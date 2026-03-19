@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+
+# Next.js
+gold-dashboard/.next/
+gold-dashboard/out/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# Pipeline output (generated, not tracked)
+gold-dashboard/pipeline/output/
+gold-dashboard/pipeline/model.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Claude
+.claude/
+
+# Obsidian
+.obsidian/
