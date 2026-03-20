@@ -1,42 +1,42 @@
 {
-  "base_value": 0.4791,
-  "prediction": 5.0908,
+  "base_value": 0.4814,
+  "prediction": 5.4392,
   "bars": [
     {
       "factor": "F2_FedFunds",
       "label": "联邦基金利率",
-      "value": 5.4795,
+      "value": 5.2374,
       "raw_feature": -1.4189
-    },
-    {
-      "factor": "F8_ETFFlow",
-      "label": "ETF 资金流",
-      "value": -0.4378,
-      "raw_feature": -1.6688
-    },
-    {
-      "factor": "F3_TIPS10Y",
-      "label": "TIPS 10Y 实际利率",
-      "value": -0.3986,
-      "raw_feature": -0.3895
     },
     {
       "factor": "F1_DXY",
       "label": "美元指数 DXY",
-      "value": 0.2249,
+      "value": 0.3656,
       "raw_feature": -0.0538
     },
     {
       "factor": "F4_BEI",
       "label": "通胀预期 BEI",
-      "value": -0.2172,
-      "raw_feature": 0.9925
+      "value": -0.3634,
+      "raw_feature": 1.1654
+    },
+    {
+      "factor": "F3_TIPS10Y",
+      "label": "TIPS 10Y 实际利率",
+      "value": -0.2032,
+      "raw_feature": -0.2419
+    },
+    {
+      "factor": "F8_ETFFlow",
+      "label": "ETF 资金流",
+      "value": -0.1585,
+      "raw_feature": 0.6354
     },
     {
       "factor": "F9_GDXRatio",
       "label": "矿业股/金价比",
-      "value": -0.0391,
-      "raw_feature": 0.0
+      "value": 0.0799,
+      "raw_feature": -0.0092
     },
     {
       "factor": "F5_OVX",

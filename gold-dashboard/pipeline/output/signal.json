@@ -1,17 +1,17 @@
 {
   "date": "2026-03-20",
-  "timestamp": "2026-03-20T10:20:10.813257",
+  "timestamp": "2026-03-20T22:21:02.505049",
   "signal": "Strong Buy",
-  "predicted_return": 5.0908,
+  "predicted_return": 5.4392,
   "confidence": 100,
-  "gold_price": 4690.03,
+  "gold_price": 4493.95,
   "gold_open": 4636.58,
-  "gold_high": 4699.3,
-  "gold_low": 4635.09,
-  "atr": 150.17,
-  "stop_loss": 4314.61,
-  "take_profit": 5253.16,
-  "position_size": 2.6637,
+  "gold_high": 4735.66,
+  "gold_low": 4478.84,
+  "atr": 163.92,
+  "stop_loss": 4084.14,
+  "take_profit": 5108.67,
+  "position_size": 2.4401,
   "regime": "Transition",
   "regime_multiplier": 0.5,
   "factors": [
@@ -30,14 +30,14 @@
     {
       "name": "F3_TIPS10Y",
       "label": "TIPS 10Y 实际利率",
-      "zscore": -0.3895,
-      "raw_value": 1.86
+      "zscore": -0.2419,
+      "raw_value": 1.88
     },
     {
       "name": "F4_BEI",
       "label": "通胀预期 BEI",
-      "zscore": 0.9925,
-      "raw_value": 2.37
+      "zscore": 1.1654,
+      "raw_value": 2.38
     },
     {
       "name": "F5_OVX",
@@ -60,13 +60,13 @@
     {
       "name": "F8_ETFFlow",
       "label": "ETF 资金流",
-      "zscore": -1.6688,
+      "zscore": 0.6354,
       "raw_value": null
     },
     {
       "name": "F9_GDXRatio",
       "label": "矿业股/金价比",
-      "zscore": 0.0,
+      "zscore": -0.0092,
       "raw_value": null
     }
   ]
