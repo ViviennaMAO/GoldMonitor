@@ -18,8 +18,7 @@ __pycache__/
 .venv/
 venv/
 
-# Pipeline output (generated, not tracked)
-gold-dashboard/pipeline/output/
+# Pipeline model (large binary, not tracked)
 gold-dashboard/pipeline/model.json
 
 # OS

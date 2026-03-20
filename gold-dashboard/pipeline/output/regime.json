@@ -1,0 +1,108 @@
+{
+  "current": {
+    "regime": "Transition",
+    "multiplier": 0.5,
+    "risk_off_score": 0,
+    "risk_on_score": 1
+  },
+  "heatmap": [
+    {
+      "month": "2025-09",
+      "factors": {
+        "F1_DXY": -1.18,
+        "F2_FedFunds": -1.11,
+        "F3_TIPS10Y": -1.4,
+        "F4_BEI": 0.32,
+        "F5_OVX": 0.0,
+        "F6_GVZ": 0.0,
+        "F7_WGC": 0.0,
+        "F8_ETFFlow": -0.62,
+        "F9_GDXRatio": 2.85
+      }
+    },
+    {
+      "month": "2025-10",
+      "factors": {
+        "F1_DXY": -0.68,
+        "F2_FedFunds": -2.03,
+        "F3_TIPS10Y": -1.16,
+        "F4_BEI": -0.67,
+        "F5_OVX": 0.0,
+        "F6_GVZ": 0.0,
+        "F7_WGC": 0.0,
+        "F8_ETFFlow": -0.44,
+        "F9_GDXRatio": 1.26
+      }
+    },
+    {
+      "month": "2025-11",
+      "factors": {
+        "F1_DXY": -0.66,
+        "F2_FedFunds": -2.74,
+        "F3_TIPS10Y": -1.15,
+        "F4_BEI": -1.72,
+        "F5_OVX": 0.0,
+        "F6_GVZ": 0.0,
+        "F7_WGC": 0.0,
+        "F8_ETFFlow": -0.86,
+        "F9_GDXRatio": 1.82
+      }
+    },
+    {
+      "month": "2025-12",
+      "factors": {
+        "F1_DXY": -0.93,
+        "F2_FedFunds": -2.43,
+        "F3_TIPS10Y": -0.17,
+        "F4_BEI": -1.19,
+        "F5_OVX": 0.0,
+        "F6_GVZ": 0.0,
+        "F7_WGC": 0.0,
+        "F8_ETFFlow": -0.28,
+        "F9_GDXRatio": 1.6
+      }
+    },
+    {
+      "month": "2026-01",
+      "factors": {
+        "F1_DXY": -1.53,
+        "F2_FedFunds": -2.04,
+        "F3_TIPS10Y": -0.25,
+        "F4_BEI": 0.64,
+        "F5_OVX": 0.0,
+        "F6_GVZ": 0.0,
+        "F7_WGC": 0.0,
+        "F8_ETFFlow": 4.37,
+        "F9_GDXRatio": 1.06
+      }
+    },
+    {
+      "month": "2026-02",
+      "factors": {
+        "F1_DXY": -1.52,
+        "F2_FedFunds": -1.63,
+        "F3_TIPS10Y": -1.5,
+        "F4_BEI": -1.09,
+        "F5_OVX": 0.0,
+        "F6_GVZ": 0.0,
+        "F7_WGC": 0.0,
+        "F8_ETFFlow": -0.08,
+        "F9_GDXRatio": 1.96
+      }
+    },
+    {
+      "month": "2026-03",
+      "factors": {
+        "F1_DXY": -0.07,
+        "F2_FedFunds": -1.43,
+        "F3_TIPS10Y": -0.39,
+        "F4_BEI": 0.99,
+        "F5_OVX": 0.0,
+        "F6_GVZ": 0.0,
+        "F7_WGC": 0.0,
+        "F8_ETFFlow": -0.11,
+        "F9_GDXRatio": -0.02
+      }
+    }
+  ]
+}

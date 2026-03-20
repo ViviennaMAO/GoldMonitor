@@ -1,0 +1,420 @@
+{
+  "factors": [
+    "F1_DXY",
+    "F2_FedFunds",
+    "F3_TIPS10Y",
+    "F4_BEI",
+    "F5_OVX",
+    "F6_GVZ",
+    "F7_WGC",
+    "F8_ETFFlow",
+    "F9_GDXRatio"
+  ],
+  "matrix": [
+    {
+      "x": "F1_DXY",
+      "y": "F1_DXY",
+      "value": 1.0
+    },
+    {
+      "x": "F1_DXY",
+      "y": "F2_FedFunds",
+      "value": -0.481
+    },
+    {
+      "x": "F1_DXY",
+      "y": "F3_TIPS10Y",
+      "value": -0.107
+    },
+    {
+      "x": "F1_DXY",
+      "y": "F4_BEI",
+      "value": -0.345
+    },
+    {
+      "x": "F1_DXY",
+      "y": "F5_OVX",
+      "value": NaN
+    },
+    {
+      "x": "F1_DXY",
+      "y": "F6_GVZ",
+      "value": NaN
+    },
+    {
+      "x": "F1_DXY",
+      "y": "F7_WGC",
+      "value": NaN
+    },
+    {
+      "x": "F1_DXY",
+      "y": "F8_ETFFlow",
+      "value": 0.034
+    },
+    {
+      "x": "F1_DXY",
+      "y": "F9_GDXRatio",
+      "value": -0.385
+    },
+    {
+      "x": "F2_FedFunds",
+      "y": "F1_DXY",
+      "value": -0.481
+    },
+    {
+      "x": "F2_FedFunds",
+      "y": "F2_FedFunds",
+      "value": 1.0
+    },
+    {
+      "x": "F2_FedFunds",
+      "y": "F3_TIPS10Y",
+      "value": 0.387
+    },
+    {
+      "x": "F2_FedFunds",
+      "y": "F4_BEI",
+      "value": 0.746
+    },
+    {
+      "x": "F2_FedFunds",
+      "y": "F5_OVX",
+      "value": NaN
+    },
+    {
+      "x": "F2_FedFunds",
+      "y": "F6_GVZ",
+      "value": NaN
+    },
+    {
+      "x": "F2_FedFunds",
+      "y": "F7_WGC",
+      "value": NaN
+    },
+    {
+      "x": "F2_FedFunds",
+      "y": "F8_ETFFlow",
+      "value": -0.037
+    },
+    {
+      "x": "F2_FedFunds",
+      "y": "F9_GDXRatio",
+      "value": -0.003
+    },
+    {
+      "x": "F3_TIPS10Y",
+      "y": "F1_DXY",
+      "value": -0.107
+    },
+    {
+      "x": "F3_TIPS10Y",
+      "y": "F2_FedFunds",
+      "value": 0.387
+    },
+    {
+      "x": "F3_TIPS10Y",
+      "y": "F3_TIPS10Y",
+      "value": 1.0
+    },
+    {
+      "x": "F3_TIPS10Y",
+      "y": "F4_BEI",
+      "value": 0.211
+    },
+    {
+      "x": "F3_TIPS10Y",
+      "y": "F5_OVX",
+      "value": NaN
+    },
+    {
+      "x": "F3_TIPS10Y",
+      "y": "F6_GVZ",
+      "value": NaN
+    },
+    {
+      "x": "F3_TIPS10Y",
+      "y": "F7_WGC",
+      "value": NaN
+    },
+    {
+      "x": "F3_TIPS10Y",
+      "y": "F8_ETFFlow",
+      "value": -0.045
+    },
+    {
+      "x": "F3_TIPS10Y",
+      "y": "F9_GDXRatio",
+      "value": -0.532
+    },
+    {
+      "x": "F4_BEI",
+      "y": "F1_DXY",
+      "value": -0.345
+    },
+    {
+      "x": "F4_BEI",
+      "y": "F2_FedFunds",
+      "value": 0.746
+    },
+    {
+      "x": "F4_BEI",
+      "y": "F3_TIPS10Y",
+      "value": 0.211
+    },
+    {
+      "x": "F4_BEI",
+      "y": "F4_BEI",
+      "value": 1.0
+    },
+    {
+      "x": "F4_BEI",
+      "y": "F5_OVX",
+      "value": NaN
+    },
+    {
+      "x": "F4_BEI",
+      "y": "F6_GVZ",
+      "value": NaN
+    },
+    {
+      "x": "F4_BEI",
+      "y": "F7_WGC",
+      "value": NaN
+    },
+    {
+      "x": "F4_BEI",
+      "y": "F8_ETFFlow",
+      "value": 0.031
+    },
+    {
+      "x": "F4_BEI",
+      "y": "F9_GDXRatio",
+      "value": 0.004
+    },
+    {
+      "x": "F5_OVX",
+      "y": "F1_DXY",
+      "value": NaN
+    },
+    {
+      "x": "F5_OVX",
+      "y": "F2_FedFunds",
+      "value": NaN
+    },
+    {
+      "x": "F5_OVX",
+      "y": "F3_TIPS10Y",
+      "value": NaN
+    },
+    {
+      "x": "F5_OVX",
+      "y": "F4_BEI",
+      "value": NaN
+    },
+    {
+      "x": "F5_OVX",
+      "y": "F5_OVX",
+      "value": NaN
+    },
+    {
+      "x": "F5_OVX",
+      "y": "F6_GVZ",
+      "value": NaN
+    },
+    {
+      "x": "F5_OVX",
+      "y": "F7_WGC",
+      "value": NaN
+    },
+    {
+      "x": "F5_OVX",
+      "y": "F8_ETFFlow",
+      "value": NaN
+    },
+    {
+      "x": "F5_OVX",
+      "y": "F9_GDXRatio",
+      "value": NaN
+    },
+    {
+      "x": "F6_GVZ",
+      "y": "F1_DXY",
+      "value": NaN
+    },
+    {
+      "x": "F6_GVZ",
+      "y": "F2_FedFunds",
+      "value": NaN
+    },
+    {
+      "x": "F6_GVZ",
+      "y": "F3_TIPS10Y",
+      "value": NaN
+    },
+    {
+      "x": "F6_GVZ",
+      "y": "F4_BEI",
+      "value": NaN
+    },
+    {
+      "x": "F6_GVZ",
+      "y": "F5_OVX",
+      "value": NaN
+    },
+    {
+      "x": "F6_GVZ",
+      "y": "F6_GVZ",
+      "value": NaN
+    },
+    {
+      "x": "F6_GVZ",
+      "y": "F7_WGC",
+      "value": NaN
+    },
+    {
+      "x": "F6_GVZ",
+      "y": "F8_ETFFlow",
+      "value": NaN
+    },
+    {
+      "x": "F6_GVZ",
+      "y": "F9_GDXRatio",
+      "value": NaN
+    },
+    {
+      "x": "F7_WGC",
+      "y": "F1_DXY",
+      "value": NaN
+    },
+    {
+      "x": "F7_WGC",
+      "y": "F2_FedFunds",
+      "value": NaN
+    },
+    {
+      "x": "F7_WGC",
+      "y": "F3_TIPS10Y",
+      "value": NaN
+    },
+    {
+      "x": "F7_WGC",
+      "y": "F4_BEI",
+      "value": NaN
+    },
+    {
+      "x": "F7_WGC",
+      "y": "F5_OVX",
+      "value": NaN
+    },
+    {
+      "x": "F7_WGC",
+      "y": "F6_GVZ",
+      "value": NaN
+    },
+    {
+      "x": "F7_WGC",
+      "y": "F7_WGC",
+      "value": NaN
+    },
+    {
+      "x": "F7_WGC",
+      "y": "F8_ETFFlow",
+      "value": NaN
+    },
+    {
+      "x": "F7_WGC",
+      "y": "F9_GDXRatio",
+      "value": NaN
+    },
+    {
+      "x": "F8_ETFFlow",
+      "y": "F1_DXY",
+      "value": 0.034
+    },
+    {
+      "x": "F8_ETFFlow",
+      "y": "F2_FedFunds",
+      "value": -0.037
+    },
+    {
+      "x": "F8_ETFFlow",
+      "y": "F3_TIPS10Y",
+      "value": -0.045
+    },
+    {
+      "x": "F8_ETFFlow",
+      "y": "F4_BEI",
+      "value": 0.031
+    },
+    {
+      "x": "F8_ETFFlow",
+      "y": "F5_OVX",
+      "value": NaN
+    },
+    {
+      "x": "F8_ETFFlow",
+      "y": "F6_GVZ",
+      "value": NaN
+    },
+    {
+      "x": "F8_ETFFlow",
+      "y": "F7_WGC",
+      "value": NaN
+    },
+    {
+      "x": "F8_ETFFlow",
+      "y": "F8_ETFFlow",
+      "value": 1.0
+    },
+    {
+      "x": "F8_ETFFlow",
+      "y": "F9_GDXRatio",
+      "value": 0.07
+    },
+    {
+      "x": "F9_GDXRatio",
+      "y": "F1_DXY",
+      "value": -0.385
+    },
+    {
+      "x": "F9_GDXRatio",
+      "y": "F2_FedFunds",
+      "value": -0.003
+    },
+    {
+      "x": "F9_GDXRatio",
+      "y": "F3_TIPS10Y",
+      "value": -0.532
+    },
+    {
+      "x": "F9_GDXRatio",
+      "y": "F4_BEI",
+      "value": 0.004
+    },
+    {
+      "x": "F9_GDXRatio",
+      "y": "F5_OVX",
+      "value": NaN
+    },
+    {
+      "x": "F9_GDXRatio",
+      "y": "F6_GVZ",
+      "value": NaN
+    },
+    {
+      "x": "F9_GDXRatio",
+      "y": "F7_WGC",
+      "value": NaN
+    },
+    {
+      "x": "F9_GDXRatio",
+      "y": "F8_ETFFlow",
+      "value": 0.07
+    },
+    {
+      "x": "F9_GDXRatio",
+      "y": "F9_GDXRatio",
+      "value": 1.0
+    }
+  ]
+}
