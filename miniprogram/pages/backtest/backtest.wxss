@@ -18,7 +18,6 @@
   border-radius: 10rpx;
   font-size: 26rpx;
   color: #9CA3AF;
-  transition: all 0.2s;
 }
 
 .tab-active {
@@ -45,6 +44,10 @@
   align-items: center;
 }
 
+.stat-card-wide {
+  width: 100%;
+}
+
 .stat-label {
   font-size: 22rpx;
   color: #9CA3AF;
@@ -54,6 +57,31 @@
 .stat-value {
   font-size: 36rpx;
   font-weight: 700;
+}
+
+/* ── Active Position ── */
+.pos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.pos-item {
+  width: calc(50% - 6rpx);
+  display: flex;
+  flex-direction: column;
+  padding: 8rpx 0;
+}
+
+.pos-label {
+  font-size: 22rpx;
+  color: #6B7280;
+  margin-bottom: 4rpx;
+}
+
+.pos-value {
+  font-size: 28rpx;
+  font-weight: 600;
 }
 
 /* ── Strategy Description ── */

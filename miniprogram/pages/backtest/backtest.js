@@ -4,7 +4,6 @@ var util = require('../../utils/util')
 Page({
   data: {
     loading: true,
-    // Equity curve summary
     totalReturn: '--',
     totalReturnColor: '#9CA3AF',
     sharpe: '--',
@@ -12,10 +11,11 @@ Page({
     winRate: '--',
     tradeCount: '--',
     finalEquity: '--',
-    // Recent equity points (for simple text display)
     equityPoints: [],
-    // Positions
-    positions: [],
+    // Active position
+    activePosition: null,
+    // Recent trades
+    trades: [],
     activeTab: 'overview'
   },
 
@@ -47,64 +47,96 @@ Page({
 
       var updateObj = { loading: false }
 
-      // Equity curve
-      if (equityData) {
-        if (equityData.stats) {
-          var s = equityData.stats
-          updateObj.totalReturn = util.formatPercent(s.totalReturn)
-          updateObj.totalReturnColor = s.totalReturn >= 0 ? '#10B981' : '#EF4444'
-          updateObj.sharpe = util.formatNumber(s.sharpe, 4)
-          updateObj.maxDrawdown = util.formatPercent(s.maxDrawdown)
-          updateObj.winRate = util.formatPercent(s.winRate)
-          updateObj.tradeCount = s.trades || '--'
-          updateObj.finalEquity = s.finalEquity ? '$' + util.formatNumber(s.finalEquity, 0) : '--'
-        }
+      // ── Equity Curve (API returns array directly) ──
+      if (equityData && Array.isArray(equityData) && equityData.length > 0) {
+        var curve = equityData
+        var first = curve[0]
+        var last = curve[curve.length - 1]
 
-        if (equityData.curve && equityData.curve.length > 0) {
-          // Show last 20 data points as a list
-          var curve = equityData.curve
-          var step = Math.max(1, Math.floor(curve.length / 20))
-          var points = []
-          for (var i = 0; i < curve.length; i += step) {
-            points.push({
-              date: util.formatDate(curve[i].date),
-              equity: util.formatNumber(curve[i].equity, 0),
-              drawdown: curve[i].drawdown != null ? util.formatPercent(curve[i].drawdown) : '--',
-              drawdownColor: (curve[i].drawdown || 0) < -2 ? '#EF4444' : '#9CA3AF'
-            })
-          }
-          // Always include last point
-          var last = curve[curve.length - 1]
-          if (points[points.length - 1].date !== util.formatDate(last.date)) {
-            points.push({
-              date: util.formatDate(last.date),
-              equity: util.formatNumber(last.equity, 0),
-              drawdown: last.drawdown != null ? util.formatPercent(last.drawdown) : '--',
-              drawdownColor: (last.drawdown || 0) < -2 ? '#EF4444' : '#9CA3AF'
-            })
-          }
-          updateObj.equityPoints = points
+        // Calculate stats from curve data
+        var startEquity = first.equity
+        var endEquity = last.equity
+        var totalReturn = ((endEquity - startEquity) / startEquity) * 100
+
+        // Find max drawdown
+        var peak = startEquity
+        var maxDD = 0
+        curve.forEach(function (pt) {
+          if (pt.equity > peak) peak = pt.equity
+          var dd = ((pt.equity - peak) / peak) * 100
+          if (dd < maxDD) maxDD = dd
+        })
+
+        updateObj.totalReturn = util.formatPercent(totalReturn)
+        updateObj.totalReturnColor = totalReturn >= 0 ? '#10B981' : '#EF4444'
+        updateObj.maxDrawdown = util.formatNumber(maxDD, 2) + '%'
+        updateObj.finalEquity = '$' + util.formatNumber(endEquity, 0)
+
+        // Sample equity points for table display
+        var step = Math.max(1, Math.floor(curve.length / 20))
+        var points = []
+        for (var i = 0; i < curve.length; i += step) {
+          points.push({
+            date: util.formatDate(curve[i].date),
+            equity: util.formatNumber(curve[i].equity, 0),
+            drawdown: curve[i].drawdown != null ? util.formatNumber(curve[i].drawdown, 2) + '%' : '--',
+            drawdownColor: (curve[i].drawdown || 0) < -2 ? '#EF4444' : '#9CA3AF'
+          })
         }
+        // Always include last point
+        if (points[points.length - 1].date !== util.formatDate(last.date)) {
+          points.push({
+            date: util.formatDate(last.date),
+            equity: util.formatNumber(last.equity, 0),
+            drawdown: last.drawdown != null ? util.formatNumber(last.drawdown, 2) + '%' : '--',
+            drawdownColor: (last.drawdown || 0) < -2 ? '#EF4444' : '#9CA3AF'
+          })
+        }
+        updateObj.equityPoints = points
       }
 
-      // Positions
-      if (posData && posData.positions) {
-        updateObj.positions = posData.positions.map(function (p) {
-          var pnl = p.pnl || 0
-          return {
-            id: p.id || p.entryDate,
-            direction: p.direction || 'Long',
-            dirClass: (p.direction || 'Long') === 'Long' ? 'badge-buy' : 'badge-sell',
-            entryDate: util.formatDate(p.entryDate),
-            exitDate: p.exitDate ? util.formatDate(p.exitDate) : '持仓中',
-            entryPrice: util.formatPrice(p.entryPrice),
-            exitPrice: p.exitPrice ? util.formatPrice(p.exitPrice) : '--',
-            pnl: util.formatPercent(pnl),
-            pnlColor: pnl >= 0 ? '#10B981' : '#EF4444',
-            lots: p.lots || p.size || 1,
-            status: p.exitDate ? 'closed' : 'open'
+      // ── Positions (API returns {active, recent_trades}) ──
+      if (posData) {
+        // Active position
+        if (posData.active && posData.active.length > 0) {
+          var ap = posData.active[0]
+          updateObj.activePosition = {
+            symbol: ap.symbol || 'XAUUSD',
+            direction: ap.direction || 'Long',
+            dirClass: (ap.direction || 'Long') === 'Long' ? 'badge-buy' : 'badge-sell',
+            size: util.formatNumber(ap.size, 2),
+            entryPrice: util.formatPrice(ap.entry_price),
+            currentPrice: util.formatPrice(ap.current_price),
+            stopLoss: util.formatPrice(ap.stop_loss),
+            pnl: '$' + util.formatNumber(ap.unrealized_pnl, 2),
+            pnlPercent: util.formatPercent(ap.return_pct),
+            pnlColor: (ap.unrealized_pnl || 0) >= 0 ? '#10B981' : '#EF4444'
           }
-        }).slice(0, 30) // Show last 30 trades
+        }
+
+        // Recent trades
+        if (posData.recent_trades && posData.recent_trades.length > 0) {
+          var winCount = 0
+          updateObj.trades = posData.recent_trades.map(function (t) {
+            var pnl = t.pnl || 0
+            if (pnl > 0) winCount++
+            return {
+              date: util.formatDate(t.date),
+              direction: t.direction || 'Long',
+              dirClass: (t.direction || 'Long') === 'Long' ? 'badge-buy' : 'badge-sell',
+              type: t.type || '',
+              entryPrice: util.formatPrice(t.entry),
+              exitPrice: util.formatPrice(t.exit),
+              pnl: '$' + util.formatNumber(pnl, 2),
+              pnlPercent: util.formatPercent(t.return_pct),
+              pnlColor: pnl >= 0 ? '#10B981' : '#EF4444'
+            }
+          })
+
+          var total = posData.recent_trades.length
+          updateObj.tradeCount = total + ''
+          updateObj.winRate = util.formatNumber((winCount / total) * 100, 1) + '%'
+        }
       }
 
       that.setData(updateObj)
