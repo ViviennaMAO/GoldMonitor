@@ -32,7 +32,7 @@
       <view class="row-between mt-12">
         <view class="col">
           <text class="text-xs text-gray">当前值</text>
-          <text class="text-lg text-bold text-white">{{item.value}}</text>
+          <text class="text-lg text-bold text-white">{{item.value}} {{item.unit}}</text>
         </view>
         <view class="col" style="align-items: center;">
           <text class="text-xs text-gray">Z-Score</text>

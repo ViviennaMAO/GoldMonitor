@@ -66,7 +66,7 @@
       <view class="factor-grid mt-12">
         <view class="factor-mini" wx:for="{{factors}}" wx:key="id">
           <text class="factor-mini-name">{{item.name}}</text>
-          <text class="factor-mini-value">{{item.value}}</text>
+          <text class="factor-mini-value">{{item.value}}{{item.unit}}</text>
           <text class="factor-mini-zscore" style="color: {{item.zScoreColor}}">Z: {{item.zScore}}</text>
         </view>
       </view>

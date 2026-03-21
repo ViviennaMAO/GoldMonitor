@@ -28,12 +28,14 @@ Page({
       if (data && data.factors) {
         var factors = data.factors.map(function (f) {
           var zs = f.zScore != null ? f.zScore : 0
+          var val = f.rawValue != null ? f.rawValue : f.value
           return {
             id: f.id,
             name: f.name,
             displayName: f.displayName || f.name,
-            value: util.formatNumber(f.value, 4),
-            rawValue: f.value,
+            value: util.formatNumber(val, 2),
+            unit: f.rawUnit || '',
+            rawValue: val,
             zScore: util.formatNumber(zs),
             zScoreColor: zs > 1 ? '#10B981' : zs > 0.5 ? '#34D399' :
                          zs < -1 ? '#EF4444' : zs < -0.5 ? '#F87171' : '#9CA3AF',

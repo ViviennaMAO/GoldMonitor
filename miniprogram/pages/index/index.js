@@ -86,10 +86,12 @@ Page({
       // Factor summary (mini cards)
       if (factorsData && factorsData.factors) {
         updateObj.factors = factorsData.factors.map(function (f) {
+          var val = f.rawValue != null ? f.rawValue : f.value
           return {
             id: f.id,
             name: f.name,
-            value: util.formatNumber(f.value),
+            value: util.formatNumber(val),
+            unit: f.rawUnit || '',
             zScore: f.zScore != null ? util.formatNumber(f.zScore) : '--',
             zScoreColor: f.zScore > 0.5 ? '#10B981' : f.zScore < -0.5 ? '#EF4444' : '#9CA3AF',
             signal: f.signal || 'Neutral'
