@@ -7,13 +7,21 @@ Page({
     goldPrice: null,
     priceChange: null,
     priceChangePercent: null,
+    priceChangeColor: '#9CA3AF',
     priceSource: '--',
     signal: null,
     signalLabel: '--',
     signalBadgeClass: 'badge-neutral',
     signalConfidence: 0,
     predictedReturn: '--',
+    signalDate: '--',
+    // SHAP waterfall
     shapBars: [],
+    shapBaseValue: '--',
+    shapPrediction: '--',
+    shapBullSum: '--',
+    shapBearSum: '--',
+    // Factors
     factors: [],
     lastUpdate: '--'
   },
@@ -23,6 +31,7 @@ Page({
   },
 
   onPullDownRefresh() {
+    var that = this
     this.loadAllData().then(function () {
       wx.stopPullDownRefresh()
     })
@@ -65,25 +74,42 @@ Page({
         updateObj.signalDate = signalData.date || '--'
       }
 
-      // SHAP bars (top 6)
+      // SHAP waterfall (web-style)
       if (shapData && shapData.bars) {
         var bars = shapData.bars.slice()
+        // Sort by absolute value descending
         bars.sort(function (a, b) { return Math.abs(b.value) - Math.abs(a.value) })
-        updateObj.shapBars = bars.slice(0, 6).map(function (bar) {
-          var absVal = Math.abs(bar.value)
-          var maxVal = Math.abs(bars[0].value)
+
+        var maxAbsVal = Math.abs(bars[0].value)
+        var bullSum = 0
+        var bearSum = 0
+
+        var shapBars = bars.map(function (bar) {
+          var isPositive = bar.value >= 0
+          if (isPositive) bullSum += bar.value
+          else bearSum += bar.value
+
           return {
-            name: bar.name || bar.factor,
+            factor: bar.factor,
+            label: bar.label || bar.factor,
+            rawFeature: bar.raw_feature != null ? bar.raw_feature.toFixed(2) : '--',
             value: bar.value,
-            displayValue: (bar.value >= 0 ? '+' : '') + bar.value.toFixed(4),
-            isPositive: bar.value >= 0,
-            barWidth: maxVal > 0 ? Math.round((absVal / maxVal) * 100) : 0,
-            color: bar.value >= 0 ? '#10B981' : '#EF4444'
+            displayValue: (bar.value >= 0 ? '+' : '') + (bar.value * 100 / (shapData.prediction - shapData.base_value) * 100).toFixed(0),
+            displayPct: (bar.value >= 0 ? '+' : '') + (bar.value / Math.abs(shapData.prediction - shapData.base_value) * 100).toFixed(1) + '%',
+            isPositive: isPositive,
+            barWidth: maxAbsVal > 0 ? Math.round(Math.abs(bar.value) / maxAbsVal * 100) : 0,
+            color: isPositive ? '#10B981' : '#EF4444'
           }
         })
+
+        updateObj.shapBars = shapBars
+        updateObj.shapBaseValue = util.formatPercent(shapData.base_value)
+        updateObj.shapPrediction = util.formatPercent(shapData.prediction)
+        updateObj.shapBullSum = '+' + (bullSum / Math.abs(shapData.prediction - shapData.base_value) * 100).toFixed(1) + '%'
+        updateObj.shapBearSum = (bearSum / Math.abs(shapData.prediction - shapData.base_value) * 100).toFixed(1) + '%'
       }
 
-      // Factor summary (mini cards)
+      // Factor mini cards
       if (factorsData && factorsData.factors) {
         updateObj.factors = factorsData.factors.map(function (f) {
           var val = f.rawValue != null ? f.rawValue : f.value

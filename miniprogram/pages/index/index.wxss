@@ -13,13 +13,89 @@
   background: linear-gradient(135deg, #111827 0%, #1a2332 100%);
 }
 
-/* ── SHAP List ── */
-.shap-item {
-  margin-bottom: 16rpx;
+/* ── Waterfall Summary ── */
+.waterfall-summary {
+  display: flex;
+  align-items: center;
+  background: rgba(17, 24, 39, 0.6);
+  border-radius: 12rpx;
+  padding: 16rpx 20rpx;
 }
 
-.shap-item:last-child {
-  margin-bottom: 0;
+.ws-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.ws-arrow {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 36rpx;
+}
+
+/* ── Waterfall Bars ── */
+.waterfall-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+}
+
+.waterfall-item {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.wf-label {
+  width: 200rpx;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.wf-factor {
+  font-size: 24rpx;
+  color: #E5E7EB;
+  font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.wf-raw {
+  margin-top: 2rpx;
+}
+
+.wf-bar-area {
+  flex: 1;
+  height: 28rpx;
+  display: flex;
+  align-items: center;
+}
+
+.wf-bar {
+  height: 100%;
+  border-radius: 4rpx;
+  min-width: 4rpx;
+}
+
+.wf-bar-pos {
+  background: linear-gradient(90deg, #059669, #10B981);
+}
+
+.wf-bar-neg {
+  background: linear-gradient(90deg, #EF4444, #DC2626);
+}
+
+.wf-value {
+  width: 100rpx;
+  text-align: right;
+  font-size: 24rpx;
+  font-weight: 600;
+  flex-shrink: 0;
 }
 
 /* ── Factor Mini Grid ── */

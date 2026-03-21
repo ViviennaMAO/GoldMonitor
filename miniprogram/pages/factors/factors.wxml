@@ -1,53 +1,214 @@
-<!-- Factors Detail Page -->
+<!-- Factors, IC, Regime Page -->
 <scroll-view scroll-y class="page-scroll">
   <view class="container">
 
-    <!-- Header -->
-    <view class="row-between mb-16">
-      <text class="text-lg text-bold text-white">黄金量化因子</text>
-      <view class="badge badge-gold">
-        <text>{{dataSource}}</text>
+    <!-- ── Tab Switcher ── -->
+    <view class="tab-bar">
+      <view class="tab-item {{activeTab === 'factors' ? 'tab-active' : ''}}" bindtap="switchTab" data-tab="factors">
+        <text>因子</text>
+      </view>
+      <view class="tab-item {{activeTab === 'ic' ? 'tab-active' : ''}}" bindtap="switchTab" data-tab="ic">
+        <text>IC追踪</text>
+      </view>
+      <view class="tab-item {{activeTab === 'regime' ? 'tab-active' : ''}}" bindtap="switchTab" data-tab="regime">
+        <text>Regime</text>
       </view>
     </view>
 
-    <!-- Factor Cards -->
-    <view class="factor-card" wx:for="{{factors}}" wx:key="id">
-      <!-- Header Row -->
-      <view class="row-between mb-12">
-        <view class="row" style="gap: 12rpx; align-items: center;">
-          <view class="factor-id-badge">
-            <text>{{item.id}}</text>
+    <!-- ══════════════════════════════════════ -->
+    <!-- ── Factors Tab ── -->
+    <!-- ══════════════════════════════════════ -->
+    <view wx:if="{{activeTab === 'factors'}}">
+      <view class="row-between mb-16">
+        <text class="text-lg text-bold text-white">黄金量化因子</text>
+        <view class="badge badge-gold">
+          <text>{{dataSource}}</text>
+        </view>
+      </view>
+
+      <view class="factor-card" wx:for="{{factors}}" wx:key="id">
+        <view class="row-between mb-12">
+          <view class="row" style="gap: 12rpx; align-items: center;">
+            <view class="factor-id-badge">
+              <text>{{item.id}}</text>
+            </view>
+            <text class="text-base text-bold text-white">{{item.displayName}}</text>
           </view>
-          <text class="text-base text-bold text-white">{{item.displayName}}</text>
+          <view class="badge {{item.signalClass}}">
+            <text>{{item.signal}}</text>
+          </view>
         </view>
-        <view class="badge {{item.signalClass}}">
-          <text>{{item.signal}}</text>
+        <text class="text-xs text-gray" wx:if="{{item.description}}">{{item.description}}</text>
+
+        <view class="row-between mt-12">
+          <view class="col">
+            <text class="text-xs text-gray">当前值</text>
+            <text class="text-lg text-bold text-white">{{item.value}} {{item.unit}}</text>
+          </view>
+          <view class="col" style="align-items: center;">
+            <text class="text-xs text-gray">Z-Score</text>
+            <text class="text-lg text-bold" style="color: {{item.zScoreColor}}">{{item.zScore}}</text>
+          </view>
+          <view class="col" style="align-items: flex-end;" wx:if="{{item.percentile != null}}">
+            <text class="text-xs text-gray">百分位</text>
+            <text class="text-lg text-bold text-white">{{item.percentile}}%</text>
+          </view>
+        </view>
+
+        <view class="zscore-bar mt-12">
+          <view class="zscore-center-line"></view>
+          <view class="zscore-fill {{item.zScoreDir}}" style="width: {{item.zScoreWidth}}%; background: {{item.zScoreColor}};"></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- ── IC Tracking Tab ── -->
+    <!-- ══════════════════════════════════════ -->
+    <view wx:if="{{activeTab === 'ic'}}">
+      <text class="text-lg text-bold text-white mb-16">IC 追踪 · 信息系数</text>
+
+      <!-- IC Summary Stats -->
+      <view class="ic-stats-grid">
+        <view class="ic-stat-card">
+          <text class="ic-stat-label">Rolling IC</text>
+          <text class="ic-stat-value" style="color: {{icLatestColor}}">{{icLatest}}</text>
+        </view>
+        <view class="ic-stat-card">
+          <text class="ic-stat-label">IC Mean</text>
+          <text class="ic-stat-value text-white">{{icMean}}</text>
+        </view>
+        <view class="ic-stat-card">
+          <text class="ic-stat-label">ICIR</text>
+          <text class="ic-stat-value text-gold">{{icir}}</text>
         </view>
       </view>
 
-      <!-- Description -->
-      <text class="text-xs text-gray mb-12" wx:if="{{item.description}}">{{item.description}}</text>
-
-      <!-- Values Row -->
-      <view class="row-between mt-12">
-        <view class="col">
-          <text class="text-xs text-gray">当前值</text>
-          <text class="text-lg text-bold text-white">{{item.value}} {{item.unit}}</text>
-        </view>
-        <view class="col" style="align-items: center;">
-          <text class="text-xs text-gray">Z-Score</text>
-          <text class="text-lg text-bold" style="color: {{item.zScoreColor}}">{{item.zScore}}</text>
-        </view>
-        <view class="col" style="align-items: flex-end;" wx:if="{{item.percentile != null}}">
-          <text class="text-xs text-gray">百分位</text>
-          <text class="text-lg text-bold text-white">{{item.percentile}}%</text>
+      <!-- IC Bar Chart -->
+      <view class="card mt-16">
+        <text class="card-title">Rolling IC 时序</text>
+        <view class="ic-chart mt-12">
+          <!-- Zero line -->
+          <view class="ic-chart-area">
+            <view class="ic-bar-wrapper" wx:for="{{icData}}" wx:key="date">
+              <view class="ic-bar-pos" wx:if="{{item.icRaw >= 0}}" style="height: {{item.barHeight}}rpx; background: {{item.color}};"></view>
+              <view class="ic-zero-line"></view>
+              <view class="ic-bar-neg" wx:if="{{item.icRaw < 0}}" style="height: {{item.barHeight}}rpx; background: {{item.color}};"></view>
+            </view>
+          </view>
+          <!-- X axis labels -->
+          <view class="ic-x-labels">
+            <text class="ic-x-label" wx:for="{{icData}}" wx:key="date" wx:if="{{index % 5 === 0}}">{{item.date}}</text>
+          </view>
         </view>
       </view>
 
-      <!-- Z-Score Bar -->
-      <view class="zscore-bar mt-12">
-        <view class="zscore-center-line"></view>
-        <view class="zscore-fill {{item.zScoreDir}}" style="width: {{item.zScoreWidth}}%; background: {{item.zScoreColor}};"></view>
+      <!-- IC Data Table -->
+      <view class="card mt-16">
+        <text class="card-title">IC 数据明细</text>
+        <view class="ic-table mt-12">
+          <view class="ic-table-header">
+            <text class="ic-col">日期</text>
+            <text class="ic-col">IC值</text>
+            <text class="ic-col">状态</text>
+          </view>
+          <view class="ic-table-row" wx:for="{{icData}}" wx:key="date">
+            <text class="ic-col text-gray">{{item.date}}</text>
+            <text class="ic-col" style="color: {{item.color}}">{{item.ic}}</text>
+            <text class="ic-col">
+              <text class="badge {{item.icRaw > 0.3 ? 'badge-buy' : item.icRaw > 0 ? 'badge-neutral' : 'badge-sell'}}" style="font-size: 20rpx; padding: 2rpx 10rpx;">
+                {{item.icRaw > 0.5 ? '强' : item.icRaw > 0.3 ? '良' : item.icRaw > 0 ? '弱' : '负'}}
+              </text>
+            </text>
+          </view>
+        </view>
+      </view>
+
+      <!-- IC Explanation -->
+      <view class="card mt-16">
+        <text class="card-title">IC 指标说明</text>
+        <view class="desc-list mt-8">
+          <text class="desc-item">IC (Information Coefficient) 衡量因子预测能力</text>
+          <text class="desc-item">IC 均值越高，因子预测方向越准确</text>
+          <text class="desc-item">ICIR = IC均值/IC标准差，衡量预测稳定性</text>
+          <text class="desc-item">ICIR 大于 2 视为优秀因子</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- ── Regime Heatmap Tab ── -->
+    <!-- ══════════════════════════════════════ -->
+    <view wx:if="{{activeTab === 'regime'}}">
+      <view class="row-between mb-16">
+        <text class="text-lg text-bold text-white">Regime 热力图</text>
+        <view class="badge {{regimeClass}}">
+          <text>{{regimeCurrent}} {{regimeMultiplier}}</text>
+        </view>
+      </view>
+
+      <!-- Heatmap Table -->
+      <view class="card heatmap-card">
+        <scroll-view scroll-x class="heatmap-scroll">
+          <view class="heatmap-table">
+            <!-- Header row (factor names) -->
+            <view class="hm-row hm-header">
+              <view class="hm-cell hm-month-cell">
+                <text class="text-xs text-gray">月份</text>
+              </view>
+              <view class="hm-cell" wx:for="{{heatmapFactors}}" wx:key="*this">
+                <text class="hm-factor-label">{{item}}</text>
+              </view>
+            </view>
+
+            <!-- Data rows -->
+            <view class="hm-row" wx:for="{{heatmapRows}}" wx:key="month">
+              <view class="hm-cell hm-month-cell">
+                <text class="text-xs text-white">{{item.month}}</text>
+              </view>
+              <view class="hm-cell" wx:for="{{item.cells}}" wx:for-item="cell" wx:key="display" style="background: {{cell.bg}};">
+                <text class="hm-value" style="color: {{cell.textColor}}">{{cell.display}}</text>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+
+      <!-- Color Legend -->
+      <view class="card mt-16">
+        <text class="card-title">色阶说明</text>
+        <view class="legend-row mt-12">
+          <view class="legend-item">
+            <view class="legend-swatch" style="background: rgba(239, 68, 68, 0.8);"></view>
+            <text class="text-xs text-gray">强看空</text>
+          </view>
+          <view class="legend-item">
+            <view class="legend-swatch" style="background: rgba(239, 68, 68, 0.35);"></view>
+            <text class="text-xs text-gray">看空</text>
+          </view>
+          <view class="legend-item">
+            <view class="legend-swatch" style="background: rgba(75, 85, 99, 0.3);"></view>
+            <text class="text-xs text-gray">中性</text>
+          </view>
+          <view class="legend-item">
+            <view class="legend-swatch" style="background: rgba(16, 185, 129, 0.35);"></view>
+            <text class="text-xs text-gray">看多</text>
+          </view>
+          <view class="legend-item">
+            <view class="legend-swatch" style="background: rgba(16, 185, 129, 0.8);"></view>
+            <text class="text-xs text-gray">强看多</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- Regime Explanation -->
+      <view class="card mt-16">
+        <text class="card-title">Regime 状态说明</text>
+        <view class="desc-list mt-8">
+          <text class="desc-item">Risk-On: 全部因子利多，仓位 1.0x</text>
+          <text class="desc-item">Transition: 多空分歧，仓位 0.5x</text>
+          <text class="desc-item">Risk-Off: 全面利空，仓位 0x (熔断)</text>
+        </view>
       </view>
     </view>
 

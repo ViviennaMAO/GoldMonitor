@@ -9,7 +9,7 @@
           <text class="text-sm text-gray">XAU/USD 黄金现货</text>
           <view class="row mt-8" style="align-items: baseline; gap: 12rpx;">
             <text class="text-3xl text-bold text-gold">${{goldPrice || '--'}}</text>
-            <text class="text-sm" style="color: {{priceChangeColor || '#9CA3AF'}}">{{priceChangePercent || '--'}}</text>
+            <text class="text-sm" style="color: {{priceChangeColor}}">{{priceChangePercent || '--'}}</text>
           </view>
         </view>
         <view class="badge badge-gold">
@@ -24,7 +24,6 @@
         <text class="card-title">XGBoost 交易信号</text>
         <text class="text-xs text-gray">{{signalDate}}</text>
       </view>
-
       <view class="row-between">
         <view class="col">
           <view class="badge {{signalBadgeClass}}" style="font-size: 32rpx; padding: 10rpx 24rpx;">
@@ -37,25 +36,58 @@
           <text class="text-xs text-gray">置信度</text>
         </view>
       </view>
-
-      <!-- Confidence bar -->
       <view class="progress-bar mt-16">
         <view class="progress-fill" style="width: {{signalConfidence}}%; background: {{signal && signal.toLowerCase().indexOf('buy') !== -1 ? '#10B981' : signal && signal.toLowerCase().indexOf('sell') !== -1 ? '#EF4444' : '#6B7280'}};"></view>
       </view>
     </view>
 
-    <!-- ── SHAP Factor Attribution ── -->
+    <!-- ── SHAP Waterfall Chart ── -->
     <view class="card" wx:if="{{shapBars.length > 0}}">
-      <text class="card-title">SHAP 因子归因</text>
-      <view class="shap-list mt-12">
-        <view class="shap-item" wx:for="{{shapBars}}" wx:key="name">
-          <view class="row-between mb-8">
-            <text class="text-sm text-gray">{{item.name}}</text>
-            <text class="text-sm" style="color: {{item.color}}">{{item.displayValue}}</text>
+      <view class="row-between mb-8">
+        <text class="card-title">SHAP 因子归因瀑布图</text>
+      </view>
+      <text class="text-xs text-gray mb-16">每日信号驱动因子分解</text>
+
+      <!-- Base → Prediction bar -->
+      <view class="waterfall-summary">
+        <view class="ws-item">
+          <text class="text-xs text-gray">基准值</text>
+          <text class="text-sm text-white">{{shapBaseValue}}</text>
+        </view>
+        <view class="ws-arrow">
+          <text class="text-gold">→</text>
+        </view>
+        <view class="ws-item" style="align-items: flex-end;">
+          <text class="text-xs text-gray">预测值</text>
+          <text class="text-lg text-bold text-green">{{shapPrediction}}</text>
+        </view>
+      </view>
+
+      <!-- Waterfall bars -->
+      <view class="waterfall-list mt-16">
+        <view class="waterfall-item" wx:for="{{shapBars}}" wx:key="factor">
+          <view class="wf-label">
+            <text class="wf-factor">{{item.label}}</text>
+            <text class="wf-raw text-xs text-gray">{{item.rawFeature}}</text>
           </view>
-          <view class="progress-bar">
-            <view class="progress-fill" style="width: {{item.barWidth}}%; background: {{item.color}};"></view>
+          <view class="wf-bar-area">
+            <view class="wf-bar {{item.isPositive ? 'wf-bar-pos' : 'wf-bar-neg'}}" style="width: {{item.barWidth}}%;">
+            </view>
           </view>
+          <text class="wf-value" style="color: {{item.color}}">{{item.displayPct}}</text>
+        </view>
+      </view>
+
+      <!-- Bull/Bear totals -->
+      <view class="divider"></view>
+      <view class="row-between">
+        <view class="row" style="gap: 8rpx;">
+          <view style="width: 8rpx; height: 24rpx; background: #10B981; border-radius: 4rpx;"></view>
+          <text class="text-xs text-green">看多合计 {{shapBullSum}}</text>
+        </view>
+        <view class="row" style="gap: 8rpx;">
+          <text class="text-xs text-red">看空合计 {{shapBearSum}}</text>
+          <view style="width: 8rpx; height: 24rpx; background: #EF4444; border-radius: 4rpx;"></view>
         </view>
       </view>
     </view>
