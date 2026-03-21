@@ -1,14 +1,18 @@
 'use client'
 import { useState } from 'react'
-import { LineChart, Grid, Network, TrendingUp } from 'lucide-react'
+import { BarChart2, LineChart, Grid, Network, TrendingUp } from 'lucide-react'
+import { ShapWaterfall } from '@/components/charts/ShapWaterfall'
 import { ICTracking } from '@/components/charts/ICTracking'
 import { RegimeHeatmap } from '@/components/charts/RegimeHeatmap'
 import { CorrelationMatrix } from '@/components/charts/CorrelationMatrix'
 import { EquityCurveChart } from '@/components/charts/EquityCurve'
+import { useSignal, useShapValues } from '@/lib/useGoldData'
+import { dailySignal as mockSignal } from '@/data/mockData'
 import { TabId } from '@/types'
 import clsx from 'clsx'
 
 const TABS: Array<{ id: TabId | 'equity'; label: string; icon: React.ElementType; sublabel: string }> = [
+  { id: 'shap', label: 'SHAP 归因', icon: BarChart2, sublabel: '瀑布图' },
   { id: 'ic', label: 'IC 追踪', icon: LineChart, sublabel: '信息系数' },
   { id: 'regime', label: 'Regime', icon: Grid, sublabel: '热力图' },
   { id: 'correlation', label: '相关性', icon: Network, sublabel: '矩阵' },
@@ -16,7 +20,23 @@ const TABS: Array<{ id: TabId | 'equity'; label: string; icon: React.ElementType
 ]
 
 export function LeftPanel() {
-  const [activeTab, setActiveTab] = useState<string>('ic')
+  const [activeTab, setActiveTab] = useState<string>('shap')
+  const { data: shapData } = useShapValues()
+  const { data: signalData } = useSignal()
+
+  // Build SHAP bars from API or mock
+  const shapBars = shapData
+    ? shapData.bars.map(b => ({
+        factor: b.label,
+        factorId: b.factor,
+        value: b.value / 100,
+        zScore: b.raw_feature,
+        rawValue: `Z: ${b.raw_feature.toFixed(2)}`,
+        economic: '',
+      }))
+    : mockSignal.shapBars
+
+  const prediction = signalData?.predicted_return ?? mockSignal.prediction
 
   return (
     <div className="flex flex-col h-full bg-[#050B18]">
@@ -46,6 +66,9 @@ export function LeftPanel() {
 
       {/* Content */}
       <div className="flex-1 min-h-0 p-2 md:p-4 overflow-auto">
+        {activeTab === 'shap' && (
+          <ShapWaterfall bars={shapBars} prediction={prediction} />
+        )}
         {activeTab === 'ic' && <ICTracking />}
         {activeTab === 'regime' && <RegimeHeatmap />}
         {activeTab === 'correlation' && <CorrelationMatrix />}

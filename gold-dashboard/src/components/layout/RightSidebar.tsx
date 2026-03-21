@@ -88,8 +88,8 @@ export function RightSidebar() {
       {/* Signal card */}
       <SignalCard signal={dailySignal} />
 
-      {/* SHAP waterfall */}
-      <div className="rounded-2xl border border-white/[0.06] bg-[#0A1628] p-3 md:p-4">
+      {/* SHAP waterfall — mobile only, on desktop it lives in LeftPanel tabs */}
+      <div className="rounded-2xl border border-white/[0.06] bg-[#0A1628] p-3 md:p-4 lg:hidden">
         <ShapWaterfall bars={dailySignal.shapBars} prediction={dailySignal.prediction} />
       </div>
 
