@@ -1,0 +1,209 @@
+/* ── Global Styles ── */
+page {
+  background-color: #050B18;
+  color: #E5E7EB;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 28rpx;
+}
+
+/* ── Utility Classes ── */
+.container {
+  padding: 20rpx 24rpx;
+}
+
+.card {
+  background: linear-gradient(135deg, #111827 0%, #1F2937 100%);
+  border: 1rpx solid rgba(75, 85, 99, 0.3);
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+}
+
+.card-title {
+  font-size: 26rpx;
+  color: #9CA3AF;
+  margin-bottom: 12rpx;
+  font-weight: 500;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.text-gold {
+  color: #F59E0B;
+}
+
+.text-green {
+  color: #10B981;
+}
+
+.text-red {
+  color: #EF4444;
+}
+
+.text-gray {
+  color: #9CA3AF;
+}
+
+.text-white {
+  color: #F9FAFB;
+}
+
+.text-xs {
+  font-size: 22rpx;
+}
+
+.text-sm {
+  font-size: 26rpx;
+}
+
+.text-base {
+  font-size: 28rpx;
+}
+
+.text-lg {
+  font-size: 32rpx;
+}
+
+.text-xl {
+  font-size: 36rpx;
+}
+
+.text-2xl {
+  font-size: 44rpx;
+}
+
+.text-3xl {
+  font-size: 52rpx;
+}
+
+.text-bold {
+  font-weight: 700;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-8 {
+  margin-top: 8rpx;
+}
+
+.mt-12 {
+  margin-top: 12rpx;
+}
+
+.mt-16 {
+  margin-top: 16rpx;
+}
+
+.mt-20 {
+  margin-top: 20rpx;
+}
+
+.mb-8 {
+  margin-bottom: 8rpx;
+}
+
+.mb-12 {
+  margin-bottom: 12rpx;
+}
+
+.mb-16 {
+  margin-bottom: 16rpx;
+}
+
+.gap-12 {
+  gap: 12rpx;
+}
+
+.gap-16 {
+  gap: 16rpx;
+}
+
+/* ── Signal Badge ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6rpx 16rpx;
+  border-radius: 8rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.badge-buy {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10B981;
+  border: 1rpx solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-sell {
+  background: rgba(239, 68, 68, 0.15);
+  color: #EF4444;
+  border: 1rpx solid rgba(239, 68, 68, 0.3);
+}
+
+.badge-neutral {
+  background: rgba(156, 163, 175, 0.15);
+  color: #9CA3AF;
+  border: 1rpx solid rgba(156, 163, 175, 0.3);
+}
+
+.badge-gold {
+  background: rgba(245, 158, 11, 0.15);
+  color: #F59E0B;
+  border: 1rpx solid rgba(245, 158, 11, 0.3);
+}
+
+/* ── Loading ── */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx 0;
+}
+
+.loading-text {
+  color: #6B7280;
+  font-size: 26rpx;
+  margin-top: 16rpx;
+}
+
+/* ── Divider ── */
+.divider {
+  height: 1rpx;
+  background: rgba(75, 85, 99, 0.3);
+  margin: 16rpx 0;
+}
+
+/* ── Progress Bar ── */
+.progress-bar {
+  height: 8rpx;
+  background: rgba(75, 85, 99, 0.3);
+  border-radius: 4rpx;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 4rpx;
+  transition: width 0.3s;
+}

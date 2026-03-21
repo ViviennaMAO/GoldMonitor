@@ -1,0 +1,60 @@
+<!-- Factors Detail Page -->
+<scroll-view scroll-y class="page-scroll">
+  <view class="container">
+
+    <!-- Header -->
+    <view class="row-between mb-16">
+      <text class="text-lg text-bold text-white">黄金量化因子</text>
+      <view class="badge badge-gold">
+        <text>{{dataSource}}</text>
+      </view>
+    </view>
+
+    <!-- Factor Cards -->
+    <view class="factor-card" wx:for="{{factors}}" wx:key="id">
+      <!-- Header Row -->
+      <view class="row-between mb-12">
+        <view class="row" style="gap: 12rpx; align-items: center;">
+          <view class="factor-id-badge">
+            <text>{{item.id}}</text>
+          </view>
+          <text class="text-base text-bold text-white">{{item.displayName}}</text>
+        </view>
+        <view class="badge {{item.signalClass}}">
+          <text>{{item.signal}}</text>
+        </view>
+      </view>
+
+      <!-- Description -->
+      <text class="text-xs text-gray mb-12" wx:if="{{item.description}}">{{item.description}}</text>
+
+      <!-- Values Row -->
+      <view class="row-between mt-12">
+        <view class="col">
+          <text class="text-xs text-gray">当前值</text>
+          <text class="text-lg text-bold text-white">{{item.value}}</text>
+        </view>
+        <view class="col" style="align-items: center;">
+          <text class="text-xs text-gray">Z-Score</text>
+          <text class="text-lg text-bold" style="color: {{item.zScoreColor}}">{{item.zScore}}</text>
+        </view>
+        <view class="col" style="align-items: flex-end;" wx:if="{{item.percentile != null}}">
+          <text class="text-xs text-gray">百分位</text>
+          <text class="text-lg text-bold text-white">{{item.percentile}}%</text>
+        </view>
+      </view>
+
+      <!-- Z-Score Bar -->
+      <view class="zscore-bar mt-12">
+        <view class="zscore-center-line"></view>
+        <view class="zscore-fill {{item.zScoreDir}}" style="width: {{item.zScoreWidth}}%; background: {{item.zScoreColor}};"></view>
+      </view>
+    </view>
+
+    <!-- Last Update -->
+    <view class="text-center mt-20 mb-16">
+      <text class="text-xs text-gray">更新时间: {{lastUpdate}}</text>
+    </view>
+
+  </view>
+</scroll-view>

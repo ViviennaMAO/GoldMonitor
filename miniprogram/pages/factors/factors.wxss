@@ -1,0 +1,61 @@
+.page-scroll {
+  height: 100vh;
+}
+
+.factor-card {
+  background: linear-gradient(135deg, #111827 0%, #1F2937 100%);
+  border: 1rpx solid rgba(75, 85, 99, 0.3);
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.factor-id-badge {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1rpx solid rgba(245, 158, 11, 0.3);
+  border-radius: 8rpx;
+  padding: 4rpx 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.factor-id-badge text {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #F59E0B;
+}
+
+/* ── Z-Score Bar ── */
+.zscore-bar {
+  height: 12rpx;
+  background: rgba(75, 85, 99, 0.2);
+  border-radius: 6rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.zscore-center-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2rpx;
+  background: rgba(156, 163, 175, 0.4);
+}
+
+.zscore-fill {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: 6rpx;
+  max-width: 50%;
+}
+
+.zscore-fill.positive {
+  left: 50%;
+}
+
+.zscore-fill.negative {
+  right: 50%;
+}
