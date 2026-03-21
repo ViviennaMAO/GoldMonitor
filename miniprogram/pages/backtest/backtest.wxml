@@ -123,23 +123,50 @@
     <!-- ── Equity Tab ── -->
     <!-- ══════════════════════════════════════ -->
     <view wx:if="{{activeTab === 'equity'}}">
-      <view class="card">
-        <text class="card-title">权益变化 (采样)</text>
-        <view class="equity-table mt-12">
-          <view class="equity-header">
-            <text class="eq-col">日期</text>
-            <text class="eq-col">权益</text>
-            <text class="eq-col">回撤</text>
-          </view>
-          <view class="equity-row" wx:for="{{equityPoints}}" wx:key="date">
-            <text class="eq-col text-gray">{{item.date}}</text>
-            <text class="eq-col text-white">{{item.equity}}</text>
-            <text class="eq-col" style="color: {{item.drawdownColor}}">{{item.drawdown}}</text>
+      <!-- Equity Chart -->
+      <view class="card chart-card" wx:if="{{canvasReady}}">
+        <view class="row-between mb-12">
+          <text class="card-title">权益曲线</text>
+          <text class="text-xs text-gray">2023-01 ~ 2026-03</text>
+        </view>
+        <view class="chart-container">
+          <canvas type="2d" id="equityCanvas" class="equity-canvas"></canvas>
+        </view>
+        <view class="chart-legend mt-12">
+          <view class="row" style="gap: 16rpx;">
+            <view class="row" style="gap: 6rpx; align-items: center;">
+              <view style="width: 20rpx; height: 4rpx; background: #10B981; border-radius: 2rpx;"></view>
+              <text class="text-xs text-gray">权益</text>
+            </view>
+            <view class="row" style="gap: 6rpx; align-items: center;">
+              <view style="width: 20rpx; height: 8rpx; background: rgba(239, 68, 68, 0.15); border-radius: 2rpx;"></view>
+              <text class="text-xs text-gray">回撤区域</text>
+            </view>
           </view>
         </view>
       </view>
 
-      <view wx:if="{{equityPoints.length === 0}}" class="text-center mt-20">
+      <!-- Summary Stats under chart -->
+      <view class="equity-summary mt-16">
+        <view class="eq-sum-item">
+          <text class="text-xs text-gray">起始权益</text>
+          <text class="text-sm text-white">$100,000</text>
+        </view>
+        <view class="eq-sum-item">
+          <text class="text-xs text-gray">最终权益</text>
+          <text class="text-sm text-green">{{finalEquity}}</text>
+        </view>
+        <view class="eq-sum-item">
+          <text class="text-xs text-gray">总收益</text>
+          <text class="text-sm" style="color: {{totalReturnColor}}">{{totalReturn}}</text>
+        </view>
+        <view class="eq-sum-item">
+          <text class="text-xs text-gray">最大回撤</text>
+          <text class="text-sm text-red">{{maxDrawdown}}</text>
+        </view>
+      </view>
+
+      <view wx:if="{{!canvasReady}}" class="text-center mt-20">
         <text class="text-gray">暂无权益数据</text>
       </view>
     </view>
