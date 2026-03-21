@@ -79,13 +79,14 @@ export function useFactors() {
 
 export interface SignalData {
   date: string
+  timestamp?: string
   signal: string
   predicted_return: number
   confidence: number
   gold_price: number
-  gold_open: number
-  gold_high: number
-  gold_low: number
+  gold_open?: number
+  gold_high?: number
+  gold_low?: number
   atr: number
   stop_loss: number
   take_profit: number
