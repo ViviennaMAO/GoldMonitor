@@ -33,7 +33,7 @@ export function FactorCard({ factor, compact }: FactorCardProps) {
       className={clsx(
         'relative rounded-xl border border-white/[0.06] p-3 cursor-pointer transition-all duration-200',
         'bg-[#0A1628] hover:bg-[#0F1F3D] hover:border-white/10',
-        compact ? 'min-w-[140px]' : 'min-w-[155px]',
+        compact ? 'min-w-[120px] md:min-w-[140px]' : 'min-w-[130px] md:min-w-[155px]',
       )}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -47,7 +47,7 @@ export function FactorCard({ factor, compact }: FactorCardProps) {
       <div className="text-xs text-slate-300 font-medium mb-2 leading-tight">{factor.name}</div>
 
       {/* Z-Score */}
-      <div className={clsx('text-2xl font-bold font-mono tabular-nums mb-0.5', getZScoreColor(factor.zScore, factor.direction))}>
+      <div className={clsx('text-xl md:text-2xl font-bold font-mono tabular-nums mb-0.5', getZScoreColor(factor.zScore, factor.direction))}>
         {factor.zScore > 0 ? '+' : ''}{factor.zScore.toFixed(2)}
       </div>
 
@@ -99,7 +99,7 @@ export function FactorCard({ factor, compact }: FactorCardProps) {
 
       {/* Hover tooltip */}
       {hovered && (
-        <div className="absolute left-0 top-full mt-1 z-50 w-56 rounded-xl border border-white/10 bg-[#0A1628]/95 backdrop-blur-sm p-3 shadow-2xl text-xs pointer-events-none">
+        <div className="absolute left-0 top-full mt-1 z-50 w-48 md:w-56 rounded-xl border border-white/10 bg-[#0A1628]/95 backdrop-blur-sm p-2 md:p-3 shadow-2xl text-xs pointer-events-none">
           <div className="font-semibold text-slate-200 mb-2">{factor.id} · {factor.nameEn}</div>
           <div className="space-y-1 text-slate-400">
             <div className="flex justify-between"><span>Z-Score</span><span className="font-mono text-slate-200">{factor.zScore.toFixed(3)}</span></div>

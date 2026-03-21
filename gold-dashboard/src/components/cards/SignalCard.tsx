@@ -43,7 +43,7 @@ export function SignalCard({ signal }: SignalCardProps) {
 
   return (
     <div
-      className={`rounded-2xl border ${cfg.border} bg-gradient-to-b ${cfg.bg} bg-[#0A1628] p-4 relative overflow-hidden`}
+      className={`rounded-2xl border ${cfg.border} bg-gradient-to-b ${cfg.bg} bg-[#0A1628] p-3 md:p-4 relative overflow-hidden`}
       style={{ boxShadow: cfg.glow }}
     >
       {/* Regime badge */}
@@ -73,22 +73,22 @@ export function SignalCard({ signal }: SignalCardProps) {
       </div>
 
       {/* Prediction */}
-      <div className="flex items-center gap-4 mb-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.04]">
-        <div className="text-center">
+      <div className="flex items-center justify-around gap-2 md:gap-4 mb-3 p-2 md:p-3 rounded-xl bg-white/[0.03] border border-white/[0.04]">
+        <div className="text-center min-w-0">
           <div className="text-[10px] text-slate-500 mb-0.5">预测20日收益</div>
-          <div className="text-xl font-bold font-mono" style={{ color: cfg.color }}>
+          <div className="text-base md:text-xl font-bold font-mono" style={{ color: cfg.color }}>
             {signal.prediction > 0 ? '+' : ''}{signal.prediction.toFixed(2)}%
           </div>
         </div>
-        <div className="w-px h-8 bg-white/10" />
-        <div className="text-center">
+        <div className="w-px h-8 bg-white/10 flex-shrink-0" />
+        <div className="text-center min-w-0">
           <div className="text-[10px] text-slate-500 mb-0.5">模型置信度</div>
-          <div className="text-xl font-bold font-mono text-slate-200">{signal.confidence}%</div>
+          <div className="text-base md:text-xl font-bold font-mono text-slate-200">{signal.confidence}%</div>
         </div>
-        <div className="w-px h-8 bg-white/10" />
-        <div className="text-center">
+        <div className="w-px h-8 bg-white/10 flex-shrink-0" />
+        <div className="text-center min-w-0">
           <div className="text-[10px] text-slate-500 mb-0.5">信号阈值</div>
-          <div className="text-xl font-bold font-mono text-slate-400">±0.8%</div>
+          <div className="text-base md:text-xl font-bold font-mono text-slate-400">±0.8%</div>
         </div>
       </div>
 

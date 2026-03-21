@@ -14,37 +14,37 @@ export function ShapWaterfall({ bars, prediction }: ShapWaterfallProps) {
   const base = 0 // baseline E[f(x)]
 
   return (
-    <div className="w-full h-full flex flex-col">
-      <div className="flex items-center justify-between mb-4">
+    <div className="w-full flex flex-col">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-3 md:mb-4">
         <div>
-          <h3 className="text-sm font-semibold text-slate-200">SHAP 因子归因瀑布图</h3>
-          <p className="text-[10px] text-slate-500 mt-0.5">每日信号驱动因子分解 · 基准值 E[f(x)] = 0.00%</p>
+          <h3 className="text-xs md:text-sm font-semibold text-slate-200">SHAP 因子归因瀑布图</h3>
+          <p className="text-[9px] md:text-[10px] text-slate-500 mt-0.5">每日信号驱动因子分解 · 基准值 E[f(x)] = 0.00%</p>
         </div>
-        <div className="flex items-center gap-3 text-[10px]">
+        <div className="flex items-center gap-2 md:gap-3 text-[10px]">
           <div className="flex items-center gap-1">
-            <div className="w-3 h-3 rounded-sm bg-green-500/70" />
-            <span className="text-slate-500">看多贡献</span>
+            <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-sm bg-green-500/70" />
+            <span className="text-slate-500">看多</span>
           </div>
           <div className="flex items-center gap-1">
-            <div className="w-3 h-3 rounded-sm bg-red-500/70" />
-            <span className="text-slate-500">看空贡献</span>
+            <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-sm bg-red-500/70" />
+            <span className="text-slate-500">看空</span>
           </div>
         </div>
       </div>
 
       {/* Prediction summary */}
-      <div className="flex items-center gap-3 mb-4 p-3 rounded-xl bg-white/[0.03] border border-white/[0.05]">
-        <div className="text-[10px] text-slate-500">基准值</div>
-        <div className="text-sm font-mono text-slate-400">0.00%</div>
+      <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4 p-2 md:p-3 rounded-xl bg-white/[0.03] border border-white/[0.05]">
+        <div className="text-[9px] md:text-[10px] text-slate-500">基准值</div>
+        <div className="text-xs md:text-sm font-mono text-slate-400">0.00%</div>
         <div className="flex-1 h-px bg-white/[0.06]" />
-        <div className="text-[10px] text-slate-500">预测值</div>
-        <div className="text-lg font-bold font-mono" style={{ color: prediction >= 0 ? '#22C55E' : '#EF4444' }}>
+        <div className="text-[9px] md:text-[10px] text-slate-500">预测值</div>
+        <div className="text-base md:text-lg font-bold font-mono" style={{ color: prediction >= 0 ? '#22C55E' : '#EF4444' }}>
           {prediction > 0 ? '+' : ''}{prediction.toFixed(2)}%
         </div>
       </div>
 
       {/* Bars */}
-      <div className="flex-1 space-y-1.5 overflow-y-auto pr-1">
+      <div className="space-y-1.5 pr-1">
         {bars.map((bar, i) => {
           const isPositive = bar.value >= 0
           const widthPct = (Math.abs(bar.value) / maxAbs) * 100
@@ -59,9 +59,9 @@ export function ShapWaterfall({ bars, prediction }: ShapWaterfallProps) {
             >
               <div className="flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-white/[0.03] transition-colors">
                 {/* Factor label */}
-                <div className="w-28 flex-shrink-0">
-                  <div className="text-xs text-slate-300 font-medium">{bar.factor}</div>
-                  <div className="text-[9px] text-slate-600 font-mono mt-0.5">{bar.rawValue}</div>
+                <div className="w-20 md:w-28 flex-shrink-0">
+                  <div className="text-[11px] md:text-xs text-slate-300 font-medium truncate">{bar.factor}</div>
+                  <div className="text-[9px] text-slate-600 font-mono mt-0.5 truncate">{bar.rawValue}</div>
                 </div>
 
                 {/* Bar chart */}
@@ -97,9 +97,9 @@ export function ShapWaterfall({ bars, prediction }: ShapWaterfallProps) {
                 </div>
 
                 {/* Value */}
-                <div className="w-16 text-right flex-shrink-0">
+                <div className="w-14 md:w-16 text-right flex-shrink-0">
                   <span
-                    className="text-xs font-bold font-mono"
+                    className="text-[10px] md:text-xs font-bold font-mono"
                     style={{ color: isPositive ? '#22C55E' : '#EF4444' }}
                   >
                     {bar.value > 0 ? '+' : ''}{(bar.value * 100).toFixed(2)}%
@@ -109,7 +109,7 @@ export function ShapWaterfall({ bars, prediction }: ShapWaterfallProps) {
 
               {/* Hover tooltip */}
               {isHovered && (
-                <div className="absolute left-0 top-full mt-1 z-50 w-72 rounded-xl border border-white/10 bg-[#0A1628]/98 backdrop-blur-sm p-3 shadow-2xl pointer-events-none">
+                <div className="absolute left-0 top-full mt-1 z-50 w-60 md:w-72 rounded-xl border border-white/10 bg-[#0A1628]/98 backdrop-blur-sm p-2 md:p-3 shadow-2xl pointer-events-none">
                   <div className="font-semibold text-sm text-slate-200 mb-2">{bar.factor}</div>
                   <div className="space-y-1 text-xs">
                     <div className="flex justify-between text-slate-400">
@@ -134,27 +134,27 @@ export function ShapWaterfall({ bars, prediction }: ShapWaterfallProps) {
       </div>
 
       {/* Summary total */}
-      <div className="mt-3 pt-3 border-t border-white/[0.06] flex items-center justify-between">
+      <div className="mt-2 md:mt-3 pt-2 md:pt-3 border-t border-white/[0.06] flex items-center justify-between">
         <div className="flex items-center gap-1.5">
-          <div className="w-1 h-8 rounded bg-gradient-to-b from-green-500 to-transparent" />
+          <div className="w-1 h-6 md:h-8 rounded bg-gradient-to-b from-green-500 to-transparent" />
           <div>
-            <div className="text-[10px] text-slate-500">看多因子合计</div>
-            <div className="text-sm font-bold font-mono text-green-400">
+            <div className="text-[9px] md:text-[10px] text-slate-500">看多合计</div>
+            <div className="text-xs md:text-sm font-bold font-mono text-green-400">
               +{(bars.filter(b => b.value > 0).reduce((s, b) => s + b.value, 0) * 100).toFixed(2)}%
             </div>
           </div>
         </div>
-        <div className="text-2xl font-bold font-mono" style={{ color: prediction >= 0 ? '#22C55E' : '#EF4444' }}>
+        <div className="text-xl md:text-2xl font-bold font-mono" style={{ color: prediction >= 0 ? '#22C55E' : '#EF4444' }}>
           {prediction > 0 ? '+' : ''}{prediction.toFixed(2)}%
         </div>
         <div className="flex items-center gap-1.5">
           <div>
-            <div className="text-[10px] text-slate-500 text-right">看空因子合计</div>
-            <div className="text-sm font-bold font-mono text-red-400 text-right">
+            <div className="text-[9px] md:text-[10px] text-slate-500 text-right">看空合计</div>
+            <div className="text-xs md:text-sm font-bold font-mono text-red-400 text-right">
               {(bars.filter(b => b.value < 0).reduce((s, b) => s + b.value, 0) * 100).toFixed(2)}%
             </div>
           </div>
-          <div className="w-1 h-8 rounded bg-gradient-to-b from-red-500 to-transparent" />
+          <div className="w-1 h-6 md:h-8 rounded bg-gradient-to-b from-red-500 to-transparent" />
         </div>
       </div>
     </div>

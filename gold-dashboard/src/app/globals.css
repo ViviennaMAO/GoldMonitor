@@ -58,4 +58,13 @@ html, body {
   .glow-green { box-shadow: 0 0 20px rgba(34, 197, 94, 0.15); }
   .glow-red { box-shadow: 0 0 20px rgba(239, 68, 68, 0.15); }
   .glow-gold { box-shadow: 0 0 30px rgba(251, 191, 36, 0.1); }
+
+  /* Hide scrollbar but keep scrolling */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }

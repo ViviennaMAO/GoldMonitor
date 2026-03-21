@@ -33,18 +33,18 @@ export function StatusBar() {
   const warningCount  = alerts.filter(a => a.level === 'warning').length
 
   return (
-    <footer className="relative flex-shrink-0 h-9 flex items-center justify-between px-4 border-t border-white/[0.06] bg-[#050B18] text-[10px]">
+    <footer className="relative flex-shrink-0 h-9 flex items-center justify-between px-2 md:px-4 border-t border-white/[0.06] bg-[#050B18] text-[10px]">
       {/* Left: system status */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 md:gap-4">
         <div className="flex items-center gap-1.5 text-green-400/80">
           <Circle className="w-2 h-2 fill-current animate-pulse" />
           <span>系统正常</span>
         </div>
-        <div className="flex items-center gap-1 text-slate-600">
+        <div className="items-center gap-1 text-slate-600 hidden md:flex">
           <Cpu className="w-3 h-3" />
           <span>XGBoost 推理引擎 · 在线</span>
         </div>
-        <div className="flex items-center gap-1 text-slate-600">
+        <div className="items-center gap-1 text-slate-600 hidden lg:flex">
           <Database className="w-3 h-3" style={{ color: dataSource?.fred ? '#22C55E80' : undefined }} />
           <span>
             {dataSource?.fred ? 'FRED+Yahoo' : 'Mock 数据'}
@@ -54,7 +54,7 @@ export function StatusBar() {
               : '21:00'}
           </span>
         </div>
-        <div className="flex items-center gap-1 text-slate-600">
+        <div className="items-center gap-1 text-slate-600 hidden lg:flex">
           <Wifi className="w-3 h-3" />
           <span>VSTAR WebSocket · 连接中</span>
         </div>
@@ -62,7 +62,7 @@ export function StatusBar() {
 
       {/* Center: alert counts */}
       <button
-        className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+        className="flex items-center gap-2 md:gap-3 cursor-pointer hover:opacity-80 transition-opacity"
         onClick={() => setShowAlerts(s => !s)}
       >
         {criticalCount > 0 && (
@@ -79,25 +79,25 @@ export function StatusBar() {
         )}
         <div className="flex items-center gap-1 text-slate-600">
           <Bell className="w-3 h-3" />
-          <span>{alerts.length} 条消息</span>
+          <span className="hidden sm:inline">{alerts.length} 条消息</span>
         </div>
       </button>
 
       {/* Right: time + version */}
-      <div className="flex items-center gap-3 text-slate-600">
+      <div className="flex items-center gap-2 md:gap-3 text-slate-600">
         <span className="font-mono">{time}</span>
-        <span className="text-slate-800">·</span>
-        <span>Gold Monitor v1.0 · PRD v1.0</span>
+        <span className="text-slate-800 hidden md:inline">·</span>
+        <span className="hidden md:inline">Gold Monitor v1.0</span>
       </div>
 
-      {/* Alerts dropdown */}
+      {/* Alerts dropdown — responsive width */}
       {showAlerts && (
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[480px] rounded-2xl border border-white/10 bg-[#0A1628]/98 backdrop-blur-xl shadow-2xl p-3 z-50">
+        <div className="absolute bottom-10 left-2 right-2 md:left-1/2 md:right-auto md:-translate-x-1/2 md:w-[480px] rounded-2xl border border-white/10 bg-[#0A1628]/98 backdrop-blur-xl shadow-2xl p-3 z-50">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-semibold text-slate-300">告警消息</span>
             <button onClick={() => setShowAlerts(false)} className="text-slate-600 hover:text-slate-300 cursor-pointer text-xs">关闭</button>
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-1.5 max-h-[50vh] overflow-y-auto">
             {alerts.map(alert => {
               const cfg = alertConfig[alert.level]
               const Icon = cfg.icon

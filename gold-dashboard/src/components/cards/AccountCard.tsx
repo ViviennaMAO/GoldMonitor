@@ -26,7 +26,7 @@ export function AccountCard({ stats }: AccountCardProps) {
   const heatColor = stats.portfolioHeat > 1.8 ? 'red' : stats.portfolioHeat > 1.2 ? 'amber' : 'green'
 
   return (
-    <div className="rounded-2xl border border-white/[0.06] bg-[#0A1628] p-4 space-y-3">
+    <div className="rounded-2xl border border-white/[0.06] bg-[#0A1628] p-3 md:p-4 space-y-3">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
@@ -42,7 +42,7 @@ export function AccountCard({ stats }: AccountCardProps) {
       <div className="flex items-end justify-between">
         <div>
           <div className="text-[10px] text-slate-600 mb-0.5">账户净值</div>
-          <div className="text-2xl font-bold font-mono text-slate-100">
+          <div className="text-xl md:text-2xl font-bold font-mono text-slate-100">
             ${equity.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
           <div className="text-xs font-mono mt-0.5" style={{ color: pnl >= 0 ? '#22C55E' : '#EF4444' }}>
@@ -87,29 +87,29 @@ export function AccountCard({ stats }: AccountCardProps) {
       </div>
 
       {/* Performance metrics */}
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 md:gap-2">
         {[
           { label: 'Sharpe(60d)', value: stats.sharpe60d.toFixed(2), color: stats.sharpe60d > 1 ? 'text-green-400' : 'text-amber-400' },
           { label: '最大回撤', value: `-${stats.maxDrawdown.toFixed(2)}%`, color: 'text-red-400' },
           { label: '胜率', value: `${stats.winRate.toFixed(1)}%`, color: 'text-blue-400' },
         ].map(m => (
-          <div key={m.label} className="text-center p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
+          <div key={m.label} className="text-center p-1.5 md:p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
             <div className="text-[9px] text-slate-600 mb-0.5">{m.label}</div>
-            <div className={`text-sm font-bold font-mono ${m.color}`}>{m.value}</div>
+            <div className={`text-xs md:text-sm font-bold font-mono ${m.color}`}>{m.value}</div>
           </div>
         ))}
       </div>
 
       {/* More metrics */}
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 md:gap-2">
         {[
           { label: 'Calmar', value: stats.calmar.toFixed(2), color: 'text-purple-400' },
           { label: '盈亏比', value: stats.profitFactor.toFixed(2), color: 'text-slate-300' },
           { label: '总交易', value: stats.totalTrades.toString(), color: 'text-slate-400' },
         ].map(m => (
-          <div key={m.label} className="text-center p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
+          <div key={m.label} className="text-center p-1.5 md:p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
             <div className="text-[9px] text-slate-600 mb-0.5">{m.label}</div>
-            <div className={`text-sm font-bold font-mono ${m.color}`}>{m.value}</div>
+            <div className={`text-xs md:text-sm font-bold font-mono ${m.color}`}>{m.value}</div>
           </div>
         ))}
       </div>

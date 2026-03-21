@@ -27,7 +27,7 @@ export function PositionCard({ positions }: PositionCardProps) {
   }
 
   return (
-    <div className="rounded-2xl border border-white/[0.06] bg-[#0A1628] p-4 space-y-2">
+    <div className="rounded-2xl border border-white/[0.06] bg-[#0A1628] p-3 md:p-4 space-y-2">
       <div className="flex items-center justify-between mb-1">
         <div className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
           <Activity className="w-3.5 h-3.5" />
@@ -71,7 +71,7 @@ export function PositionCard({ positions }: PositionCardProps) {
               </div>
 
               {/* Price row */}
-              <div className="flex items-center gap-3 text-[10px] text-slate-500 font-mono">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-slate-500 font-mono">
                 <span>开仓 <span className="text-slate-300">${pos.entryPrice.toFixed(2)}</span></span>
                 <span>→</span>
                 <span>现价 <span className="text-slate-200 font-semibold">${pos.currentPrice.toFixed(2)}</span></span>
