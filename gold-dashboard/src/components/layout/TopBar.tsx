@@ -108,7 +108,7 @@ export function TopBar() {
           ))}
         </div>
 
-        {/* Right: status */}
+        {/* Right: status + VSTAR button */}
         <div className="flex items-center gap-3">
           {factorsLoading && (
             <RefreshCw className="w-3 h-3 text-slate-600 animate-spin" />
@@ -125,6 +125,15 @@ export function TopBar() {
             <AlertCircle className="w-3 h-3" />
             <span>1 警告</span>
           </div>
+          <a
+            href="https://share.vstarau.com/sign-page/?lang=zh_CN&inviteCode=s7f5qfhy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ml-1 px-3 py-1.5 rounded-md bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-black text-[11px] font-bold transition-all hover:shadow-lg hover:shadow-amber-500/20 flex items-center gap-1 flex-shrink-0"
+          >
+            <span>VSTAR 开户交易</span>
+            <ChevronRight className="w-3 h-3" />
+          </a>
         </div>
       </div>
 
