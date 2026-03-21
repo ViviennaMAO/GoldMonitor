@@ -7,48 +7,96 @@
       <view class="row-between mb-12">
         <text class="card-title">VSTAR 仿真账户</text>
         <view class="badge {{regimeClass}}">
-          <text>{{regimeStatus}}</text>
+          <text>{{regimeStatus}} {{riskMultiplier}}</text>
         </view>
       </view>
 
       <view class="balance-main">
         <text class="text-xs text-gray">账户权益</text>
-        <text class="balance-amount">{{equity}}</text>
+        <text class="balance-amount">{{finalEquity}}</text>
+        <text class="text-sm mt-8" style="color: {{totalReturnColor}}">总收益 {{totalReturn}}</text>
       </view>
+    </view>
 
-      <view class="divider"></view>
-
-      <view class="account-grid">
-        <view class="account-item">
-          <text class="account-label">余额</text>
-          <text class="account-value">{{balance}}</text>
+    <!-- ── Performance Stats ── -->
+    <view class="card">
+      <text class="card-title">策略表现</text>
+      <view class="perf-grid mt-12">
+        <view class="perf-item">
+          <text class="perf-label">初始资金</text>
+          <text class="perf-value text-white">{{initialEquity}}</text>
         </view>
-        <view class="account-item">
-          <text class="account-label">已用保证金</text>
-          <text class="account-value">{{margin}}</text>
+        <view class="perf-item">
+          <text class="perf-label">最终权益</text>
+          <text class="perf-value text-green">{{finalEquity}}</text>
         </view>
-        <view class="account-item">
-          <text class="account-label">可用保证金</text>
-          <text class="account-value">{{freeMargin}}</text>
+        <view class="perf-item">
+          <text class="perf-label">Sharpe 比率</text>
+          <text class="perf-value text-gold">{{sharpe}}</text>
         </view>
-        <view class="account-item">
-          <text class="account-label">保证金率</text>
-          <text class="account-value">{{marginLevel}}</text>
+        <view class="perf-item">
+          <text class="perf-label">最大回撤</text>
+          <text class="perf-value text-red">{{maxDrawdown}}</text>
+        </view>
+        <view class="perf-item">
+          <text class="perf-label">交易次数</text>
+          <text class="perf-value text-white">{{totalTrades}}</text>
+        </view>
+        <view class="perf-item">
+          <text class="perf-label">胜率</text>
+          <text class="perf-value text-gold">{{winRate}}</text>
+        </view>
+        <view class="perf-item">
+          <text class="perf-label">盈利/亏损</text>
+          <text class="perf-value">
+            <text class="text-green">{{winners}}</text>
+            <text class="text-gray"> / </text>
+            <text class="text-red">{{losers}}</text>
+          </text>
+        </view>
+        <view class="perf-item">
+          <text class="perf-label">平均盈/亏</text>
+          <text class="perf-value">
+            <text class="text-green">{{avgWin}}</text>
+            <text class="text-gray"> / </text>
+            <text class="text-red">{{avgLoss}}</text>
+          </text>
         </view>
       </view>
     </view>
 
-    <!-- ── P&L Card ── -->
-    <view class="card">
-      <text class="card-title">盈亏表现</text>
-      <view class="pnl-grid mt-12">
-        <view class="pnl-item">
-          <text class="pnl-label">今日盈亏</text>
-          <text class="pnl-value" style="color: {{todayPnlColor}}">{{todayPnl}}</text>
+    <!-- ── Active Position ── -->
+    <view class="card" wx:if="{{activePosition}}">
+      <view class="row-between mb-12">
+        <text class="card-title">当前持仓</text>
+        <view class="badge {{activePosition.dirClass}}">
+          <text>{{activePosition.direction}}</text>
         </view>
-        <view class="pnl-item">
-          <text class="pnl-label">本周盈亏</text>
-          <text class="pnl-value" style="color: {{weekPnlColor}}">{{weekPnl}}</text>
+      </view>
+      <view class="perf-grid">
+        <view class="perf-item">
+          <text class="perf-label">品种</text>
+          <text class="perf-value text-gold">{{activePosition.symbol}}</text>
+        </view>
+        <view class="perf-item">
+          <text class="perf-label">手数</text>
+          <text class="perf-value text-white">{{activePosition.size}}</text>
+        </view>
+        <view class="perf-item">
+          <text class="perf-label">入场价</text>
+          <text class="perf-value text-white">${{activePosition.entryPrice}}</text>
+        </view>
+        <view class="perf-item">
+          <text class="perf-label">现价</text>
+          <text class="perf-value text-white">${{activePosition.currentPrice}}</text>
+        </view>
+        <view class="perf-item">
+          <text class="perf-label">止损</text>
+          <text class="perf-value text-red">${{activePosition.stopLoss}}</text>
+        </view>
+        <view class="perf-item">
+          <text class="perf-label">浮盈</text>
+          <text class="perf-value" style="color: {{activePosition.pnlColor}}">{{activePosition.pnl}}</text>
         </view>
       </view>
     </view>
@@ -56,36 +104,18 @@
     <!-- ── Risk Regime Card ── -->
     <view class="card">
       <text class="card-title">风险管理</text>
-      <view class="risk-grid mt-12">
-        <view class="risk-item">
-          <text class="risk-label">风控状态</text>
-          <view class="badge {{regimeClass}}">
-            <text>{{regimeStatus}}</text>
-          </view>
-        </view>
-        <view class="risk-item">
-          <text class="risk-label">仓位乘数</text>
-          <text class="risk-value text-gold">{{riskMultiplier}}</text>
-        </view>
-        <view class="risk-item">
-          <text class="risk-label">持仓数量</text>
-          <text class="risk-value text-white">{{openCount}}</text>
-        </view>
-      </view>
-
-      <!-- Risk level explanation -->
-      <view class="risk-legend mt-16">
+      <view class="risk-legend mt-12">
         <view class="legend-item">
           <view class="legend-dot" style="background: #10B981;"></view>
-          <text class="text-xs text-gray">健康 (1.0×) — 正常仓位</text>
+          <text class="text-xs text-gray">Risk-On (1.0x) — 正常仓位</text>
         </view>
         <view class="legend-item">
           <view class="legend-dot" style="background: #F59E0B;"></view>
-          <text class="text-xs text-gray">警戒 (0.5×) — 减半仓位</text>
+          <text class="text-xs text-gray">Transition (0.5x) — 减半仓位</text>
         </view>
         <view class="legend-item">
           <view class="legend-dot" style="background: #EF4444;"></view>
-          <text class="text-xs text-gray">熔断 (0×) — 禁止开仓</text>
+          <text class="text-xs text-gray">Risk-Off (0x) — 禁止开仓</text>
         </view>
       </view>
     </view>

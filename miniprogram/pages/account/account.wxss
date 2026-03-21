@@ -22,89 +22,38 @@
   margin-top: 8rpx;
 }
 
-/* ── Account Grid ── */
-.account-grid {
+/* ── Performance Grid ── */
+.perf-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 16rpx;
+  gap: 2rpx;
 }
 
-.account-item {
-  width: calc(50% - 8rpx);
+.perf-item {
+  width: calc(50% - 1rpx);
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  padding: 12rpx 0;
+  padding: 16rpx 12rpx;
+  background: rgba(17, 24, 39, 0.4);
+  border-radius: 8rpx;
 }
 
-.account-label {
-  font-size: 22rpx;
+.perf-label {
+  font-size: 24rpx;
   color: #9CA3AF;
-  margin-bottom: 6rpx;
 }
 
-.account-value {
-  font-size: 28rpx;
+.perf-value {
+  font-size: 26rpx;
   font-weight: 600;
-  color: #F9FAFB;
-}
-
-/* ── PnL Grid ── */
-.pnl-grid {
-  display: flex;
-  gap: 16rpx;
-}
-
-.pnl-item {
-  flex: 1;
-  background: rgba(17, 24, 39, 0.6);
-  border-radius: 12rpx;
-  padding: 20rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.pnl-label {
-  font-size: 22rpx;
-  color: #9CA3AF;
-  margin-bottom: 8rpx;
-}
-
-.pnl-value {
-  font-size: 32rpx;
-  font-weight: 700;
-}
-
-/* ── Risk Grid ── */
-.risk-grid {
-  display: flex;
-  gap: 12rpx;
-}
-
-.risk-item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8rpx;
-}
-
-.risk-label {
-  font-size: 22rpx;
-  color: #9CA3AF;
-}
-
-.risk-value {
-  font-size: 28rpx;
-  font-weight: 700;
 }
 
 /* ── Risk Legend ── */
 .risk-legend {
   display: flex;
   flex-direction: column;
-  gap: 8rpx;
+  gap: 12rpx;
 }
 
 .legend-item {
@@ -114,8 +63,8 @@
 }
 
 .legend-dot {
-  width: 12rpx;
-  height: 12rpx;
+  width: 14rpx;
+  height: 14rpx;
   border-radius: 50%;
   flex-shrink: 0;
 }

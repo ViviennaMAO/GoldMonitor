@@ -5,21 +5,24 @@ Page({
   data: {
     loading: true,
     // Account stats
-    balance: '--',
-    equity: '--',
-    margin: '--',
-    freeMargin: '--',
-    marginLevel: '--',
-    todayPnl: '--',
-    todayPnlColor: '#9CA3AF',
-    weekPnl: '--',
-    weekPnlColor: '#9CA3AF',
+    initialEquity: '--',
+    finalEquity: '--',
+    totalReturn: '--',
+    totalReturnColor: '#9CA3AF',
+    totalTrades: '--',
+    winRate: '--',
+    winners: '--',
+    losers: '--',
+    maxDrawdown: '--',
+    sharpe: '--',
+    avgWin: '--',
+    avgLoss: '--',
     // Regime
     regimeStatus: '--',
     regimeClass: 'badge-neutral',
     riskMultiplier: '--',
-    // Open positions count
-    openCount: 0,
+    // Active position
+    activePosition: null,
     // App info
     version: '1.0.0',
     apiBase: ''
@@ -43,48 +46,60 @@ Page({
     wx.showLoading({ title: '加载账户数据...' })
 
     return Promise.all([
+      api.request('/account').catch(function () { return null }),
       api.request('/signal').catch(function () { return null }),
       api.fetchPositions().catch(function () { return null }),
       api.fetchRegime().catch(function () { return null })
     ]).then(function (results) {
-      var signalData = results[0]
-      var posData = results[1]
-      var regimeData = results[2]
+      var accountData = results[0]
+      var signalData = results[1]
+      var posData = results[2]
+      var regimeData = results[3]
 
       var updateObj = { loading: false }
 
-      // Account from signal endpoint (contains account info)
-      if (signalData && signalData.account) {
-        var a = signalData.account
-        updateObj.balance = '$' + util.formatNumber(a.balance, 2)
-        updateObj.equity = '$' + util.formatNumber(a.equity, 2)
-        updateObj.margin = '$' + util.formatNumber(a.margin, 2)
-        updateObj.freeMargin = '$' + util.formatNumber(a.freeMargin, 2)
-        updateObj.marginLevel = a.marginLevel ? util.formatNumber(a.marginLevel, 0) + '%' : '--'
-        updateObj.todayPnl = util.formatPercent(a.todayPnl)
-        updateObj.todayPnlColor = (a.todayPnl || 0) >= 0 ? '#10B981' : '#EF4444'
-        updateObj.weekPnl = util.formatPercent(a.weekPnl)
-        updateObj.weekPnlColor = (a.weekPnl || 0) >= 0 ? '#10B981' : '#EF4444'
+      // ── Account stats from /api/account ──
+      if (accountData) {
+        updateObj.initialEquity = '$' + util.formatNumber(accountData.initial_equity, 0)
+        updateObj.finalEquity = '$' + util.formatNumber(accountData.final_equity, 0)
+        updateObj.totalReturn = util.formatPercent(accountData.total_return)
+        updateObj.totalReturnColor = (accountData.total_return || 0) >= 0 ? '#10B981' : '#EF4444'
+        updateObj.totalTrades = accountData.total_trades || 0
+        updateObj.winRate = util.formatNumber(accountData.win_rate, 1) + '%'
+        updateObj.winners = accountData.winners || 0
+        updateObj.losers = accountData.losers || 0
+        updateObj.maxDrawdown = util.formatNumber(accountData.max_drawdown, 2) + '%'
+        updateObj.sharpe = util.formatNumber(accountData.sharpe_ratio, 4)
+        updateObj.avgWin = '$' + util.formatNumber(accountData.avg_win, 2)
+        updateObj.avgLoss = '$' + util.formatNumber(accountData.avg_loss, 2)
       }
 
-      // Open positions count
-      if (posData && posData.positions) {
-        var openCount = posData.positions.filter(function (p) { return !p.exitDate }).length
-        updateObj.openCount = openCount
+      // ── Regime from /api/signal ──
+      if (signalData) {
+        var regime = signalData.regime || 'Unknown'
+        updateObj.regimeStatus = regime === 'Risk-On' ? '风险偏好' :
+                                  regime === 'Risk-Off' ? '风险规避' :
+                                  regime === 'Transition' ? '过渡期' : regime
+        updateObj.regimeClass = regime === 'Risk-On' ? 'badge-buy' :
+                                regime === 'Risk-Off' ? 'badge-sell' : 'badge-gold'
+        updateObj.riskMultiplier = signalData.regime_multiplier != null ?
+          signalData.regime_multiplier + 'x' : '--'
       }
 
-      // Regime
-      if (regimeData) {
-        var regime = regimeData.current || regimeData.regime
-        if (regime) {
-          var status = regime.status || regime
-          updateObj.regimeStatus = status === 'healthy' ? '健康' :
-                                   status === 'caution' ? '警戒' :
-                                   status === 'circuit_break' ? '熔断' : status
-          updateObj.regimeClass = status === 'healthy' ? 'badge-buy' :
-                                  status === 'caution' ? 'badge-gold' : 'badge-sell'
-          updateObj.riskMultiplier = regime.multiplier != null ?
-            regime.multiplier + '×' : '1.0×'
+      // ── Active position from /api/positions ──
+      if (posData && posData.active && posData.active.length > 0) {
+        var ap = posData.active[0]
+        updateObj.activePosition = {
+          symbol: ap.symbol || 'XAUUSD',
+          direction: ap.direction || 'Long',
+          dirClass: (ap.direction || 'Long') === 'Long' ? 'badge-buy' : 'badge-sell',
+          size: util.formatNumber(ap.size, 2),
+          entryPrice: util.formatPrice(ap.entry_price),
+          currentPrice: util.formatPrice(ap.current_price),
+          stopLoss: util.formatPrice(ap.stop_loss),
+          pnl: '$' + util.formatNumber(ap.unrealized_pnl, 2),
+          pnlPercent: util.formatPercent(ap.return_pct),
+          pnlColor: (ap.unrealized_pnl || 0) >= 0 ? '#10B981' : '#EF4444'
         }
       }
 
