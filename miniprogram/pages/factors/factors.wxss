@@ -112,6 +112,13 @@
   font-weight: 700;
 }
 
+.ic-hint {
+  font-size: 18rpx;
+  color: #6B7280;
+  margin-top: 6rpx;
+  text-align: center;
+}
+
 /* ── IC Bar Chart ── */
 .ic-chart {
   overflow: hidden;

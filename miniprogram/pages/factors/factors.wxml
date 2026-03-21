@@ -73,20 +73,24 @@
         <view class="ic-stat-card">
           <text class="ic-stat-label">Rolling IC</text>
           <text class="ic-stat-value" style="color: {{icLatestColor}}">{{icLatest}}</text>
+          <text class="ic-hint">最近一期预测相关性</text>
         </view>
         <view class="ic-stat-card">
           <text class="ic-stat-label">IC Mean</text>
           <text class="ic-stat-value text-white">{{icMean}}</text>
+          <text class="ic-hint">历史平均预测准度</text>
         </view>
         <view class="ic-stat-card">
           <text class="ic-stat-label">ICIR</text>
           <text class="ic-stat-value text-gold">{{icir}}</text>
+          <text class="ic-hint">预测稳定性 (>2优)</text>
         </view>
       </view>
 
       <!-- IC Bar Chart -->
       <view class="card mt-16">
         <text class="card-title">Rolling IC 时序</text>
+        <text class="text-xs text-gray mt-4">绿色=因子预测方向正确，红色=预测方向错误</text>
         <view class="ic-chart mt-12">
           <!-- Zero line -->
           <view class="ic-chart-area">
