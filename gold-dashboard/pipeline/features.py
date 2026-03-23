@@ -57,11 +57,14 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     else:
         features["F4_BEI"] = 0.0
 
-    # F5: OVX — Oil Volatility (proxy for geopolitical risk)
-    if "OVX_close" in df.columns:
-        features["F5_OVX"] = rolling_zscore(df["OVX_close"])
+    # F5: GPR — Geopolitical Risk (Economic Policy Uncertainty Index)
+    if "GPR" in df.columns:
+        features["F5_GPR"] = rolling_zscore(df["GPR"])
+    elif "OVX_close" in df.columns:
+        # Fallback: use OVX as proxy if GPR unavailable
+        features["F5_GPR"] = rolling_zscore(df["OVX_close"])
     else:
-        features["F5_OVX"] = 0.0
+        features["F5_GPR"] = 0.0
 
     # F6: GVZ — Gold Volatility Index
     if "GVZ_close" in df.columns:
@@ -118,7 +121,7 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
         "FED_FUNDS": "raw_FedFunds",
         "TIPS_10Y": "raw_TIPS10Y",
         "BEI": "raw_BEI",
-        "OVX_close": "raw_OVX",
+        "GPR": "raw_GPR",
         "GVZ_close": "raw_GVZ",
     }
     for src, dst in raw_cols.items():

@@ -85,18 +85,51 @@ def fetch_stooq(symbol: str, stooq_symbol: str) -> pd.DataFrame:
 
 
 def fetch_all_stooq() -> pd.DataFrame:
-    """Fetch all Stooq series and merge."""
+    """Fetch all Stooq series and merge. Falls back to Yahoo Finance if Stooq is rate-limited."""
+    # Yahoo Finance symbol mapping for fallback
+    YAHOO_FALLBACK = {
+        "XAUUSD": "GC=F",
+        "GLD": "GLD",
+        "IAU": "IAU",
+        "GDX": "GDX",
+        "GDXJ": "GDXJ",
+    }
+
     frames = []
     for symbol, stooq_sym in STOOQ_SYMBOLS.items():
+        df = pd.DataFrame()
         try:
             df = fetch_stooq(symbol, stooq_sym)
             if not df.empty:
                 frames.append(df)
                 print(f"  Stooq {symbol}: {len(df)} bars")
-            else:
-                print(f"  Stooq {symbol}: no data")
+                continue
         except Exception as e:
             print(f"  Stooq {symbol}: FAILED — {e}")
+
+        # Fallback to Yahoo Finance
+        yahoo_sym = YAHOO_FALLBACK.get(symbol)
+        if yahoo_sym and df.empty:
+            try:
+                yf_df = fetch_yahoo_history(yahoo_sym, days=4000, ohlcv=True)
+                if not yf_df.empty:
+                    # Rename columns to match expected format
+                    rename = {}
+                    clean = yahoo_sym.replace("^", "").replace("=", "")
+                    for col_type in ["open", "high", "low", "close", "volume"]:
+                        src = f"{clean}_{col_type}"
+                        dst = f"{symbol}_{col_type}"
+                        if src in yf_df.columns:
+                            rename[src] = dst
+                    yf_df = yf_df.rename(columns=rename)
+                    frames.append(yf_df)
+                    print(f"  Yahoo {symbol} (fallback): {len(yf_df)} bars")
+                    continue
+            except Exception as e2:
+                print(f"  Yahoo {symbol} fallback: FAILED — {e2}")
+
+        if df.empty:
+            print(f"  {symbol}: no data from any source")
 
     if not frames:
         return pd.DataFrame()
@@ -111,7 +144,7 @@ def fetch_all_stooq() -> pd.DataFrame:
 
 # ── Yahoo Finance (GVZ, OVX) ──────────────────────────────────────────────────
 
-def fetch_yahoo_history(symbol: str, days: int = 2800) -> pd.DataFrame:
+def fetch_yahoo_history(symbol: str, days: int = 2800, ohlcv: bool = False) -> pd.DataFrame:
     """Fetch daily history from Yahoo Finance v8 chart API."""
     period2 = int(datetime.now().timestamp())
     period1 = int((datetime.now() - timedelta(days=days)).timestamp())
@@ -146,11 +179,22 @@ def fetch_yahoo_history(symbol: str, days: int = 2800) -> pd.DataFrame:
         return pd.DataFrame()
 
     dates = [datetime.utcfromtimestamp(ts).strftime("%Y-%m-%d") for ts in timestamps]
-    df = pd.DataFrame({
-        f"{symbol}_close": closes,
-    }, index=pd.DatetimeIndex(pd.to_datetime(dates)))
+    clean_sym = symbol.replace("^", "").replace("=", "")
 
-    df = df.dropna()
+    if ohlcv:
+        df = pd.DataFrame({
+            f"{clean_sym}_open": quote.get("open", [None] * len(closes)),
+            f"{clean_sym}_high": quote.get("high", [None] * len(closes)),
+            f"{clean_sym}_low": quote.get("low", [None] * len(closes)),
+            f"{clean_sym}_close": closes,
+            f"{clean_sym}_volume": quote.get("volume", [None] * len(closes)),
+        }, index=pd.DatetimeIndex(pd.to_datetime(dates)))
+    else:
+        df = pd.DataFrame({
+            f"{clean_sym}_close": closes,
+        }, index=pd.DatetimeIndex(pd.to_datetime(dates)))
+
+    df = df.dropna(subset=[f"{clean_sym}_close"])
     df.index.name = "date"
     return df
 
@@ -220,6 +264,8 @@ def fetch_all_data() -> pd.DataFrame:
         merged["TIPS_10Y"] = merged["TIPS_10Y"].ffill()
     if "BEI" in merged.columns:
         merged["BEI"] = merged["BEI"].ffill()
+    if "GPR" in merged.columns:
+        merged["GPR"] = merged["GPR"].ffill()
 
     # Drop rows where gold price is missing
     if "XAUUSD_close" in merged.columns:

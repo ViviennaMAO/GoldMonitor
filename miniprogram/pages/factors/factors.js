@@ -6,7 +6,7 @@ var FACTOR_SHORT = {
   'F2_FedFunds': 'Fed',
   'F3_TIPS10Y': 'TIPS',
   'F4_BEI': 'BEI',
-  'F5_OVX': 'OVX',
+  'F5_GPR': 'GPR',
   'F6_GVZ': 'GVZ',
   'F7_WGC': 'WGC',
   'F8_ETFFlow': 'ETF',
@@ -158,7 +158,7 @@ Page({
         }
 
         if (regimeData.heatmap) {
-          var factorKeys = ['F1_DXY', 'F2_FedFunds', 'F3_TIPS10Y', 'F4_BEI', 'F5_OVX', 'F6_GVZ', 'F7_WGC', 'F8_ETFFlow', 'F9_GDXRatio']
+          var factorKeys = ['F1_DXY', 'F2_FedFunds', 'F3_TIPS10Y', 'F4_BEI', 'F5_GPR', 'F6_GVZ', 'F7_WGC', 'F8_ETFFlow', 'F9_GDXRatio']
           updateObj.heatmapFactors = factorKeys.map(function (k) { return FACTOR_SHORT[k] || k })
 
           updateObj.heatmapRows = regimeData.heatmap.map(function (row) {
@@ -194,7 +194,7 @@ function getFactorDescription(id) {
     'F2': '联邦基金利率 — 加息利空黄金',
     'F3': 'TIPS 10Y 实际利率 — 金价核心驱动',
     'F4': '通胀预期 BEI — 通胀利好黄金',
-    'F5': '原油波动率 OVX — 风险情绪指标',
+    'F5': '地缘政治风险 GPR — 经济政策不确定性',
     'F6': '黄金波动率 GVZ — 市场恐慌指标',
     'F7': '央行购金需求 — 实物需求支撑',
     'F8': 'ETF 资金流 — 投资者情绪',

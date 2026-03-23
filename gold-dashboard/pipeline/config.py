@@ -27,6 +27,7 @@ FRED_SERIES = {
     "FED_FUNDS": "FEDFUNDS",
     "TIPS_10Y": "DFII10",
     "BEI": "T10YIE",
+    "GPR": "GEPUCURRENT",       # Global Economic Policy Uncertainty (geopolitical risk proxy)
 }
 
 # ── Stooq Symbols ────────────────────────────────────────────────────────────
@@ -64,7 +65,7 @@ FACTOR_NAMES = [
     "F2_FedFunds",
     "F3_TIPS10Y",
     "F4_BEI",
-    "F5_OVX",
+    "F5_GPR",
     "F6_GVZ",
     "F7_WGC",
     "F8_ETFFlow",
@@ -76,7 +77,7 @@ FACTOR_DISPLAY = {
     "F2_FedFunds": "联邦基金利率",
     "F3_TIPS10Y": "TIPS 10Y 实际利率",
     "F4_BEI": "通胀预期 BEI",
-    "F5_OVX": "原油波动率 OVX",
+    "F5_GPR": "地缘政治风险 GPR",
     "F6_GVZ": "黄金波动率 GVZ",
     "F7_WGC": "央行购金需求",
     "F8_ETFFlow": "ETF 资金流",
