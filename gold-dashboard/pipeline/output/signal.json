@@ -1,48 +1,48 @@
 {
-  "date": "2026-03-20",
-  "timestamp": "2026-03-20T22:21:02.505049",
+  "date": "2026-03-23",
+  "timestamp": "2026-03-23T22:24:12.497211",
   "signal": "Strong Buy",
-  "predicted_return": 5.4392,
+  "predicted_return": 3.862,
   "confidence": 100,
-  "gold_price": 4493.95,
-  "gold_open": 4636.58,
-  "gold_high": 4735.66,
-  "gold_low": 4478.84,
-  "atr": 163.92,
-  "stop_loss": 4084.14,
-  "take_profit": 5108.67,
-  "position_size": 2.4401,
+  "gold_price": 4416.89,
+  "gold_open": 4498.43,
+  "gold_high": 4511.43,
+  "gold_low": 4100.71,
+  "atr": 165.98,
+  "stop_loss": 4001.93,
+  "take_profit": 5039.33,
+  "position_size": 2.4099,
   "regime": "Transition",
   "regime_multiplier": 0.5,
   "factors": [
     {
       "name": "F1_DXY",
       "label": "美元指数 DXY",
-      "zscore": -0.0538,
-      "raw_value": 120.5518
+      "zscore": -0.2011,
+      "raw_value": 120.2757
     },
     {
       "name": "F2_FedFunds",
       "label": "联邦基金利率",
-      "zscore": -1.4189,
+      "zscore": -1.4064,
       "raw_value": 3.64
     },
     {
       "name": "F3_TIPS10Y",
       "label": "TIPS 10Y 实际利率",
-      "zscore": -0.2419,
-      "raw_value": 1.88
+      "zscore": 0.7162,
+      "raw_value": 2.01
     },
     {
       "name": "F4_BEI",
       "label": "通胀预期 BEI",
-      "zscore": 1.1654,
-      "raw_value": 2.38
+      "zscore": 0.2976,
+      "raw_value": 2.33
     },
     {
-      "name": "F5_OVX",
-      "label": "原油波动率 OVX",
-      "zscore": 0.0,
+      "name": "F5_GPR",
+      "label": "地缘政治风险 GPR",
+      "zscore": -0.3873,
       "raw_value": null
     },
     {
@@ -60,13 +60,13 @@
     {
       "name": "F8_ETFFlow",
       "label": "ETF 资金流",
-      "zscore": 0.6354,
+      "zscore": 1.147,
       "raw_value": null
     },
     {
       "name": "F9_GDXRatio",
       "label": "矿业股/金价比",
-      "zscore": -0.0092,
+      "zscore": 0.4737,
       "raw_value": null
     }
   ]

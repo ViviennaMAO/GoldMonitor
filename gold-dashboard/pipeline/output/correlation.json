@@ -4,7 +4,7 @@
     "F2_FedFunds",
     "F3_TIPS10Y",
     "F4_BEI",
-    "F5_OVX",
+    "F5_GPR",
     "F6_GVZ",
     "F7_WGC",
     "F8_ETFFlow",
@@ -24,7 +24,7 @@
     {
       "x": "F1_DXY",
       "y": "F3_TIPS10Y",
-      "value": -0.103
+      "value": -0.091
     },
     {
       "x": "F1_DXY",
@@ -33,8 +33,8 @@
     },
     {
       "x": "F1_DXY",
-      "y": "F5_OVX",
-      "value": NaN
+      "y": "F5_GPR",
+      "value": 0.24
     },
     {
       "x": "F1_DXY",
@@ -49,12 +49,12 @@
     {
       "x": "F1_DXY",
       "y": "F8_ETFFlow",
-      "value": 0.04
+      "value": 0.055
     },
     {
       "x": "F1_DXY",
       "y": "F9_GDXRatio",
-      "value": -0.385
+      "value": -0.383
     },
     {
       "x": "F2_FedFunds",
@@ -69,17 +69,17 @@
     {
       "x": "F2_FedFunds",
       "y": "F3_TIPS10Y",
-      "value": 0.388
+      "value": 0.384
     },
     {
       "x": "F2_FedFunds",
       "y": "F4_BEI",
-      "value": 0.742
+      "value": 0.741
     },
     {
       "x": "F2_FedFunds",
-      "y": "F5_OVX",
-      "value": NaN
+      "y": "F5_GPR",
+      "value": 0.364
     },
     {
       "x": "F2_FedFunds",
@@ -94,22 +94,22 @@
     {
       "x": "F2_FedFunds",
       "y": "F8_ETFFlow",
-      "value": -0.037
+      "value": -0.039
     },
     {
       "x": "F2_FedFunds",
       "y": "F9_GDXRatio",
-      "value": -0.003
+      "value": -0.004
     },
     {
       "x": "F3_TIPS10Y",
       "y": "F1_DXY",
-      "value": -0.103
+      "value": -0.091
     },
     {
       "x": "F3_TIPS10Y",
       "y": "F2_FedFunds",
-      "value": 0.388
+      "value": 0.384
     },
     {
       "x": "F3_TIPS10Y",
@@ -119,12 +119,12 @@
     {
       "x": "F3_TIPS10Y",
       "y": "F4_BEI",
-      "value": 0.216
+      "value": 0.22
     },
     {
       "x": "F3_TIPS10Y",
-      "y": "F5_OVX",
-      "value": NaN
+      "y": "F5_GPR",
+      "value": 0.58
     },
     {
       "x": "F3_TIPS10Y",
@@ -139,12 +139,12 @@
     {
       "x": "F3_TIPS10Y",
       "y": "F8_ETFFlow",
-      "value": -0.043
+      "value": -0.027
     },
     {
       "x": "F3_TIPS10Y",
       "y": "F9_GDXRatio",
-      "value": -0.538
+      "value": -0.543
     },
     {
       "x": "F4_BEI",
@@ -154,12 +154,12 @@
     {
       "x": "F4_BEI",
       "y": "F2_FedFunds",
-      "value": 0.742
+      "value": 0.741
     },
     {
       "x": "F4_BEI",
       "y": "F3_TIPS10Y",
-      "value": 0.216
+      "value": 0.22
     },
     {
       "x": "F4_BEI",
@@ -168,8 +168,8 @@
     },
     {
       "x": "F4_BEI",
-      "y": "F5_OVX",
-      "value": NaN
+      "y": "F5_GPR",
+      "value": 0.068
     },
     {
       "x": "F4_BEI",
@@ -184,57 +184,57 @@
     {
       "x": "F4_BEI",
       "y": "F8_ETFFlow",
-      "value": 0.038
+      "value": 0.041
     },
     {
       "x": "F4_BEI",
       "y": "F9_GDXRatio",
-      "value": -0.005
+      "value": -0.006
     },
     {
-      "x": "F5_OVX",
+      "x": "F5_GPR",
       "y": "F1_DXY",
-      "value": NaN
+      "value": 0.24
     },
     {
-      "x": "F5_OVX",
+      "x": "F5_GPR",
       "y": "F2_FedFunds",
-      "value": NaN
+      "value": 0.364
     },
     {
-      "x": "F5_OVX",
+      "x": "F5_GPR",
       "y": "F3_TIPS10Y",
-      "value": NaN
+      "value": 0.58
     },
     {
-      "x": "F5_OVX",
+      "x": "F5_GPR",
       "y": "F4_BEI",
-      "value": NaN
+      "value": 0.068
     },
     {
-      "x": "F5_OVX",
-      "y": "F5_OVX",
-      "value": NaN
+      "x": "F5_GPR",
+      "y": "F5_GPR",
+      "value": 1.0
     },
     {
-      "x": "F5_OVX",
+      "x": "F5_GPR",
       "y": "F6_GVZ",
       "value": NaN
     },
     {
-      "x": "F5_OVX",
+      "x": "F5_GPR",
       "y": "F7_WGC",
       "value": NaN
     },
     {
-      "x": "F5_OVX",
+      "x": "F5_GPR",
       "y": "F8_ETFFlow",
-      "value": NaN
+      "value": -0.029
     },
     {
-      "x": "F5_OVX",
+      "x": "F5_GPR",
       "y": "F9_GDXRatio",
-      "value": NaN
+      "value": -0.597
     },
     {
       "x": "F6_GVZ",
@@ -258,7 +258,7 @@
     },
     {
       "x": "F6_GVZ",
-      "y": "F5_OVX",
+      "y": "F5_GPR",
       "value": NaN
     },
     {
@@ -303,7 +303,7 @@
     },
     {
       "x": "F7_WGC",
-      "y": "F5_OVX",
+      "y": "F5_GPR",
       "value": NaN
     },
     {
@@ -329,27 +329,27 @@
     {
       "x": "F8_ETFFlow",
       "y": "F1_DXY",
-      "value": 0.04
+      "value": 0.055
     },
     {
       "x": "F8_ETFFlow",
       "y": "F2_FedFunds",
-      "value": -0.037
+      "value": -0.039
     },
     {
       "x": "F8_ETFFlow",
       "y": "F3_TIPS10Y",
-      "value": -0.043
+      "value": -0.027
     },
     {
       "x": "F8_ETFFlow",
       "y": "F4_BEI",
-      "value": 0.038
+      "value": 0.041
     },
     {
       "x": "F8_ETFFlow",
-      "y": "F5_OVX",
-      "value": NaN
+      "y": "F5_GPR",
+      "value": -0.029
     },
     {
       "x": "F8_ETFFlow",
@@ -369,32 +369,32 @@
     {
       "x": "F8_ETFFlow",
       "y": "F9_GDXRatio",
-      "value": 0.063
+      "value": 0.049
     },
     {
       "x": "F9_GDXRatio",
       "y": "F1_DXY",
-      "value": -0.385
+      "value": -0.383
     },
     {
       "x": "F9_GDXRatio",
       "y": "F2_FedFunds",
-      "value": -0.003
+      "value": -0.004
     },
     {
       "x": "F9_GDXRatio",
       "y": "F3_TIPS10Y",
-      "value": -0.538
+      "value": -0.543
     },
     {
       "x": "F9_GDXRatio",
       "y": "F4_BEI",
-      "value": -0.005
+      "value": -0.006
     },
     {
       "x": "F9_GDXRatio",
-      "y": "F5_OVX",
-      "value": NaN
+      "y": "F5_GPR",
+      "value": -0.597
     },
     {
       "x": "F9_GDXRatio",
@@ -409,7 +409,7 @@
     {
       "x": "F9_GDXRatio",
       "y": "F8_ETFFlow",
-      "value": 0.063
+      "value": 0.049
     },
     {
       "x": "F9_GDXRatio",

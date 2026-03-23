@@ -3,7 +3,7 @@
     "regime": "Transition",
     "multiplier": 0.5,
     "risk_off_score": 0,
-    "risk_on_score": 1
+    "risk_on_score": 0
   },
   "heatmap": [
     {
@@ -13,7 +13,7 @@
         "F2_FedFunds": -1.11,
         "F3_TIPS10Y": -1.4,
         "F4_BEI": 0.32,
-        "F5_OVX": 0.0,
+        "F5_GPR": -0.64,
         "F6_GVZ": 0.0,
         "F7_WGC": 0.0,
         "F8_ETFFlow": -0.62,
@@ -27,7 +27,7 @@
         "F2_FedFunds": -2.03,
         "F3_TIPS10Y": -1.16,
         "F4_BEI": -0.67,
-        "F5_OVX": 0.0,
+        "F5_GPR": 0.12,
         "F6_GVZ": 0.0,
         "F7_WGC": 0.0,
         "F8_ETFFlow": -0.44,
@@ -41,7 +41,7 @@
         "F2_FedFunds": -2.74,
         "F3_TIPS10Y": -1.15,
         "F4_BEI": -1.72,
-        "F5_OVX": 0.0,
+        "F5_GPR": -0.31,
         "F6_GVZ": 0.0,
         "F7_WGC": 0.0,
         "F8_ETFFlow": -0.86,
@@ -55,7 +55,7 @@
         "F2_FedFunds": -2.43,
         "F3_TIPS10Y": -0.17,
         "F4_BEI": -1.19,
-        "F5_OVX": 0.0,
+        "F5_GPR": -0.37,
         "F6_GVZ": 0.0,
         "F7_WGC": 0.0,
         "F8_ETFFlow": -0.28,
@@ -69,7 +69,7 @@
         "F2_FedFunds": -2.04,
         "F3_TIPS10Y": -0.25,
         "F4_BEI": 0.64,
-        "F5_OVX": 0.0,
+        "F5_GPR": -0.44,
         "F6_GVZ": 0.0,
         "F7_WGC": 0.0,
         "F8_ETFFlow": 4.37,
@@ -83,7 +83,7 @@
         "F2_FedFunds": -1.63,
         "F3_TIPS10Y": -1.5,
         "F4_BEI": -1.09,
-        "F5_OVX": 0.0,
+        "F5_GPR": -0.46,
         "F6_GVZ": 0.0,
         "F7_WGC": 0.0,
         "F8_ETFFlow": -0.08,
@@ -93,15 +93,15 @@
     {
       "month": "2026-03",
       "factors": {
-        "F1_DXY": -0.05,
-        "F2_FedFunds": -1.42,
-        "F3_TIPS10Y": -0.24,
-        "F4_BEI": 1.17,
-        "F5_OVX": 0.0,
+        "F1_DXY": -0.2,
+        "F2_FedFunds": -1.41,
+        "F3_TIPS10Y": 0.72,
+        "F4_BEI": 0.3,
+        "F5_GPR": -0.39,
         "F6_GVZ": 0.0,
         "F7_WGC": 0.0,
-        "F8_ETFFlow": 0.64,
-        "F9_GDXRatio": -0.01
+        "F8_ETFFlow": 1.15,
+        "F9_GDXRatio": 0.47
       }
     }
   ]
