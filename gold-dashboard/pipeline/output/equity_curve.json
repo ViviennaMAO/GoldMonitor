@@ -4984,5 +4984,11 @@
     "equity": 113145.64,
     "drawdown": 8.54,
     "gold_price": 4416.89
+  },
+  {
+    "date": "2026-03-24",
+    "equity": 113303.43,
+    "drawdown": 8.54,
+    "gold_price": 4471.2
   }
 ]

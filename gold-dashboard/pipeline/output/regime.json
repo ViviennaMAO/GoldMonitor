@@ -93,15 +93,15 @@
     {
       "month": "2026-03",
       "factors": {
-        "F1_DXY": -0.2,
-        "F2_FedFunds": -1.41,
-        "F3_TIPS10Y": 0.72,
+        "F1_DXY": -0.19,
+        "F2_FedFunds": -1.39,
+        "F3_TIPS10Y": 0.71,
         "F4_BEI": 0.3,
-        "F5_GPR": -0.39,
+        "F5_GPR": -0.38,
         "F6_GVZ": 0.0,
         "F7_WGC": 0.0,
-        "F8_ETFFlow": 1.15,
-        "F9_GDXRatio": 0.47
+        "F8_ETFFlow": 0.15,
+        "F9_GDXRatio": 0.36
       }
     }
   ]

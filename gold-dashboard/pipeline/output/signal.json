@@ -1,36 +1,36 @@
 {
-  "date": "2026-03-23",
-  "timestamp": "2026-03-23T22:24:12.497211",
+  "date": "2026-03-24",
+  "timestamp": "2026-03-24T22:23:41.710515",
   "signal": "Strong Buy",
-  "predicted_return": 3.862,
+  "predicted_return": 3.775,
   "confidence": 100,
-  "gold_price": 4416.89,
-  "gold_open": 4498.43,
-  "gold_high": 4511.43,
-  "gold_low": 4100.71,
-  "atr": 165.98,
-  "stop_loss": 4001.93,
-  "take_profit": 5039.33,
-  "position_size": 2.4099,
+  "gold_price": 4471.2,
+  "gold_open": 4426.76,
+  "gold_high": 4484.22,
+  "gold_low": 4308.11,
+  "atr": 169.96,
+  "stop_loss": 4046.31,
+  "take_profit": 5108.53,
+  "position_size": 2.3536,
   "regime": "Transition",
   "regime_multiplier": 0.5,
   "factors": [
     {
       "name": "F1_DXY",
       "label": "美元指数 DXY",
-      "zscore": -0.2011,
+      "zscore": -0.1911,
       "raw_value": 120.2757
     },
     {
       "name": "F2_FedFunds",
       "label": "联邦基金利率",
-      "zscore": -1.4064,
+      "zscore": -1.3941,
       "raw_value": 3.64
     },
     {
       "name": "F3_TIPS10Y",
       "label": "TIPS 10Y 实际利率",
-      "zscore": 0.7162,
+      "zscore": 0.7109,
       "raw_value": 2.01
     },
     {
@@ -42,7 +42,7 @@
     {
       "name": "F5_GPR",
       "label": "地缘政治风险 GPR",
-      "zscore": -0.3873,
+      "zscore": -0.3805,
       "raw_value": null
     },
     {
@@ -60,13 +60,13 @@
     {
       "name": "F8_ETFFlow",
       "label": "ETF 资金流",
-      "zscore": 1.147,
+      "zscore": 0.1495,
       "raw_value": null
     },
     {
       "name": "F9_GDXRatio",
       "label": "矿业股/金价比",
-      "zscore": 0.4737,
+      "zscore": 0.359,
       "raw_value": null
     }
   ]
