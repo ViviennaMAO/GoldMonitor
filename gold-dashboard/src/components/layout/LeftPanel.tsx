@@ -7,8 +7,7 @@ import { RegimeHeatmap } from '@/components/charts/RegimeHeatmap'
 import { CorrelationMatrix } from '@/components/charts/CorrelationMatrix'
 import { EquityCurveChart } from '@/components/charts/EquityCurve'
 import { useSignal, useShapValues } from '@/lib/useGoldData'
-import { dailySignal as mockSignal } from '@/data/mockData'
-import { TabId } from '@/types'
+import { TabId, ShapBar } from '@/types'
 import clsx from 'clsx'
 
 const TABS: Array<{ id: TabId | 'equity'; label: string; icon: React.ElementType; sublabel: string }> = [
@@ -24,8 +23,8 @@ export function LeftPanel() {
   const { data: shapData } = useShapValues()
   const { data: signalData } = useSignal()
 
-  // Build SHAP bars from API or mock
-  const shapBars = shapData
+  // Build SHAP bars from API
+  const shapBars: ShapBar[] = shapData
     ? shapData.bars.map(b => ({
         factor: b.label,
         factorId: b.factor,
@@ -34,9 +33,9 @@ export function LeftPanel() {
         rawValue: `Z: ${b.raw_feature.toFixed(2)}`,
         economic: '',
       }))
-    : mockSignal.shapBars
+    : []
 
-  const prediction = signalData?.predicted_return ?? mockSignal.prediction
+  const prediction = signalData?.predicted_return ?? 0
 
   return (
     <div className="flex flex-col h-full bg-[#050B18]">

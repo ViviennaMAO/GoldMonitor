@@ -4,7 +4,6 @@ import { PositionCard } from '@/components/cards/PositionCard'
 import { AccountCard } from '@/components/cards/AccountCard'
 import { ShapWaterfall } from '@/components/charts/ShapWaterfall'
 import { useSignal, useShapValues, usePositions, useAccount } from '@/lib/useGoldData'
-import { dailySignal as mockSignal, positions as mockPositions, accountStats as mockAccount } from '@/data/mockData'
 import { DailySignal, ShapBar, Position, AccountStats, Signal } from '@/types'
 
 /** Map API signal string to component Signal type */
@@ -15,24 +14,48 @@ function mapSignal(s: string): Signal {
   return 'neutral'
 }
 
+const EMPTY_SIGNAL: DailySignal = {
+  signal: 'neutral',
+  prediction: 0,
+  confidence: 0,
+  generatedAt: '--',
+  regime: 'Neutral',
+  shapBars: [],
+}
+
+const EMPTY_ACCOUNT: AccountStats = {
+  equity: 100000,
+  balance: 100000,
+  drawdown: 0,
+  portfolioHeat: 0,
+  riskLevel: 'healthy',
+  sharpe60d: 0,
+  calmar: 0,
+  maxDrawdown: 0,
+  winRate: 0,
+  profitFactor: 0,
+  totalTrades: 0,
+}
+
 export function RightSidebar() {
   const { data: signalData } = useSignal()
   const { data: shapData } = useShapValues()
   const { data: posData } = usePositions()
   const { data: acctData } = useAccount()
 
-  // ── Build DailySignal from API or fallback to mock ──
+  // ── Build SHAP bars from API ──
   const shapBars: ShapBar[] = shapData
     ? shapData.bars.map(b => ({
         factor: b.label,
         factorId: b.factor,
-        value: b.value / 100,               // API gives percentage points, component expects decimal
+        value: b.value / 100,
         zScore: b.raw_feature,
         rawValue: `Z: ${b.raw_feature.toFixed(2)}`,
         economic: '',
       }))
-    : mockSignal.shapBars
+    : []
 
+  // ── Build DailySignal from API ──
   const dailySignal: DailySignal = signalData
     ? {
         signal: mapSignal(signalData.signal),
@@ -42,9 +65,9 @@ export function RightSidebar() {
         regime: signalData.regime,
         shapBars,
       }
-    : mockSignal
+    : EMPTY_SIGNAL
 
-  // ── Build Positions from API or fallback to mock ──
+  // ── Build Positions from API ──
   const positions: Position[] = posData?.active?.length
     ? posData.active.map((p, i) => ({
         id: `POS-${String(i + 1).padStart(3, '0')}`,
@@ -62,9 +85,9 @@ export function RightSidebar() {
         shapDriver: shapBars[0]?.factor ?? 'N/A',
         stopType: 'initial' as const,
       }))
-    : mockPositions
+    : []
 
-  // ── Build AccountStats from API or fallback to mock ──
+  // ── Build AccountStats from API ──
   const accountStats: AccountStats = acctData
     ? {
         equity: acctData.final_equity,
@@ -73,7 +96,9 @@ export function RightSidebar() {
         portfolioHeat: positions.reduce((s, p) => s + Math.abs(p.pnlPct) * 0.5, 0),
         riskLevel: acctData.max_drawdown > 15 ? 'circuit_break' : acctData.max_drawdown > 5 ? 'warning' : 'healthy',
         sharpe60d: acctData.sharpe_ratio,
-        calmar: acctData.total_return / Math.max(acctData.max_drawdown, 0.01),
+        calmar: acctData.max_drawdown > 0
+          ? acctData.total_return / acctData.max_drawdown
+          : 0,
         maxDrawdown: acctData.max_drawdown,
         winRate: acctData.win_rate,
         profitFactor: acctData.avg_win && acctData.avg_loss
@@ -81,7 +106,7 @@ export function RightSidebar() {
           : 0,
         totalTrades: acctData.total_trades,
       }
-    : mockAccount
+    : EMPTY_ACCOUNT
 
   return (
     <div className="h-full flex flex-col gap-2 md:gap-3 p-2 md:p-3 overflow-y-auto bg-[#050B18] lg:border-l border-white/[0.06]">

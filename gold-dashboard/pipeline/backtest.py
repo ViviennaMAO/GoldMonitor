@@ -177,9 +177,14 @@ def run_backtest(features_df: pd.DataFrame, initial_equity: float = 100000.0):
         if position_dir != 0:
             unrealized = position * (price - entry_price) * position_dir
 
+        # GLD benchmark: buy-and-hold from start
+        first_price = float(test_df.iloc[0].get("gold_price", price))
+        gld_equity = round(initial_equity * (price / first_price), 2) if first_price > 0 else initial_equity
+
         equity_curve.append({
             "date": date.strftime("%Y-%m-%d"),
             "equity": round(equity + unrealized, 2),
+            "gld": gld_equity,
             "drawdown": round((peak_equity - equity) / peak_equity * 100, 2),
             "gold_price": round(price, 2),
         })

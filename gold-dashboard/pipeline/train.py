@@ -108,6 +108,10 @@ def train_model(features_df: pd.DataFrame) -> xgb.XGBRegressor:
     # ── Model health check (P1) ───────────────────────────────────────────────
     compute_model_health(features_df, model)
 
+    # ── Run backtest on OOS data ──────────────────────────────────────────────
+    from backtest import run_backtest as _run_backtest
+    _run_backtest(features_df)
+
     return model
 
 

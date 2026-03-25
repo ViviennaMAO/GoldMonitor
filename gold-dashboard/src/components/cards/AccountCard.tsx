@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/Badge'
 import { ProgressBar } from '@/components/ui/ProgressBar'
 import { AccountStats } from '@/types'
 import { ResponsiveContainer, AreaChart, Area } from 'recharts'
-import { equityCurve } from '@/data/mockData'
+import { useEquityCurve } from '@/lib/useGoldData'
 
 interface AccountCardProps {
   stats: AccountStats
@@ -17,10 +17,13 @@ const riskConfig = {
 }
 
 export function AccountCard({ stats }: AccountCardProps) {
+  const { data: equityCurve } = useEquityCurve()
+  const curve = equityCurve ?? []
+
   const rc = riskConfig[stats.riskLevel]
   const equity = stats.equity
   const pnl = equity - stats.balance
-  const pnlPct = (pnl / stats.balance) * 100
+  const pnlPct = stats.balance > 0 ? (pnl / stats.balance) * 100 : 0
 
   // heat bar color
   const heatColor = stats.portfolioHeat > 1.8 ? 'red' : stats.portfolioHeat > 1.2 ? 'amber' : 'green'
@@ -31,7 +34,7 @@ export function AccountCard({ stats }: AccountCardProps) {
       <div className="flex items-center justify-between">
         <div className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
           <Wallet className="w-3.5 h-3.5" />
-          仿真账户 (VSTAR)
+          回测账户
         </div>
         <Badge variant={rc.variant} size="sm" dot>
           {rc.label}
@@ -49,19 +52,32 @@ export function AccountCard({ stats }: AccountCardProps) {
             {pnl >= 0 ? '+' : ''}${Math.abs(pnl).toFixed(2)} ({pnlPct >= 0 ? '+' : ''}{pnlPct.toFixed(2)}%)
           </div>
         </div>
-        {/* Mini equity chart */}
+        {/* Mini equity chart from real data */}
         <div className="h-12 w-28">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={equityCurve.slice(-60)}>
-              <defs>
-                <linearGradient id="eqGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#22C55E" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#22C55E" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <Area type="monotone" dataKey="equity" stroke="#22C55E" strokeWidth={1.5} fill="url(#eqGrad)" dot={false} />
-            </AreaChart>
-          </ResponsiveContainer>
+          {curve.length > 0 ? (
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={curve.slice(-60)}>
+                <defs>
+                  <linearGradient id="eqGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor={pnl >= 0 ? '#22C55E' : '#EF4444'} stopOpacity={0.3} />
+                    <stop offset="95%" stopColor={pnl >= 0 ? '#22C55E' : '#EF4444'} stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <Area
+                  type="monotone"
+                  dataKey="equity"
+                  stroke={pnl >= 0 ? '#22C55E' : '#EF4444'}
+                  strokeWidth={1.5}
+                  fill="url(#eqGrad)"
+                  dot={false}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-[9px] text-slate-700">
+              无数据
+            </div>
+          )}
         </div>
       </div>
 
@@ -89,9 +105,9 @@ export function AccountCard({ stats }: AccountCardProps) {
       {/* Performance metrics */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 md:gap-2">
         {[
-          { label: 'Sharpe(60d)', value: stats.sharpe60d.toFixed(2), color: stats.sharpe60d > 1 ? 'text-green-400' : 'text-amber-400' },
+          { label: 'Sharpe', value: stats.sharpe60d.toFixed(2), color: stats.sharpe60d > 1 ? 'text-green-400' : stats.sharpe60d > 0.5 ? 'text-amber-400' : 'text-red-400' },
           { label: '最大回撤', value: `-${stats.maxDrawdown.toFixed(2)}%`, color: 'text-red-400' },
-          { label: '胜率', value: `${stats.winRate.toFixed(1)}%`, color: 'text-blue-400' },
+          { label: '胜率', value: `${stats.winRate.toFixed(1)}%`, color: stats.winRate >= 50 ? 'text-blue-400' : 'text-amber-400' },
         ].map(m => (
           <div key={m.label} className="text-center p-1.5 md:p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
             <div className="text-[9px] text-slate-600 mb-0.5">{m.label}</div>
@@ -104,7 +120,7 @@ export function AccountCard({ stats }: AccountCardProps) {
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 md:gap-2">
         {[
           { label: 'Calmar', value: stats.calmar.toFixed(2), color: 'text-purple-400' },
-          { label: '盈亏比', value: stats.profitFactor.toFixed(2), color: 'text-slate-300' },
+          { label: '盈亏比', value: stats.profitFactor.toFixed(2), color: stats.profitFactor >= 1 ? 'text-slate-300' : 'text-red-400' },
           { label: '总交易', value: stats.totalTrades.toString(), color: 'text-slate-400' },
         ].map(m => (
           <div key={m.label} className="text-center p-1.5 md:p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
@@ -120,8 +136,12 @@ export function AccountCard({ stats }: AccountCardProps) {
         <div className="flex-1">
           <div className="text-[9px] text-slate-600">当前回撤 {stats.drawdown.toFixed(2)}% · 风险乘数 1.0×</div>
           <div className="flex gap-1 mt-1">
-            {['< 5%', '5-15%', '> 15%'].map((stage, i) => (
-              <div key={stage} className={`flex-1 h-1 rounded-full ${i === 0 ? 'bg-green-500' : 'bg-slate-800'}`} />
+            {[
+              { stage: '< 5%', active: stats.drawdown < 5 },
+              { stage: '5-15%', active: stats.drawdown >= 5 && stats.drawdown < 15 },
+              { stage: '> 15%', active: stats.drawdown >= 15 },
+            ].map((s, i) => (
+              <div key={s.stage} className={`flex-1 h-1 rounded-full ${s.active ? (i === 0 ? 'bg-green-500' : i === 1 ? 'bg-amber-500' : 'bg-red-500') : 'bg-slate-800'}`} />
             ))}
           </div>
         </div>
