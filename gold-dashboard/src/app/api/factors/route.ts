@@ -10,6 +10,7 @@ import { NextResponse } from 'next/server'
 import { fetchFredSeries, percentileRank } from '@/lib/fred'
 import { fetchYFQuotes, fetchYFHistory, computeZScore, roc, percentile52W } from '@/lib/yahoo'
 import { fetchStooqHistory } from '@/lib/stooq'
+import { readPipelineJson } from '@/lib/readPipelineJson'
 import { factors as MOCK_FACTORS } from '@/data/mockData'
 
 export const revalidate = 3600 // ISR: revalidate once per hour max
@@ -93,7 +94,18 @@ export async function GET() {
     icValue: 0.093,
   })
 
-  // ── F5: 地缘政治风险 (OVX proxy) ────────────────────────────────────
+  // ── Pipeline fallback: read signal.json for F5/F6 raw values if Yahoo quotes fail ──
+  const pipelineSignal = await readPipelineJson<{
+    factors?: { name: string; zscore: number; raw_value: number | null }[]
+  }>('signal.json', {})
+  const pipelineFactorMap: Record<string, { zscore: number; raw_value: number | null }> = {}
+  if (pipelineSignal.factors) {
+    for (const f of pipelineSignal.factors) {
+      pipelineFactorMap[f.name] = { zscore: f.zscore, raw_value: f.raw_value }
+    }
+  }
+
+  // ── F5: 地缘政治风险 (GPR / OVX proxy) ────────────────────────────
   let f5 = MOCK_FACTORS[4]
   if (ovxHistory && yfQuotes?.['^OVX']) {
     const ovxVal = yfQuotes['^OVX'].regularMarketPrice
@@ -108,6 +120,17 @@ export async function GET() {
       zScore: z,
       percentile52w: p52,
       dayChange: parseFloat((ovxVal - prev).toFixed(2)),
+      direction: z > 0.5 ? 'bullish' : z < -0.5 ? 'bearish' : 'neutral',
+      signal: z > 1 ? '地缘风险偏高，避险需求支撑' : z < -1 ? '地缘压力缓和' : '地缘风险中性',
+    }
+  } else if (pipelineFactorMap['F5_GPR']) {
+    const pf = pipelineFactorMap['F5_GPR']
+    const z = pf.zscore
+    f5 = {
+      ...f5,
+      rawValue: pf.raw_value != null ? parseFloat(pf.raw_value.toFixed(1)) : f5.rawValue,
+      rawUnit: 'GPR',
+      zScore: parseFloat(z.toFixed(2)),
       direction: z > 0.5 ? 'bullish' : z < -0.5 ? 'bearish' : 'neutral',
       signal: z > 1 ? '地缘风险偏高，避险需求支撑' : z < -1 ? '地缘压力缓和' : '地缘风险中性',
     }
@@ -130,6 +153,18 @@ export async function GET() {
       dayChange: parseFloat((gvzVal - prev).toFixed(2)),
       direction: z > 0.5 ? 'bullish' : z < -0.5 ? 'bearish' : 'neutral',
       signal: gvzVal > 25 ? 'GVZ极高，黄金恐慌溢价↑↑' : gvzVal > 18 ? 'GVZ升温，黄金恐慌溢价↑' : 'GVZ平稳，恐慌溢价有限',
+    }
+  } else if (pipelineFactorMap['F6_GVZ']) {
+    const pf = pipelineFactorMap['F6_GVZ']
+    const z = pf.zscore
+    const rawVal = pf.raw_value
+    f6 = {
+      ...f6,
+      rawValue: rawVal != null ? parseFloat(rawVal.toFixed(1)) : f6.rawValue,
+      rawUnit: 'GVZ',
+      zScore: parseFloat(z.toFixed(2)),
+      direction: z > 0.5 ? 'bullish' : z < -0.5 ? 'bearish' : 'neutral',
+      signal: rawVal != null && rawVal > 25 ? 'GVZ极高，黄金恐慌溢价↑↑' : rawVal != null && rawVal > 18 ? 'GVZ升温，黄金恐慌溢价↑' : 'GVZ平稳，恐慌溢价有限',
     }
   }
 

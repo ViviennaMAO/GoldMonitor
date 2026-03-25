@@ -1,54 +1,66 @@
 {
-  "base_value": 0.4785,
-  "prediction": 3.775,
+  "base_value": 1.0076,
+  "prediction": -0.5378,
   "bars": [
-    {
-      "factor": "F2_FedFunds",
-      "label": "联邦基金利率",
-      "value": 4.2949,
-      "raw_feature": -1.3941
-    },
-    {
-      "factor": "F5_GPR",
-      "label": "地缘政治风险 GPR",
-      "value": -0.5592,
-      "raw_feature": -0.3805
-    },
     {
       "factor": "F9_GDXRatio",
       "label": "矿业股/金价比",
-      "value": -0.4827,
-      "raw_feature": 0.359
-    },
-    {
-      "factor": "F3_TIPS10Y",
-      "label": "TIPS 10Y 实际利率",
-      "value": -0.0918,
-      "raw_feature": 0.7109
-    },
-    {
-      "factor": "F4_BEI",
-      "label": "通胀预期 BEI",
-      "value": 0.0572,
-      "raw_feature": 0.2976
-    },
-    {
-      "factor": "F8_ETFFlow",
-      "label": "ETF 资金流",
-      "value": 0.0469,
-      "raw_feature": 0.1495
-    },
-    {
-      "factor": "F1_DXY",
-      "label": "美元指数 DXY",
-      "value": 0.0312,
-      "raw_feature": -0.1911
+      "value": -0.8949,
+      "raw_feature": 0.4623
     },
     {
       "factor": "F6_GVZ",
       "label": "黄金波动率 GVZ",
-      "value": 0.0,
-      "raw_feature": 0.0
+      "value": -0.7116,
+      "raw_feature": 2.7488
+    },
+    {
+      "factor": "F2c_RateExpect",
+      "label": "利率预期 DGS2",
+      "value": -0.5802,
+      "raw_feature": 1.1587
+    },
+    {
+      "factor": "F2_FedFunds",
+      "label": "联邦基金利率",
+      "value": 0.5732,
+      "raw_feature": -0.265
+    },
+    {
+      "factor": "F5_GPR",
+      "label": "地缘政治风险 GPR",
+      "value": -0.5495,
+      "raw_feature": -0.4077
+    },
+    {
+      "factor": "F1_DXY",
+      "label": "美元指数 DXY",
+      "value": 0.2302,
+      "raw_feature": -0.2492
+    },
+    {
+      "factor": "F3_TIPS10Y",
+      "label": "TIPS 10Y 实际利率",
+      "value": 0.1946,
+      "raw_feature": 0.7207
+    },
+    {
+      "factor": "F4_BEI",
+      "label": "通胀预期 BEI",
+      "value": 0.1238,
+      "raw_feature": 0.2762
+    },
+    {
+      "factor": "F2b_RateMomentum",
+      "label": "利率动量 60d",
+      "value": 0.0762,
+      "raw_feature": 1.6803
+    },
+    {
+      "factor": "F8_ETFFlow",
+      "label": "ETF 资金流",
+      "value": -0.0072,
+      "raw_feature": -0.3396
     },
     {
       "factor": "F7_WGC",

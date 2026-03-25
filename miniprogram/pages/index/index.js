@@ -58,10 +58,12 @@ Page({
       if (priceData) {
         updateObj.goldPrice = util.formatPrice(priceData.price)
         updateObj.priceChange = priceData.change
-        updateObj.priceChangePercent = util.formatPercent(priceData.changePercent)
+        updateObj.priceChangePercent = util.formatPercent(priceData.changePercent || priceData.changePct)
         updateObj.priceChangeColor = util.getChangeColor(priceData.change)
         updateObj.priceSource = priceData.source === 'stooq' ? 'Stooq' :
-                                priceData.source === 'yahoo' ? 'Yahoo' : 'MOCK'
+                                priceData.source === 'yahoo' ? 'Yahoo' :
+                                priceData.source === 'yahoo-chart' ? 'Yahoo' :
+                                priceData.source === 'pipeline' ? 'Pipeline' : 'MOCK'
       }
 
       // Signal

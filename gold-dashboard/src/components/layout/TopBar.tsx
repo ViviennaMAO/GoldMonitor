@@ -29,7 +29,7 @@ export function TopBar() {
   const baseChange = priceData?.change ?? 12.3
   const liveChange = parseFloat((baseChange + tickOffset).toFixed(2))
   const changePct = priceData?.changePct ?? 0.39
-  const isLive = priceData?.source === 'yahoo' || priceData?.source === 'stooq'
+  const isLive = priceData?.source !== 'mock'
   const priceSource = priceData?.source ?? 'mock'
 
   return (

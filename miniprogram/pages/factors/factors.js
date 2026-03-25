@@ -4,6 +4,8 @@ var util = require('../../utils/util')
 var FACTOR_SHORT = {
   'F1_DXY': 'DXY',
   'F2_FedFunds': 'Fed',
+  'F2b_RateMomentum': 'FedΔ',
+  'F2c_RateExpect': 'DGS2',
   'F3_TIPS10Y': 'TIPS',
   'F4_BEI': 'BEI',
   'F5_GPR': 'GPR',
@@ -73,7 +75,11 @@ Page({
           if (factorsData.dataSource.fred) sources.push('FRED')
           if (factorsData.dataSource.yahoo) sources.push('Yahoo')
           if (factorsData.dataSource.stooq) sources.push('Stooq')
+          if (factorsData.dataSource.pipeline) sources.push('Pipeline')
         }
+        // Check if any factor has GPR unit (pipeline fallback active)
+        var hasPipeline = factorsData.factors.some(function (f) { return f.rawUnit === 'GPR' })
+        if (hasPipeline && sources.indexOf('Pipeline') === -1) sources.push('Pipeline')
         updateObj.dataSource = sources.join('+') || 'API'
 
         updateObj.factors = factorsData.factors.map(function (f) {
@@ -158,7 +164,7 @@ Page({
         }
 
         if (regimeData.heatmap) {
-          var factorKeys = ['F1_DXY', 'F2_FedFunds', 'F3_TIPS10Y', 'F4_BEI', 'F5_GPR', 'F6_GVZ', 'F7_WGC', 'F8_ETFFlow', 'F9_GDXRatio']
+          var factorKeys = ['F1_DXY', 'F2_FedFunds', 'F2b_RateMomentum', 'F2c_RateExpect', 'F3_TIPS10Y', 'F4_BEI', 'F5_GPR', 'F6_GVZ', 'F7_WGC', 'F8_ETFFlow', 'F9_GDXRatio']
           updateObj.heatmapFactors = factorKeys.map(function (k) { return FACTOR_SHORT[k] || k })
 
           updateObj.heatmapRows = regimeData.heatmap.map(function (row) {
@@ -192,6 +198,8 @@ function getFactorDescription(id) {
   var descriptions = {
     'F1': '美元指数 — 与金价负相关',
     'F2': '联邦基金利率 — 加息利空黄金',
+    'F2b': '利率动量 — 60日变化方向',
+    'F2c': '利率预期 — 2年期国债收益率',
     'F3': 'TIPS 10Y 实际利率 — 金价核心驱动',
     'F4': '通胀预期 BEI — 通胀利好黄金',
     'F5': '地缘政治风险 GPR — 经济政策不确定性',

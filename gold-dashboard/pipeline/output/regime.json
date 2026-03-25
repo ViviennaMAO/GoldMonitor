@@ -2,7 +2,7 @@
   "current": {
     "regime": "Transition",
     "multiplier": 0.5,
-    "risk_off_score": 0,
+    "risk_off_score": 1,
     "risk_on_score": 0
   },
   "heatmap": [
@@ -10,98 +10,112 @@
       "month": "2025-09",
       "factors": {
         "F1_DXY": -1.18,
-        "F2_FedFunds": -1.11,
-        "F3_TIPS10Y": -1.4,
-        "F4_BEI": 0.32,
-        "F5_GPR": -0.64,
-        "F6_GVZ": 0.0,
+        "F2_FedFunds": -1.35,
+        "F2b_RateMomentum": -2.16,
+        "F2c_RateExpect": -1.57,
+        "F3_TIPS10Y": -1.28,
+        "F4_BEI": 0.36,
+        "F5_GPR": -0.59,
+        "F6_GVZ": 0.76,
         "F7_WGC": 0.0,
-        "F8_ETFFlow": -0.62,
-        "F9_GDXRatio": 2.85
+        "F8_ETFFlow": -0.66,
+        "F9_GDXRatio": 2.95
       }
     },
     {
       "month": "2025-10",
       "factors": {
-        "F1_DXY": -0.68,
-        "F2_FedFunds": -2.03,
+        "F1_DXY": -0.69,
+        "F2_FedFunds": -1.13,
+        "F2b_RateMomentum": -1.84,
+        "F2c_RateExpect": -1.24,
         "F3_TIPS10Y": -1.16,
-        "F4_BEI": -0.67,
-        "F5_GPR": 0.12,
-        "F6_GVZ": 0.0,
+        "F4_BEI": -0.66,
+        "F5_GPR": 0.14,
+        "F6_GVZ": 1.18,
         "F7_WGC": 0.0,
-        "F8_ETFFlow": -0.44,
-        "F9_GDXRatio": 1.26
+        "F8_ETFFlow": -0.48,
+        "F9_GDXRatio": 1.33
       }
     },
     {
       "month": "2025-11",
       "factors": {
-        "F1_DXY": -0.66,
-        "F2_FedFunds": -2.74,
+        "F1_DXY": -0.69,
+        "F2_FedFunds": -1.34,
+        "F2b_RateMomentum": -1.29,
+        "F2c_RateExpect": -1.53,
         "F3_TIPS10Y": -1.15,
-        "F4_BEI": -1.72,
-        "F5_GPR": -0.31,
-        "F6_GVZ": 0.0,
+        "F4_BEI": -1.68,
+        "F5_GPR": -0.3,
+        "F6_GVZ": 1.08,
         "F7_WGC": 0.0,
-        "F8_ETFFlow": -0.86,
-        "F9_GDXRatio": 1.82
+        "F8_ETFFlow": -0.67,
+        "F9_GDXRatio": 1.91
       }
     },
     {
       "month": "2025-12",
       "factors": {
-        "F1_DXY": -0.93,
-        "F2_FedFunds": -2.43,
-        "F3_TIPS10Y": -0.17,
-        "F4_BEI": -1.19,
-        "F5_GPR": -0.37,
-        "F6_GVZ": 0.0,
+        "F1_DXY": -0.94,
+        "F2_FedFunds": -1.09,
+        "F2b_RateMomentum": -0.78,
+        "F2c_RateExpect": -1.32,
+        "F3_TIPS10Y": -0.21,
+        "F4_BEI": -1.2,
+        "F5_GPR": -0.35,
+        "F6_GVZ": 1.21,
         "F7_WGC": 0.0,
-        "F8_ETFFlow": -0.28,
-        "F9_GDXRatio": 1.6
+        "F8_ETFFlow": -0.33,
+        "F9_GDXRatio": 1.59
       }
     },
     {
       "month": "2026-01",
       "factors": {
-        "F1_DXY": -1.53,
-        "F2_FedFunds": -2.04,
-        "F3_TIPS10Y": -0.25,
-        "F4_BEI": 0.64,
-        "F5_GPR": -0.44,
-        "F6_GVZ": 0.0,
+        "F1_DXY": -1.5,
+        "F2_FedFunds": -1.04,
+        "F2b_RateMomentum": 0.31,
+        "F2c_RateExpect": -1.02,
+        "F3_TIPS10Y": -0.27,
+        "F4_BEI": 0.59,
+        "F5_GPR": -0.42,
+        "F6_GVZ": 5.0,
         "F7_WGC": 0.0,
-        "F8_ETFFlow": 4.37,
-        "F9_GDXRatio": 1.06
+        "F8_ETFFlow": 4.21,
+        "F9_GDXRatio": 1.31
       }
     },
     {
       "month": "2026-02",
       "factors": {
-        "F1_DXY": -1.52,
-        "F2_FedFunds": -1.63,
-        "F3_TIPS10Y": -1.5,
-        "F4_BEI": -1.09,
-        "F5_GPR": -0.46,
-        "F6_GVZ": 0.0,
+        "F1_DXY": -1.47,
+        "F2_FedFunds": -0.73,
+        "F2b_RateMomentum": 1.8,
+        "F2c_RateExpect": -1.64,
+        "F3_TIPS10Y": -1.52,
+        "F4_BEI": -1.12,
+        "F5_GPR": -0.48,
+        "F6_GVZ": 1.97,
         "F7_WGC": 0.0,
-        "F8_ETFFlow": -0.08,
-        "F9_GDXRatio": 1.96
+        "F8_ETFFlow": -0.12,
+        "F9_GDXRatio": 2.01
       }
     },
     {
       "month": "2026-03",
       "factors": {
-        "F1_DXY": -0.19,
-        "F2_FedFunds": -1.39,
-        "F3_TIPS10Y": 0.71,
-        "F4_BEI": 0.3,
-        "F5_GPR": -0.38,
-        "F6_GVZ": 0.0,
+        "F1_DXY": -0.25,
+        "F2_FedFunds": -0.27,
+        "F2b_RateMomentum": 1.68,
+        "F2c_RateExpect": 1.16,
+        "F3_TIPS10Y": 0.72,
+        "F4_BEI": 0.28,
+        "F5_GPR": -0.41,
+        "F6_GVZ": 2.75,
         "F7_WGC": 0.0,
-        "F8_ETFFlow": 0.15,
-        "F9_GDXRatio": 0.36
+        "F8_ETFFlow": -0.34,
+        "F9_GDXRatio": 0.46
       }
     }
   ]

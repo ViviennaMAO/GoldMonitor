@@ -17,7 +17,7 @@ export interface GoldPriceData {
   prevClose: number
   week52High?: number
   week52Low?: number
-  source: 'yahoo' | 'stooq' | 'mock'
+  source: 'yahoo' | 'yahoo-chart' | 'stooq' | 'pipeline' | 'mock'
   timestamp: string
 }
 

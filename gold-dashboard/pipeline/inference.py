@@ -40,12 +40,12 @@ def detect_regime(features_row: dict) -> dict:
     Detect market regime based on factor combination.
     Returns regime info with factor-level heatmap data.
     """
-    # Risk-Off indicators: high GVZ, high OVX, rising real rates
+    # Risk-Off indicators: high GVZ, high GPR, rising real rates
     risk_off_score = 0
     risk_on_score = 0
 
     gvz_z = features_row.get("F6_GVZ", 0)
-    ovx_z = features_row.get("F5_OVX", 0)
+    ovx_z = features_row.get("F5_GPR", 0)
     tips_z = features_row.get("F3_TIPS10Y", 0)
     dxy_z = features_row.get("F1_DXY", 0)
     bei_z = features_row.get("F4_BEI", 0)
@@ -231,9 +231,10 @@ def run_inference(features_df: pd.DataFrame) -> dict:
         raw_map = {
             "F1_DXY": "raw_DXY",
             "F2_FedFunds": "raw_FedFunds",
+            "F2c_RateExpect": "raw_DGS2",
             "F3_TIPS10Y": "raw_TIPS10Y",
             "F4_BEI": "raw_BEI",
-            "F5_OVX": "raw_OVX",
+            "F5_GPR": "raw_GPR",
             "F6_GVZ": "raw_GVZ",
         }
         raw_col = raw_map.get(fname)

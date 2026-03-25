@@ -39,11 +39,24 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     else:
         features["F1_DXY"] = 0.0
 
-    # F2: Federal Funds Rate
+    # F2: Federal Funds Rate (shortened 60d window — rate changes slowly)
     if "FED_FUNDS" in df.columns:
-        features["F2_FedFunds"] = rolling_zscore(df["FED_FUNDS"])
+        features["F2_FedFunds"] = rolling_zscore(df["FED_FUNDS"], window=60)
     else:
         features["F2_FedFunds"] = 0.0
+
+    # F2b: Fed Funds Momentum — 60-day rate of change (captures direction)
+    if "FED_FUNDS" in df.columns:
+        ff_momentum = df["FED_FUNDS"].diff(60)  # absolute change over 60 days
+        features["F2b_RateMomentum"] = rolling_zscore(ff_momentum, window=120)
+    else:
+        features["F2b_RateMomentum"] = 0.0
+
+    # F2c: Rate Expectation — DGS2 (2Y Treasury) as forward-looking rate proxy
+    if "DGS2" in df.columns:
+        features["F2c_RateExpect"] = rolling_zscore(df["DGS2"])
+    else:
+        features["F2c_RateExpect"] = 0.0
 
     # F3: TIPS 10Y Real Yield
     if "TIPS_10Y" in df.columns:
@@ -119,6 +132,7 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     raw_cols = {
         "DXY": "raw_DXY",
         "FED_FUNDS": "raw_FedFunds",
+        "DGS2": "raw_DGS2",
         "TIPS_10Y": "raw_TIPS10Y",
         "BEI": "raw_BEI",
         "GPR": "raw_GPR",

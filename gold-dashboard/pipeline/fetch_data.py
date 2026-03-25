@@ -149,20 +149,30 @@ def fetch_yahoo_history(symbol: str, days: int = 2800, ohlcv: bool = False) -> p
     period2 = int(datetime.now().timestamp())
     period1 = int((datetime.now() - timedelta(days=days)).timestamp())
 
-    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}"
     params = {
         "interval": "1d",
         "period1": period1,
         "period2": period2,
     }
     headers = {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                        "AppleWebKit/537.36 (KHTML, like Gecko) "
                        "Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "application/json",
     }
 
-    resp = requests.get(url, params=params, headers=headers, timeout=10)
-    if resp.status_code != 200:
+    # Try query2 first (more reliable), then query1
+    resp = None
+    for host in ["query2", "query1"]:
+        url = f"https://{host}.finance.yahoo.com/v8/finance/chart/{symbol}"
+        try:
+            resp = requests.get(url, params=params, headers=headers, timeout=15)
+            if resp.status_code == 200:
+                break
+        except Exception:
+            continue
+
+    if resp is None or resp.status_code != 200:
         return pd.DataFrame()
 
     data = resp.json()
@@ -266,6 +276,8 @@ def fetch_all_data() -> pd.DataFrame:
         merged["BEI"] = merged["BEI"].ffill()
     if "GPR" in merged.columns:
         merged["GPR"] = merged["GPR"].ffill()
+    if "DGS2" in merged.columns:
+        merged["DGS2"] = merged["DGS2"].ffill()
 
     # Drop rows where gold price is missing
     if "XAUUSD_close" in merged.columns:

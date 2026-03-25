@@ -94,7 +94,7 @@
 
     <!-- ── Factor Mini Cards ── -->
     <view class="card" wx:if="{{factors.length > 0}}">
-      <text class="card-title">9 因子概览</text>
+      <text class="card-title">{{factors.length}} 因子概览</text>
       <view class="factor-grid mt-12">
         <view class="factor-mini" wx:for="{{factors}}" wx:key="id">
           <text class="factor-mini-name">{{item.name}}</text>

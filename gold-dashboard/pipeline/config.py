@@ -14,7 +14,7 @@ FRED_API_KEY = os.environ.get("FRED_API_KEY", "6060765156e13c928200d3eeab885e01"
 
 # ── Data Parameters ──────────────────────────────────────────────────────────
 DATA_START = "2015-01-01"
-TRAIN_END = "2022-12-31"
+TRAIN_END = "2025-09-30"
 FORWARD_DAYS = 20          # 20-day forward return target
 ZSCORE_WINDOW = 252        # Rolling Z-Score window
 ATR_PERIOD = 14            # ATR calculation period
@@ -28,6 +28,7 @@ FRED_SERIES = {
     "TIPS_10Y": "DFII10",
     "BEI": "T10YIE",
     "GPR": "GEPUCURRENT",       # Global Economic Policy Uncertainty (geopolitical risk proxy)
+    "DGS2": "DGS2",             # 2-Year Treasury Yield (rate expectation proxy)
 }
 
 # ── Stooq Symbols ────────────────────────────────────────────────────────────
@@ -41,12 +42,14 @@ STOOQ_SYMBOLS = {
 
 # ── XGBoost Parameters ───────────────────────────────────────────────────────
 XGB_PARAMS = {
-    "max_depth": 4,
-    "min_child_weight": 10,
+    "max_depth": 3,
+    "min_child_weight": 30,
     "learning_rate": 0.03,
-    "n_estimators": 500,
-    "subsample": 0.8,
-    "colsample_bytree": 0.8,
+    "n_estimators": 300,
+    "subsample": 0.7,
+    "colsample_bytree": 0.7,
+    "reg_alpha": 1.0,           # L1 regularization to suppress single-factor dominance
+    "reg_lambda": 5.0,          # L2 regularization for smoother predictions
     "objective": "reg:squarederror",
     "random_state": 42,
 }
@@ -63,6 +66,8 @@ SIGNAL_THRESHOLDS = {
 FACTOR_NAMES = [
     "F1_DXY",
     "F2_FedFunds",
+    "F2b_RateMomentum",
+    "F2c_RateExpect",
     "F3_TIPS10Y",
     "F4_BEI",
     "F5_GPR",
@@ -75,6 +80,8 @@ FACTOR_NAMES = [
 FACTOR_DISPLAY = {
     "F1_DXY": "美元指数 DXY",
     "F2_FedFunds": "联邦基金利率",
+    "F2b_RateMomentum": "利率动量 60d",
+    "F2c_RateExpect": "利率预期 DGS2",
     "F3_TIPS10Y": "TIPS 10Y 实际利率",
     "F4_BEI": "通胀预期 BEI",
     "F5_GPR": "地缘政治风险 GPR",
