@@ -1,43 +1,25 @@
 {
   "date": "2026-03-25",
-  "timestamp": "2026-03-25T11:48:54.786255",
-  "signal": "Strong Buy",
-  "predicted_return": 1.2243,
-  "confidence": 81.6,
-  "gold_price": 4572.4,
+  "timestamp": "2026-03-25T13:57:30.554078",
+  "signal": "Neutral",
+  "predicted_return": -0.0746,
+  "confidence": 5.0,
+  "gold_price": 4563.9,
   "gold_open": 4473.5,
   "gold_high": 4601.0,
   "gold_low": 4458.2,
   "atr": 83.21,
-  "stop_loss": 4364.37,
-  "take_profit": 4884.45,
-  "position_size": 4.8069,
-  "regime": "Transition",
-  "regime_multiplier": 0.5,
+  "stop_loss": 4355.87,
+  "take_profit": 4875.95,
+  "position_size": 7.691,
+  "regime": "Neutral",
+  "regime_multiplier": 0.8,
   "factors": [
     {
       "name": "F1_DXY",
       "label": "美元指数 DXY",
       "zscore": 0.2163,
       "raw_value": 120.2757
-    },
-    {
-      "name": "F2_FedFunds",
-      "label": "联邦基金利率",
-      "zscore": 0.0,
-      "raw_value": 3.64
-    },
-    {
-      "name": "F2b_RateMomentum",
-      "label": "利率动量 60d",
-      "zscore": 0.751,
-      "raw_value": null
-    },
-    {
-      "name": "F2c_RateExpect",
-      "label": "利率预期 DGS2",
-      "zscore": 1.0765,
-      "raw_value": 3.83
     },
     {
       "name": "F3_TIPS10Y",

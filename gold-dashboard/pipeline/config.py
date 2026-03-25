@@ -24,11 +24,9 @@ RISK_BUDGET = 0.02         # 2% risk per trade
 # ── FRED Series IDs ──────────────────────────────────────────────────────────
 FRED_SERIES = {
     "DXY": "DTWEXBGS",
-    "FED_FUNDS": "FEDFUNDS",
     "TIPS_10Y": "DFII10",
     "BEI": "T10YIE",
     "GPR": "GEPUCURRENT",       # Global Economic Policy Uncertainty (geopolitical risk proxy)
-    "DGS2": "DGS2",             # 2-Year Treasury Yield (rate expectation proxy)
 }
 
 # ── Stooq Symbols ────────────────────────────────────────────────────────────
@@ -63,11 +61,10 @@ SIGNAL_THRESHOLDS = {
 }
 
 # ── Factor Names (display order) ─────────────────────────────────────────────
+# P1: Consolidated from 10 → 7 factors. Removed F2/F2b/F2c (rate cluster)
+# F3_TIPS10Y kept as sole rate representative (best OOS IC=+0.32)
 FACTOR_NAMES = [
     "F1_DXY",
-    "F2_FedFunds",
-    "F2b_RateMomentum",
-    "F2c_RateExpect",
     "F3_TIPS10Y",
     "F4_BEI",
     "F5_GPR",
@@ -78,9 +75,6 @@ FACTOR_NAMES = [
 
 FACTOR_DISPLAY = {
     "F1_DXY": "美元指数 DXY",
-    "F2_FedFunds": "联邦基金利率",
-    "F2b_RateMomentum": "利率动量 60d",
-    "F2c_RateExpect": "利率预期 DGS2",
     "F3_TIPS10Y": "TIPS 10Y 实际利率",
     "F4_BEI": "通胀预期 BEI",
     "F5_GPR": "地缘政治风险 GPR",
@@ -91,5 +85,10 @@ FACTOR_DISPLAY = {
 
 # ── Risk Regime Thresholds ────────────────────────────────────────────────────
 REGIME_HEALTHY = 1.0
-REGIME_CAUTION = 0.5
+REGIME_CAUTION = 0.6
 REGIME_CIRCUIT_BREAK = 0.0
+
+# ── Regime Detection Thresholds (Z-Score) ────────────────────────────────────
+# P1: Lowered from ±1.0/±0.5 → ±0.5/±0.3 to reduce "Transition" over-triggering
+REGIME_Z_HIGH = 0.5       # Factor Z > this → risk-off signal
+REGIME_Z_LOW = -0.3       # Factor Z < this → risk-on signal

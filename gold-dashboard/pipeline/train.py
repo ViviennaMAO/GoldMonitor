@@ -105,7 +105,95 @@ def train_model(features_df: pd.DataFrame) -> xgb.XGBRegressor:
     # ── Compute rolling IC history ────────────────────────────────────────────
     compute_ic_history(features_df, model)
 
+    # ── Model health check (P1) ───────────────────────────────────────────────
+    compute_model_health(features_df, model)
+
     return model
+
+
+def compute_model_health(features_df: pd.DataFrame, model: xgb.XGBRegressor) -> dict:
+    """
+    P1: Compute model health metrics for monitoring dashboard.
+    Returns a health report dict saved as model_health.json.
+    """
+    factor_cols = get_factor_columns()
+    oos_mask = features_df.index > pd.Timestamp(TRAIN_END)
+    oos_df = features_df[oos_mask].dropna(subset=factor_cols + ["target"])
+
+    health = {
+        "timestamp": pd.Timestamp.now().isoformat(),
+        "n_factors": len(factor_cols),
+        "factors": factor_cols,
+        "train_end": TRAIN_END,
+        "oos_samples": len(oos_df),
+        "status": "healthy",
+        "warnings": [],
+    }
+
+    if len(oos_df) < 20:
+        health["status"] = "insufficient_data"
+        health["warnings"].append(f"Only {len(oos_df)} OOS samples (need 20+)")
+        return health
+
+    X_oos = np.nan_to_num(oos_df[factor_cols].fillna(0).values.astype(np.float64),
+                          nan=0.0, posinf=5.0, neginf=-5.0)
+    y_oos = oos_df["target"].values
+    pred_oos = model.predict(X_oos)
+
+    # Overall OOS IC
+    ic_overall, _ = spearmanr(pred_oos, y_oos)
+    health["oos_ic"] = round(float(ic_overall), 4) if not np.isnan(ic_overall) else 0.0
+
+    # Recent 60-day IC
+    if len(oos_df) >= 60:
+        ic_recent, _ = spearmanr(pred_oos[-60:], y_oos[-60:])
+        health["recent_60d_ic"] = round(float(ic_recent), 4) if not np.isnan(ic_recent) else 0.0
+    else:
+        health["recent_60d_ic"] = health["oos_ic"]
+
+    # IC trend: compare first half vs second half
+    mid = len(pred_oos) // 2
+    if mid >= 20:
+        ic_first, _ = spearmanr(pred_oos[:mid], y_oos[:mid])
+        ic_second, _ = spearmanr(pred_oos[mid:], y_oos[mid:])
+        health["ic_first_half"] = round(float(ic_first), 4) if not np.isnan(ic_first) else 0.0
+        health["ic_second_half"] = round(float(ic_second), 4) if not np.isnan(ic_second) else 0.0
+        if ic_second < 0:
+            health["warnings"].append(f"IC turned negative in recent period: {ic_second:.4f}")
+            health["status"] = "degraded"
+        elif ic_second < ic_first * 0.5:
+            health["warnings"].append(f"IC declining: {ic_first:.4f} → {ic_second:.4f}")
+            health["status"] = "warning"
+
+    # Per-factor IC
+    factor_ics = {}
+    for j, fname in enumerate(factor_cols):
+        ic, _ = spearmanr(X_oos[:, j], y_oos)
+        factor_ics[fname] = round(float(ic), 4) if not np.isnan(ic) else 0.0
+    health["factor_ics"] = factor_ics
+
+    # Check for multicollinearity
+    corr = pd.DataFrame(X_oos, columns=factor_cols).corr(method="spearman")
+    high_corr_pairs = []
+    for i_idx, fi in enumerate(factor_cols):
+        for j_idx, fj in enumerate(factor_cols):
+            if i_idx < j_idx and abs(corr.loc[fi, fj]) > 0.7:
+                high_corr_pairs.append(f"{fi}×{fj}: {corr.loc[fi, fj]:.3f}")
+    if high_corr_pairs:
+        health["warnings"].append(f"High correlation pairs: {', '.join(high_corr_pairs)}")
+    health["high_corr_pairs"] = len(high_corr_pairs)
+
+    # Save health report
+    out_path = OUTPUT_DIR / "model_health.json"
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    with open(out_path, "w") as f:
+        json.dump(health, f, indent=2, ensure_ascii=False)
+    print(f"Model health saved to {out_path} (status: {health['status']})")
+    if health["warnings"]:
+        for w in health["warnings"]:
+            print(f"  ⚠ {w}")
+
+    return health
 
 
 def compute_ic_history(features_df: pd.DataFrame, model: xgb.XGBRegressor):

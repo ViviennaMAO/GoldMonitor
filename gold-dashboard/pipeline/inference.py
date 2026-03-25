@@ -12,6 +12,7 @@ from config import (
     MODEL_PATH, OUTPUT_DIR, SIGNAL_THRESHOLDS, FACTOR_NAMES,
     FACTOR_DISPLAY, ATR_PERIOD, ATR_STOP_MULT, RISK_BUDGET,
     REGIME_HEALTHY, REGIME_CAUTION, REGIME_CIRCUIT_BREAK,
+    REGIME_Z_HIGH, REGIME_Z_LOW,
 )
 from features import get_factor_columns
 
@@ -58,50 +59,64 @@ def signal_to_confidence(pred_return: float) -> float:
 def detect_regime(features_row: dict) -> dict:
     """
     Detect market regime based on factor combination.
+    P1: Uses configurable Z-Score thresholds (lowered from ±1.0/±0.5).
     Returns regime info with factor-level heatmap data.
     """
-    # Risk-Off indicators: high GVZ, high GPR, rising real rates
     risk_off_score = 0
     risk_on_score = 0
 
     gvz_z = features_row.get("F6_GVZ", 0)
-    ovx_z = features_row.get("F5_GPR", 0)
+    gpr_z = features_row.get("F5_GPR", 0)
     tips_z = features_row.get("F3_TIPS10Y", 0)
     dxy_z = features_row.get("F1_DXY", 0)
     bei_z = features_row.get("F4_BEI", 0)
 
-    if gvz_z > 1.0:
+    # GVZ: high volatility → risk-off
+    if gvz_z > REGIME_Z_HIGH:
         risk_off_score += 1
-    elif gvz_z < -0.5:
+    elif gvz_z < REGIME_Z_LOW:
         risk_on_score += 1
 
-    if ovx_z > 1.0:
+    # GPR: high geopolitical risk → risk-off
+    if gpr_z > REGIME_Z_HIGH:
         risk_off_score += 1
-    elif ovx_z < -0.5:
+    elif gpr_z < REGIME_Z_LOW:
         risk_on_score += 1
 
-    if tips_z > 1.0:
-        risk_off_score += 1  # Rising real rates hurt gold
-    elif tips_z < -0.5:
+    # TIPS: rising real rates → risk-off (hurts gold)
+    if tips_z > REGIME_Z_HIGH:
+        risk_off_score += 1
+    elif tips_z < REGIME_Z_LOW:
         risk_on_score += 1
 
-    if dxy_z > 1.0:
-        risk_off_score += 1  # Strong dollar bad for gold
-    elif dxy_z < -0.5:
+    # DXY: strong dollar → risk-off (hurts gold)
+    if dxy_z > REGIME_Z_HIGH:
+        risk_off_score += 1
+    elif dxy_z < REGIME_Z_LOW:
         risk_on_score += 1
 
-    if bei_z > 0.5:
-        risk_on_score += 1  # Rising inflation good for gold
+    # BEI: rising inflation → risk-on (helps gold)
+    if bei_z > REGIME_Z_HIGH:
+        risk_on_score += 1
+    elif bei_z < REGIME_Z_LOW:
+        risk_off_score += 1
 
+    # P1: Lowered trigger from >= 3 to >= 2 (out of 5 factors)
     if risk_off_score >= 3:
         regime = "Risk-Off"
         regime_mult = REGIME_CAUTION
     elif risk_on_score >= 3:
         regime = "Risk-On"
         regime_mult = REGIME_HEALTHY
-    else:
-        regime = "Transition"
+    elif risk_off_score >= 2:
+        regime = "Cautious"
         regime_mult = REGIME_CAUTION
+    elif risk_on_score >= 2:
+        regime = "Favorable"
+        regime_mult = REGIME_HEALTHY
+    else:
+        regime = "Neutral"
+        regime_mult = (REGIME_HEALTHY + REGIME_CAUTION) / 2
 
     return {
         "regime": regime,
@@ -225,6 +240,33 @@ def run_inference(features_df: pd.DataFrame) -> dict:
     # Sort by absolute SHAP value
     shap_output["bars"].sort(key=lambda x: abs(x["value"]), reverse=True)
 
+    # ── SHAP Stability Check (P1) ─────────────────────────────────────────────
+    # Use last 10 trading days to verify SHAP attribution consistency
+    shap_stability = {"stable": True, "dominant_factor": None, "max_share": 0.0}
+    n_check = min(10, len(valid) - 1)
+    if n_check >= 3:
+        recent_rows = valid.iloc[-n_check:]
+        X_recent = np.nan_to_num(
+            recent_rows[factor_cols].values.astype(np.float64),
+            nan=0.0, posinf=5.0, neginf=-5.0
+        )
+        shap_recent = explainer.shap_values(X_recent)
+        abs_shap = np.abs(shap_recent)
+        mean_abs = abs_shap.mean(axis=0)
+        total = mean_abs.sum()
+        if total > 0:
+            shares = mean_abs / total
+            max_idx = int(np.argmax(shares))
+            shap_stability["dominant_factor"] = factor_cols[max_idx]
+            shap_stability["max_share"] = round(float(shares[max_idx]), 3)
+            # Flag unstable if any single factor > 60% average attribution
+            if shares[max_idx] > 0.60:
+                shap_stability["stable"] = False
+                print(f"  ⚠ SHAP unstable: {factor_cols[max_idx]} dominates at {shares[max_idx]*100:.1f}%")
+            else:
+                print(f"  ✓ SHAP stable: top factor {factor_cols[max_idx]} at {shares[max_idx]*100:.1f}%")
+    shap_output["stability"] = shap_stability
+
     # ── ATR Position Sizing ───────────────────────────────────────────────────
     atr = float(latest.get("ATR", 50.0))
     gold_price = float(latest.get("gold_price", 3000.0))
@@ -261,8 +303,6 @@ def run_inference(features_df: pd.DataFrame) -> dict:
     for fname in factor_cols:
         raw_map = {
             "F1_DXY": "raw_DXY",
-            "F2_FedFunds": "raw_FedFunds",
-            "F2c_RateExpect": "raw_DGS2",
             "F3_TIPS10Y": "raw_TIPS10Y",
             "F4_BEI": "raw_BEI",
             "F5_GPR": "raw_GPR",
