@@ -1,9 +1,8 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { Circle, Cpu, Database, Wifi, Bell, CheckCircle2, AlertTriangle, XCircle } from 'lucide-react'
-import { alerts } from '@/data/mockData'
 import { AlertItem } from '@/types'
-import { useGoldPrice, useFactors } from '@/lib/useGoldData'
+import { useGoldPrice, useFactors, useModelHealth } from '@/lib/useGoldData'
 import clsx from 'clsx'
 
 const alertConfig = {
@@ -18,6 +17,7 @@ export function StatusBar() {
   const [showAlerts, setShowAlerts] = useState(false)
   const { data: priceData } = useGoldPrice()
   const { dataSource } = useFactors()
+  const { data: health } = useModelHealth()
 
   useEffect(() => {
     const update = () => setTime(new Date().toLocaleString('zh-CN', {
@@ -29,35 +29,78 @@ export function StatusBar() {
     return () => clearInterval(id)
   }, [])
 
+  // Build alerts from model health
+  const alerts: AlertItem[] = []
+  if (health) {
+    if (health.status === 'degraded') {
+      alerts.push({ id: 'health-degraded', level: 'critical', message: `模型质量降级 — IC 转负`, time: '模型监控' })
+    } else if (health.status === 'warning') {
+      alerts.push({ id: 'health-warning', level: 'warning', message: `模型 IC 下降趋势`, time: '模型监控' })
+    }
+    health.warnings?.forEach((w, i) => {
+      alerts.push({ id: `warn-${i}`, level: 'warning', message: w, time: '模型监控' })
+    })
+    // Add positive info
+    if (health.status === 'healthy' && (!health.warnings || health.warnings.length === 0)) {
+      alerts.push({ id: 'health-ok', level: 'info', message: `模型健康 · OOS IC=${health.oos_ic?.toFixed(3)} · 60d IC=${health.recent_60d_ic?.toFixed(3)}`, time: '模型监控' })
+    }
+    alerts.push({
+      id: 'factors',
+      level: 'daily',
+      message: `${health.n_factors} 因子 · ${health.oos_samples ?? 0} OOS样本 · 训练截止 ${health.train_end ?? 'N/A'}`,
+      time: '模型配置',
+    })
+  }
+
+  // Add data source info
+  const priceSource = priceData?.source ?? 'mock'
+  if (priceSource !== 'mock') {
+    alerts.push({ id: 'price-live', level: 'info', message: `金价数据源: ${priceSource} · $${priceData?.price?.toFixed(0)}`, time: '数据源' })
+  } else {
+    alerts.push({ id: 'price-mock', level: 'warning', message: '金价使用模拟数据', time: '数据源' })
+  }
+
   const criticalCount = alerts.filter(a => a.level === 'critical').length
   const warningCount  = alerts.filter(a => a.level === 'warning').length
+
+  const healthColor = health?.status === 'healthy' ? 'text-green-400/80'
+    : health?.status === 'warning' ? 'text-amber-400/80'
+    : health?.status === 'degraded' ? 'text-red-400/80'
+    : 'text-slate-500'
+
+  const healthLabel = health?.status === 'healthy' ? '模型健康'
+    : health?.status === 'warning' ? '模型预警'
+    : health?.status === 'degraded' ? '模型降级'
+    : '检测中...'
 
   return (
     <footer className="relative flex-shrink-0 h-9 flex items-center justify-between px-2 md:px-4 border-t border-white/[0.06] bg-[#050B18] text-[10px]">
       {/* Left: system status */}
       <div className="flex items-center gap-2 md:gap-4">
-        <div className="flex items-center gap-1.5 text-green-400/80">
+        <div className={clsx('flex items-center gap-1.5', healthColor)}>
           <Circle className="w-2 h-2 fill-current animate-pulse" />
-          <span>系统正常</span>
+          <span>{healthLabel}</span>
         </div>
         <div className="items-center gap-1 text-slate-600 hidden md:flex">
           <Cpu className="w-3 h-3" />
-          <span>XGBoost 推理引擎 · 在线</span>
+          <span>XGBoost · {health?.n_factors ?? '?'}因子</span>
         </div>
         <div className="items-center gap-1 text-slate-600 hidden lg:flex">
           <Database className="w-3 h-3" style={{ color: dataSource?.fred ? '#22C55E80' : undefined }} />
           <span>
-            {dataSource?.fred ? 'FRED+Yahoo' : 'Mock 数据'}
+            {dataSource?.fred ? 'FRED+Yahoo' : 'Pipeline'}
             {' · '}
             {dataSource?.timestamp
               ? new Date(dataSource.timestamp).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
-              : '21:00'}
+              : '--:--'}
           </span>
         </div>
-        <div className="items-center gap-1 text-slate-600 hidden lg:flex">
-          <Wifi className="w-3 h-3" />
-          <span>VSTAR WebSocket · 连接中</span>
-        </div>
+        {health && (
+          <div className="items-center gap-1 text-slate-600 hidden xl:flex">
+            <Wifi className="w-3 h-3" />
+            <span>IC={health.recent_60d_ic?.toFixed(2) ?? '--'}</span>
+          </div>
+        )}
       </div>
 
       {/* Center: alert counts */}
@@ -87,14 +130,14 @@ export function StatusBar() {
       <div className="flex items-center gap-2 md:gap-3 text-slate-600">
         <span className="font-mono">{time}</span>
         <span className="text-slate-800 hidden md:inline">·</span>
-        <span className="hidden md:inline">Gold Monitor v1.0</span>
+        <span className="hidden md:inline">Gold Monitor v1.1</span>
       </div>
 
-      {/* Alerts dropdown — responsive width */}
+      {/* Alerts dropdown */}
       {showAlerts && (
         <div className="absolute bottom-10 left-2 right-2 md:left-1/2 md:right-auto md:-translate-x-1/2 md:w-[480px] rounded-2xl border border-white/10 bg-[#0A1628]/98 backdrop-blur-xl shadow-2xl p-3 z-50">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold text-slate-300">告警消息</span>
+            <span className="text-xs font-semibold text-slate-300">系统告警 · 模型监控</span>
             <button onClick={() => setShowAlerts(false)} className="text-slate-600 hover:text-slate-300 cursor-pointer text-xs">关闭</button>
           </div>
           <div className="space-y-1.5 max-h-[50vh] overflow-y-auto">

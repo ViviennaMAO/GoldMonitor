@@ -1,36 +1,62 @@
 'use client'
 import { useState } from 'react'
-import { correlationMatrix } from '@/data/mockData'
-import { factors } from '@/data/mockData'
+import { useCorrelation } from '@/lib/useGoldData'
 import clsx from 'clsx'
 
-const FACTOR_IDS = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F8', 'F9']
 const HIGH_CORR_THRESHOLD = 0.7
+
+// Display name mapping
+const FACTOR_SHORT: Record<string, string> = {
+  F1_DXY: 'DXY',
+  F3_TIPS10Y: 'TIPS',
+  F4_BEI: 'BEI',
+  F5_GPR: 'GPR',
+  F6_GVZ: 'GVZ',
+  F8_ETFFlow: 'ETF',
+  F9_GDXRatio: 'GDX',
+}
 
 function corrColor(v: number): string {
   if (v === 1) return 'rgba(59,130,246,0.3)'
-  if (Math.abs(v) > HIGH_CORR_THRESHOLD) return v > 0 ? 'rgba(239,68,68,0.55)' : 'rgba(239,68,68,0.55)'
+  if (Math.abs(v) > HIGH_CORR_THRESHOLD) return 'rgba(239,68,68,0.55)'
   if (v > 0.4) return `rgba(34,197,94,${v * 0.5})`
   if (v < -0.4) return `rgba(239,68,68,${Math.abs(v) * 0.5})`
   return `rgba(100,116,139,${Math.abs(v) * 0.4})`
 }
 
 export function CorrelationMatrix() {
+  const { data } = useCorrelation()
   const [hoveredCell, setHoveredCell] = useState<{ row: string; col: string; val: number } | null>(null)
 
-  const highCorrPairs = FACTOR_IDS.flatMap((r, i) =>
-    FACTOR_IDS.slice(i + 1).filter(c => Math.abs(correlationMatrix[r][c]) > HIGH_CORR_THRESHOLD)
-      .map(c => ({ pair: `${r}-${c}`, val: correlationMatrix[r][c] }))
+  const factors = data?.factors ?? []
+  const matrixMap: Record<string, number> = {}
+  ;(data?.matrix ?? []).forEach(m => {
+    matrixMap[`${m.x}|${m.y}`] = m.value
+  })
+
+  const getCorr = (r: string, c: string) => matrixMap[`${r}|${c}`] ?? 0
+
+  const highCorrPairs = factors.flatMap((r, i) =>
+    factors.slice(i + 1)
+      .filter(c => Math.abs(getCorr(r, c)) > HIGH_CORR_THRESHOLD)
+      .map(c => ({ pair: `${FACTOR_SHORT[r] ?? r}×${FACTOR_SHORT[c] ?? c}`, val: getCorr(r, c) }))
   )
 
-  const factorNames: Record<string, string> = {}
-  factors.forEach(f => { factorNames[f.id] = f.name })
+  if (!factors.length) {
+    return (
+      <div className="w-full h-full flex items-center justify-center text-slate-600 text-xs">
+        加载相关性矩阵...
+      </div>
+    )
+  }
 
   return (
     <div className="w-full h-full flex flex-col">
       <div className="mb-3">
         <h3 className="text-sm font-semibold text-slate-200">因子相关性矩阵</h3>
-        <p className="text-[10px] text-slate-500 mt-0.5">60 日滚动相关性 · 红色高亮 |r| &gt; 0.7 警告</p>
+        <p className="text-[10px] text-slate-500 mt-0.5">
+          {factors.length} 因子 Spearman 秩相关 · 红色高亮 |r| &gt; 0.7 警告
+        </p>
       </div>
 
       {/* Matrix */}
@@ -39,19 +65,21 @@ export function CorrelationMatrix() {
           <thead>
             <tr>
               <th className="w-10" />
-              {FACTOR_IDS.map(fid => (
+              {factors.map(fid => (
                 <th key={fid} className="text-[9px] text-slate-500 font-mono font-normal text-center w-9 pb-1">
-                  {fid}
+                  {FACTOR_SHORT[fid] ?? fid.replace(/^F\d+_/, '')}
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {FACTOR_IDS.map(row => (
+            {factors.map(row => (
               <tr key={row}>
-                <td className="text-[9px] text-slate-500 font-mono pr-2">{row}</td>
-                {FACTOR_IDS.map(col => {
-                  const val = correlationMatrix[row][col]
+                <td className="text-[9px] text-slate-500 font-mono pr-2">
+                  {FACTOR_SHORT[row] ?? row.replace(/^F\d+_/, '')}
+                </td>
+                {factors.map(col => {
+                  const val = getCorr(row, col)
                   const isHigh = Math.abs(val) > HIGH_CORR_THRESHOLD && row !== col
                   const isHovered = hoveredCell?.row === row && hoveredCell?.col === col
 
@@ -70,7 +98,10 @@ export function CorrelationMatrix() {
                         )}
                         style={{ backgroundColor: corrColor(val) }}
                       >
-                        <span className={clsx('text-[9px] font-mono', row === col ? 'text-blue-400' : isHigh ? 'text-red-300' : 'text-slate-400')}>
+                        <span className={clsx(
+                          'text-[9px] font-mono',
+                          row === col ? 'text-blue-400' : isHigh ? 'text-red-300' : 'text-slate-400',
+                        )}>
                           {val.toFixed(2)}
                         </span>
                       </div>
@@ -87,7 +118,7 @@ export function CorrelationMatrix() {
       {highCorrPairs.length > 0 && (
         <div className="mt-3 p-2.5 rounded-xl bg-red-500/10 border border-red-500/20">
           <div className="text-[10px] font-semibold text-red-400 mb-1.5">
-            高相关预警 (|r| &gt; 0.7) — 正交化效果可能需要更新
+            高相关预警 (|r| &gt; 0.7) — {highCorrPairs.length} 对因子需关注
           </div>
           <div className="flex flex-wrap gap-1.5">
             {highCorrPairs.map(p => (
@@ -99,11 +130,23 @@ export function CorrelationMatrix() {
         </div>
       )}
 
+      {highCorrPairs.length === 0 && (
+        <div className="mt-3 p-2.5 rounded-xl bg-green-500/10 border border-green-500/20">
+          <div className="text-[10px] font-semibold text-green-400">
+            因子正交性良好 — 无高相关预警
+          </div>
+        </div>
+      )}
+
       {/* Hover info */}
       {hoveredCell && hoveredCell.row !== hoveredCell.col && (
         <div className="mt-2 p-2 rounded-lg bg-white/[0.03] border border-white/[0.06] text-[10px]">
-          <span className="text-slate-500">{hoveredCell.row} {factorNames[hoveredCell.row]} × {hoveredCell.col} {factorNames[hoveredCell.col]}</span>
-          <span className="ml-2 font-mono font-bold" style={{ color: Math.abs(hoveredCell.val) > 0.7 ? '#EF4444' : hoveredCell.val > 0 ? '#22C55E' : '#94A3B8' }}>
+          <span className="text-slate-500">
+            {FACTOR_SHORT[hoveredCell.row] ?? hoveredCell.row} × {FACTOR_SHORT[hoveredCell.col] ?? hoveredCell.col}
+          </span>
+          <span className="ml-2 font-mono font-bold" style={{
+            color: Math.abs(hoveredCell.val) > 0.7 ? '#EF4444' : hoveredCell.val > 0 ? '#22C55E' : '#94A3B8'
+          }}>
             r = {hoveredCell.val.toFixed(3)}
           </span>
         </div>

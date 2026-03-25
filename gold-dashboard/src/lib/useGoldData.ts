@@ -236,3 +236,24 @@ export function useEquityCurve() {
     revalidateOnFocus: false,
   })
 }
+
+export interface ModelHealthData {
+  timestamp: string
+  status: 'healthy' | 'warning' | 'degraded' | 'insufficient_data' | 'unknown'
+  warnings: string[]
+  n_factors: number
+  factors: string[]
+  train_end: string
+  oos_samples: number
+  oos_ic: number
+  recent_60d_ic: number
+  high_corr_pairs: number
+  factor_ics?: Record<string, number>
+}
+
+export function useModelHealth() {
+  return useSWR<ModelHealthData>('/api/model-health', fetcher, {
+    refreshInterval: HOURLY,
+    revalidateOnFocus: false,
+  })
+}

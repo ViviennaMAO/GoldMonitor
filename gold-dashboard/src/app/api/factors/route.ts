@@ -1,9 +1,9 @@
 /**
  * GET /api/factors
- * Aggregates all 9 gold factor readings from:
- *   - FRED API (F1 DXY, F2 Fed Funds, F3 TIPS 10Y, F4 BEI)
+ * Aggregates 7 gold factor readings from:
+ *   - FRED API (F1 DXY, F3 TIPS 10Y, F4 BEI)
  *   - Yahoo Finance (F5 GPR proxy, F6 GVZ, F8 ETF flow, F9 GDX ratio)
- *   - Stooq fallback for ETF history (GLD, IAU, GDX)
+ *   - Pipeline signal.json fallback
  * Falls back to mock data for any factor that fails.
  */
 import { NextResponse } from 'next/server'
@@ -28,7 +28,6 @@ export async function GET() {
   // ── Parallel data fetches ──────────────────────────────────────────
   const [
     fredDXY,          // F1: DTWEXBGS — Broad USD index
-    fredFedFunds,     // F2: FEDFUNDS — Fed funds rate
     fredTIPS10Y,      // F3: DFII10 — 10Y TIPS real yield
     fredBEI,          // F4: T10YIE — 10Y breakeven inflation
     yfQuotes,         // F5/F6 volatility quotes (Yahoo only)
@@ -40,7 +39,6 @@ export async function GET() {
     ovxHistory,       // F5: OVX history (Yahoo only)
   ] = await Promise.all([
     fetchFredSeries('DTWEXBGS', 260),
-    fetchFredSeries('FEDFUNDS', 260),
     fetchFredSeries('DFII10', 260),
     fetchFredSeries('T10YIE', 260),
     fetchYFQuotes(['^GVZ', '^OVX']),
@@ -64,17 +62,7 @@ export async function GET() {
     icValue: -0.087,
   })
 
-  // ── F2: 货币政策预期 (Fed Funds) ────────────────────────────────────
-  const f2 = buildFactor('F2', fredFedFunds, {
-    mockFactor: MOCK_FACTORS[1],
-    invertDirection: true,
-    label: 'FEDFUNDS',
-    unit: '%',
-    signalFn: (z) => z < -0.5 ? '降息预期升温，金价支撑' : z > 0.5 ? '加息预期偏强，利率压制' : '降息预期中性，方向不明',
-    icValue: -0.041,
-  })
-
-  // ── F3: 实际利率 (TIPS 10Y) ─────────────────────────────────────────
+  // ── F3: 实际利率 (TIPS 10Y) — P1: sole rate representative ─────────
   const f3 = buildFactor('F3', fredTIPS10Y, {
     mockFactor: MOCK_FACTORS[2],
     invertDirection: true, // higher real rates = bearish gold
@@ -222,9 +210,9 @@ export async function GET() {
 
   const etfSource = gldHistory ? 'live' : null
   const result = {
-    factors: [f1, f2, f3, f4, f5, f6, f8, f9],
+    factors: [f1, f3, f4, f5, f6, f8, f9],
     dataSource: {
-      fred: !!(fredTIPS10Y || fredBEI || fredDXY || fredFedFunds),
+      fred: !!(fredTIPS10Y || fredBEI || fredDXY),
       yahoo: !!(yfQuotes),
       stooq: !!(etfSource),
       timestamp: now,

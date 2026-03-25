@@ -7,7 +7,7 @@ import { StatusBar } from '@/components/layout/StatusBar'
 export default function Home() {
   return (
     <div className="flex flex-col h-screen bg-[#050B18] overflow-hidden">
-      {/* Top: logo + gold price + 9 factor cards */}
+      {/* Top: logo + gold price + factor cards */}
       <TopBar />
 
       {/* Main body — stacked on mobile, side-by-side on desktop */}
