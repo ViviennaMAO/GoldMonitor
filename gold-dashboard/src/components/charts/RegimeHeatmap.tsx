@@ -6,7 +6,7 @@ import clsx from 'clsx'
 
 const MONTHS = ['2025-04', '2025-05', '2025-06', '2025-07', '2025-08',
   '2025-09', '2025-10', '2025-11', '2025-12', '2026-01', '2026-02', '2026-03']
-const FACTOR_IDS = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9']
+const FACTOR_IDS = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F8', 'F9']
 
 function getColor(value: number): string {
   const abs = Math.min(Math.abs(value), 0.3)

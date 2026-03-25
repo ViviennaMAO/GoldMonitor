@@ -8,7 +8,6 @@
     "F4_BEI",
     "F5_GPR",
     "F6_GVZ",
-    "F7_WGC",
     "F8_ETFFlow",
     "F9_GDXRatio"
   ],
@@ -21,57 +20,52 @@
     {
       "x": "F1_DXY",
       "y": "F2_FedFunds",
-      "value": 0.021
+      "value": 0.036
     },
     {
       "x": "F1_DXY",
       "y": "F2b_RateMomentum",
-      "value": 0.125
+      "value": 0.143
     },
     {
       "x": "F1_DXY",
       "y": "F2c_RateExpect",
-      "value": 0.734
+      "value": 0.735
     },
     {
       "x": "F1_DXY",
       "y": "F3_TIPS10Y",
-      "value": 0.763
+      "value": 0.771
     },
     {
       "x": "F1_DXY",
       "y": "F4_BEI",
-      "value": 0.493
+      "value": 0.497
     },
     {
       "x": "F1_DXY",
       "y": "F5_GPR",
-      "value": 0.832
+      "value": 0.827
     },
     {
       "x": "F1_DXY",
       "y": "F6_GVZ",
-      "value": -0.515
-    },
-    {
-      "x": "F1_DXY",
-      "y": "F7_WGC",
-      "value": NaN
+      "value": -0.511
     },
     {
       "x": "F1_DXY",
       "y": "F8_ETFFlow",
-      "value": -0.034
+      "value": -0.035
     },
     {
       "x": "F1_DXY",
       "y": "F9_GDXRatio",
-      "value": -0.842
+      "value": -0.845
     },
     {
       "x": "F2_FedFunds",
       "y": "F1_DXY",
-      "value": 0.021
+      "value": 0.036
     },
     {
       "x": "F2_FedFunds",
@@ -81,57 +75,52 @@
     {
       "x": "F2_FedFunds",
       "y": "F2b_RateMomentum",
-      "value": 0.886
+      "value": 0.888
     },
     {
       "x": "F2_FedFunds",
       "y": "F2c_RateExpect",
-      "value": 0.416
+      "value": 0.429
     },
     {
       "x": "F2_FedFunds",
       "y": "F3_TIPS10Y",
-      "value": 0.265
+      "value": 0.267
     },
     {
       "x": "F2_FedFunds",
       "y": "F4_BEI",
-      "value": 0.207
+      "value": 0.202
     },
     {
       "x": "F2_FedFunds",
       "y": "F5_GPR",
-      "value": 0.035
+      "value": 0.013
     },
     {
       "x": "F2_FedFunds",
       "y": "F6_GVZ",
-      "value": 0.161
-    },
-    {
-      "x": "F2_FedFunds",
-      "y": "F7_WGC",
-      "value": NaN
+      "value": 0.189
     },
     {
       "x": "F2_FedFunds",
       "y": "F8_ETFFlow",
-      "value": -0.102
+      "value": -0.114
     },
     {
       "x": "F2_FedFunds",
       "y": "F9_GDXRatio",
-      "value": -0.311
+      "value": -0.31
     },
     {
       "x": "F2b_RateMomentum",
       "y": "F1_DXY",
-      "value": 0.125
+      "value": 0.143
     },
     {
       "x": "F2b_RateMomentum",
       "y": "F2_FedFunds",
-      "value": 0.886
+      "value": 0.888
     },
     {
       "x": "F2b_RateMomentum",
@@ -141,112 +130,102 @@
     {
       "x": "F2b_RateMomentum",
       "y": "F2c_RateExpect",
-      "value": 0.518
+      "value": 0.522
     },
     {
       "x": "F2b_RateMomentum",
       "y": "F3_TIPS10Y",
-      "value": 0.402
+      "value": 0.396
     },
     {
       "x": "F2b_RateMomentum",
       "y": "F4_BEI",
-      "value": 0.302
+      "value": 0.299
     },
     {
       "x": "F2b_RateMomentum",
       "y": "F5_GPR",
-      "value": 0.115
+      "value": 0.099
     },
     {
       "x": "F2b_RateMomentum",
       "y": "F6_GVZ",
-      "value": -0.084
-    },
-    {
-      "x": "F2b_RateMomentum",
-      "y": "F7_WGC",
-      "value": NaN
+      "value": -0.058
     },
     {
       "x": "F2b_RateMomentum",
       "y": "F8_ETFFlow",
-      "value": -0.054
+      "value": -0.064
     },
     {
       "x": "F2b_RateMomentum",
       "y": "F9_GDXRatio",
-      "value": -0.444
+      "value": -0.447
     },
     {
       "x": "F2c_RateExpect",
       "y": "F1_DXY",
-      "value": 0.734
+      "value": 0.735
     },
     {
       "x": "F2c_RateExpect",
       "y": "F2_FedFunds",
-      "value": 0.416
+      "value": 0.429
     },
     {
       "x": "F2c_RateExpect",
       "y": "F2b_RateMomentum",
-      "value": 0.518
-    },
-    {
-      "x": "F2c_RateExpect",
-      "y": "F2c_RateExpect",
-      "value": 1.0
-    },
-    {
-      "x": "F2c_RateExpect",
-      "y": "F3_TIPS10Y",
-      "value": 0.885
-    },
-    {
-      "x": "F2c_RateExpect",
-      "y": "F4_BEI",
-      "value": 0.671
-    },
-    {
-      "x": "F2c_RateExpect",
-      "y": "F5_GPR",
       "value": 0.522
     },
     {
       "x": "F2c_RateExpect",
-      "y": "F6_GVZ",
-      "value": -0.315
+      "y": "F2c_RateExpect",
+      "value": 1.0
     },
     {
       "x": "F2c_RateExpect",
-      "y": "F7_WGC",
-      "value": NaN
+      "y": "F3_TIPS10Y",
+      "value": 0.885
+    },
+    {
+      "x": "F2c_RateExpect",
+      "y": "F4_BEI",
+      "value": 0.661
+    },
+    {
+      "x": "F2c_RateExpect",
+      "y": "F5_GPR",
+      "value": 0.489
+    },
+    {
+      "x": "F2c_RateExpect",
+      "y": "F6_GVZ",
+      "value": -0.277
     },
     {
       "x": "F2c_RateExpect",
       "y": "F8_ETFFlow",
-      "value": 0.003
+      "value": -0.008
     },
     {
       "x": "F2c_RateExpect",
       "y": "F9_GDXRatio",
-      "value": -0.806
+      "value": -0.799
     },
     {
       "x": "F3_TIPS10Y",
       "y": "F1_DXY",
-      "value": 0.763
+      "value": 0.771
     },
     {
       "x": "F3_TIPS10Y",
       "y": "F2_FedFunds",
-      "value": 0.265
+      "value": 0.267
     },
     {
       "x": "F3_TIPS10Y",
       "y": "F2b_RateMomentum",
-      "value": 0.402
+      "value": 0.396
     },
     {
       "x": "F3_TIPS10Y",
@@ -261,57 +240,52 @@
     {
       "x": "F3_TIPS10Y",
       "y": "F4_BEI",
-      "value": 0.575
+      "value": 0.574
     },
     {
       "x": "F3_TIPS10Y",
       "y": "F5_GPR",
-      "value": 0.63
+      "value": 0.611
     },
     {
       "x": "F3_TIPS10Y",
       "y": "F6_GVZ",
-      "value": -0.415
-    },
-    {
-      "x": "F3_TIPS10Y",
-      "y": "F7_WGC",
-      "value": NaN
+      "value": -0.39
     },
     {
       "x": "F3_TIPS10Y",
       "y": "F8_ETFFlow",
-      "value": -0.003
+      "value": -0.013
     },
     {
       "x": "F3_TIPS10Y",
       "y": "F9_GDXRatio",
-      "value": -0.788
+      "value": -0.791
     },
     {
       "x": "F4_BEI",
       "y": "F1_DXY",
-      "value": 0.493
+      "value": 0.497
     },
     {
       "x": "F4_BEI",
       "y": "F2_FedFunds",
-      "value": 0.207
+      "value": 0.202
     },
     {
       "x": "F4_BEI",
       "y": "F2b_RateMomentum",
-      "value": 0.302
+      "value": 0.299
     },
     {
       "x": "F4_BEI",
       "y": "F2c_RateExpect",
-      "value": 0.671
+      "value": 0.661
     },
     {
       "x": "F4_BEI",
       "y": "F3_TIPS10Y",
-      "value": 0.575
+      "value": 0.574
     },
     {
       "x": "F4_BEI",
@@ -321,22 +295,17 @@
     {
       "x": "F4_BEI",
       "y": "F5_GPR",
-      "value": 0.32
+      "value": 0.307
     },
     {
       "x": "F4_BEI",
       "y": "F6_GVZ",
-      "value": -0.475
-    },
-    {
-      "x": "F4_BEI",
-      "y": "F7_WGC",
-      "value": NaN
+      "value": -0.468
     },
     {
       "x": "F4_BEI",
       "y": "F8_ETFFlow",
-      "value": 0.078
+      "value": 0.076
     },
     {
       "x": "F4_BEI",
@@ -346,32 +315,32 @@
     {
       "x": "F5_GPR",
       "y": "F1_DXY",
-      "value": 0.832
+      "value": 0.827
     },
     {
       "x": "F5_GPR",
       "y": "F2_FedFunds",
-      "value": 0.035
+      "value": 0.013
     },
     {
       "x": "F5_GPR",
       "y": "F2b_RateMomentum",
-      "value": 0.115
+      "value": 0.099
     },
     {
       "x": "F5_GPR",
       "y": "F2c_RateExpect",
-      "value": 0.522
+      "value": 0.489
     },
     {
       "x": "F5_GPR",
       "y": "F3_TIPS10Y",
-      "value": 0.63
+      "value": 0.611
     },
     {
       "x": "F5_GPR",
       "y": "F4_BEI",
-      "value": 0.32
+      "value": 0.307
     },
     {
       "x": "F5_GPR",
@@ -381,57 +350,52 @@
     {
       "x": "F5_GPR",
       "y": "F6_GVZ",
-      "value": -0.475
-    },
-    {
-      "x": "F5_GPR",
-      "y": "F7_WGC",
-      "value": NaN
+      "value": -0.477
     },
     {
       "x": "F5_GPR",
       "y": "F8_ETFFlow",
-      "value": -0.051
+      "value": -0.044
     },
     {
       "x": "F5_GPR",
       "y": "F9_GDXRatio",
-      "value": -0.76
+      "value": -0.749
     },
     {
       "x": "F6_GVZ",
       "y": "F1_DXY",
-      "value": -0.515
+      "value": -0.511
     },
     {
       "x": "F6_GVZ",
       "y": "F2_FedFunds",
-      "value": 0.161
+      "value": 0.189
     },
     {
       "x": "F6_GVZ",
       "y": "F2b_RateMomentum",
-      "value": -0.084
+      "value": -0.058
     },
     {
       "x": "F6_GVZ",
       "y": "F2c_RateExpect",
-      "value": -0.315
+      "value": -0.277
     },
     {
       "x": "F6_GVZ",
       "y": "F3_TIPS10Y",
-      "value": -0.415
+      "value": -0.39
     },
     {
       "x": "F6_GVZ",
       "y": "F4_BEI",
-      "value": -0.475
+      "value": -0.468
     },
     {
       "x": "F6_GVZ",
       "y": "F5_GPR",
-      "value": -0.475
+      "value": -0.477
     },
     {
       "x": "F6_GVZ",
@@ -440,118 +404,53 @@
     },
     {
       "x": "F6_GVZ",
-      "y": "F7_WGC",
-      "value": NaN
-    },
-    {
-      "x": "F6_GVZ",
       "y": "F8_ETFFlow",
-      "value": 0.068
+      "value": 0.06
     },
     {
       "x": "F6_GVZ",
       "y": "F9_GDXRatio",
-      "value": 0.453
-    },
-    {
-      "x": "F7_WGC",
-      "y": "F1_DXY",
-      "value": NaN
-    },
-    {
-      "x": "F7_WGC",
-      "y": "F2_FedFunds",
-      "value": NaN
-    },
-    {
-      "x": "F7_WGC",
-      "y": "F2b_RateMomentum",
-      "value": NaN
-    },
-    {
-      "x": "F7_WGC",
-      "y": "F2c_RateExpect",
-      "value": NaN
-    },
-    {
-      "x": "F7_WGC",
-      "y": "F3_TIPS10Y",
-      "value": NaN
-    },
-    {
-      "x": "F7_WGC",
-      "y": "F4_BEI",
-      "value": NaN
-    },
-    {
-      "x": "F7_WGC",
-      "y": "F5_GPR",
-      "value": NaN
-    },
-    {
-      "x": "F7_WGC",
-      "y": "F6_GVZ",
-      "value": NaN
-    },
-    {
-      "x": "F7_WGC",
-      "y": "F7_WGC",
-      "value": NaN
-    },
-    {
-      "x": "F7_WGC",
-      "y": "F8_ETFFlow",
-      "value": NaN
-    },
-    {
-      "x": "F7_WGC",
-      "y": "F9_GDXRatio",
-      "value": NaN
+      "value": 0.444
     },
     {
       "x": "F8_ETFFlow",
       "y": "F1_DXY",
-      "value": -0.034
+      "value": -0.035
     },
     {
       "x": "F8_ETFFlow",
       "y": "F2_FedFunds",
-      "value": -0.102
+      "value": -0.114
     },
     {
       "x": "F8_ETFFlow",
       "y": "F2b_RateMomentum",
-      "value": -0.054
+      "value": -0.064
     },
     {
       "x": "F8_ETFFlow",
       "y": "F2c_RateExpect",
-      "value": 0.003
+      "value": -0.008
     },
     {
       "x": "F8_ETFFlow",
       "y": "F3_TIPS10Y",
-      "value": -0.003
+      "value": -0.013
     },
     {
       "x": "F8_ETFFlow",
       "y": "F4_BEI",
-      "value": 0.078
+      "value": 0.076
     },
     {
       "x": "F8_ETFFlow",
       "y": "F5_GPR",
-      "value": -0.051
+      "value": -0.044
     },
     {
       "x": "F8_ETFFlow",
       "y": "F6_GVZ",
-      "value": 0.068
-    },
-    {
-      "x": "F8_ETFFlow",
-      "y": "F7_WGC",
-      "value": NaN
+      "value": 0.06
     },
     {
       "x": "F8_ETFFlow",
@@ -566,27 +465,27 @@
     {
       "x": "F9_GDXRatio",
       "y": "F1_DXY",
-      "value": -0.842
+      "value": -0.845
     },
     {
       "x": "F9_GDXRatio",
       "y": "F2_FedFunds",
-      "value": -0.311
+      "value": -0.31
     },
     {
       "x": "F9_GDXRatio",
       "y": "F2b_RateMomentum",
-      "value": -0.444
+      "value": -0.447
     },
     {
       "x": "F9_GDXRatio",
       "y": "F2c_RateExpect",
-      "value": -0.806
+      "value": -0.799
     },
     {
       "x": "F9_GDXRatio",
       "y": "F3_TIPS10Y",
-      "value": -0.788
+      "value": -0.791
     },
     {
       "x": "F9_GDXRatio",
@@ -596,17 +495,12 @@
     {
       "x": "F9_GDXRatio",
       "y": "F5_GPR",
-      "value": -0.76
+      "value": -0.749
     },
     {
       "x": "F9_GDXRatio",
       "y": "F6_GVZ",
-      "value": 0.453
-    },
-    {
-      "x": "F9_GDXRatio",
-      "y": "F7_WGC",
-      "value": NaN
+      "value": 0.444
     },
     {
       "x": "F9_GDXRatio",
@@ -618,5 +512,6 @@
       "y": "F9_GDXRatio",
       "value": 1.0
     }
-  ]
+  ],
+  "dropped_constant": []
 }

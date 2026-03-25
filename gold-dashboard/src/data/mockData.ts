@@ -39,12 +39,6 @@ export const factors: Factor[] = [
     signal: 'GVZ升温，黄金恐慌溢价↑', shapValue: 0.152,
   },
   {
-    id: 'F7', name: '央行需求', nameEn: 'WGC CB Buying', zScore: 1.56,
-    rawValue: 290, rawUnit: 't/Q', dayChange: 0, percentile52w: 88,
-    icValue: 0.082, icir: 1.18, direction: 'bullish',
-    signal: '央行购金持续，长期结构性支撑', shapValue: 0.121,
-  },
-  {
     id: 'F8', name: 'ETF资金流', nameEn: 'GLD+IAU Flow', zScore: -0.44,
     rawValue: -2.3, rawUnit: 't/5d', dayChange: -1.1, percentile52w: 38,
     icValue: 0.048, icir: 0.71, direction: 'bearish',
@@ -69,8 +63,7 @@ export const dailySignal: DailySignal = {
     { factor: 'F3 实际利率', factorId: 'F3', value: 0.281, zScore: -1.89, rawValue: 'TIPS 10Y: 1.72%', economic: '实际利率下行驱动金价上涨' },
     { factor: 'F4 通胀预期', factorId: 'F4', value: 0.192, zScore: 1.23, rawValue: '5Y5Y BEI: 2.61%', economic: '通胀预期上升，抗缩水需求增加' },
     { factor: 'F6 市场情绪', factorId: 'F6', value: 0.152, zScore: 1.14, rawValue: 'GVZ: 18.4', economic: '恐慌指数偏高，避险情绪支撑金价' },
-    { factor: 'F7 央行需求', factorId: 'F7', value: 0.121, zScore: 1.56, rawValue: '央行净买入 290t/Q', economic: '央行持续增储，结构性需求稳定' },
-    { factor: 'F9 金矿产能', factorId: 'F9', value: 0.067, zScore: -0.28, rawValue: 'GDX/Gold: 0.97', economic: '矿商相对弱势，产量无扩张压力' },
+{ factor: 'F9 金矿产能', factorId: 'F9', value: 0.067, zScore: -0.28, rawValue: 'GDX/Gold: 0.97', economic: '矿商相对弱势，产量无扩张压力' },
     { factor: 'F1 美元强弱', factorId: 'F1', value: 0.042, zScore: -1.42, rawValue: 'DXY: 101.32', economic: 'DXY走弱，以美元计价的黄金获支撑' },
     { factor: 'F2 货币政策', factorId: 'F2', value: 0.008, zScore: 0.31, rawValue: 'FF Futures: 4.82%', economic: '货币政策预期中性，信号较弱' },
     { factor: 'F5 地缘风险', factorId: 'F5', value: -0.041, zScore: 0.67, rawValue: 'GPR: 142', economic: '地缘压力相对可控，避险需求边际减弱' },
@@ -109,7 +102,6 @@ export const icDataByFactor: Record<string, ICDataPoint[]> = {
   F4: generateICData(0.09, 0.04),
   F5: generateICData(0.05, 0.07),
   F6: generateICData(0.07, 0.05),
-  F7: generateICData(0.08, 0.03),
   F8: generateICData(0.05, 0.06),
   F9: generateICData(-0.03, 0.05),
 }
@@ -119,9 +111,9 @@ function generateRegimeData(): RegimeCell[] {
   const cells: RegimeCell[] = []
   const months = ['2025-04', '2025-05', '2025-06', '2025-07', '2025-08',
     '2025-09', '2025-10', '2025-11', '2025-12', '2026-01', '2026-02', '2026-03']
-  const factorIds = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9']
+  const factorIds = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F8', 'F9']
   const baseSHAPs: Record<string, number> = {
-    F1: 0.05, F2: 0.03, F3: 0.28, F4: 0.19, F5: 0.04, F6: 0.15, F7: 0.12, F8: -0.08, F9: 0.07,
+    F1: 0.05, F2: 0.03, F3: 0.28, F4: 0.19, F5: 0.04, F6: 0.15, F8: -0.08, F9: 0.07,
   }
   months.forEach((month, mi) => {
     factorIds.forEach(fid => {
@@ -139,15 +131,14 @@ export const regimeData: RegimeCell[] = generateRegimeData()
 
 // ─── Correlation Matrix ───────────────────────────────────────────────
 export const correlationMatrix: Record<string, Record<string, number>> = {
-  F1: { F1: 1.00, F2: 0.61, F3: 0.72, F4: -0.43, F5: -0.18, F6: -0.22, F7: -0.15, F8: -0.31, F9: 0.28 },
-  F2: { F1: 0.61, F2: 1.00, F3: 0.58, F4: -0.38, F5: -0.12, F6: -0.17, F7: -0.09, F8: -0.25, F9: 0.19 },
-  F3: { F1: 0.72, F2: 0.58, F3: 1.00, F4: -0.55, F5: -0.21, F6: -0.29, F7: -0.18, F8: -0.38, F9: 0.33 },
-  F4: { F1: -0.43, F2: -0.38, F3: -0.55, F4: 1.00, F5: 0.34, F6: 0.41, F7: 0.28, F8: 0.52, F9: -0.24 },
-  F5: { F1: -0.18, F2: -0.12, F3: -0.21, F4: 0.34, F5: 1.00, F6: 0.67, F7: 0.22, F8: 0.18, F9: -0.09 },
-  F6: { F1: -0.22, F2: -0.17, F3: -0.29, F4: 0.41, F5: 0.67, F6: 1.00, F7: 0.19, F8: 0.29, F9: -0.13 },
-  F7: { F1: -0.15, F2: -0.09, F3: -0.18, F4: 0.28, F5: 0.22, F6: 0.19, F7: 1.00, F8: 0.36, F9: -0.07 },
-  F8: { F1: -0.31, F2: -0.25, F3: -0.38, F4: 0.52, F5: 0.18, F6: 0.29, F7: 0.36, F8: 1.00, F9: -0.19 },
-  F9: { F1: 0.28, F2: 0.19, F3: 0.33, F4: -0.24, F5: -0.09, F6: -0.13, F7: -0.07, F8: -0.19, F9: 1.00 },
+  F1: { F1: 1.00, F2: 0.61, F3: 0.72, F4: -0.43, F5: -0.18, F6: -0.22, F8: -0.31, F9: 0.28 },
+  F2: { F1: 0.61, F2: 1.00, F3: 0.58, F4: -0.38, F5: -0.12, F6: -0.17, F8: -0.25, F9: 0.19 },
+  F3: { F1: 0.72, F2: 0.58, F3: 1.00, F4: -0.55, F5: -0.21, F6: -0.29, F8: -0.38, F9: 0.33 },
+  F4: { F1: -0.43, F2: -0.38, F3: -0.55, F4: 1.00, F5: 0.34, F6: 0.41, F8: 0.52, F9: -0.24 },
+  F5: { F1: -0.18, F2: -0.12, F3: -0.21, F4: 0.34, F5: 1.00, F6: 0.67, F8: 0.18, F9: -0.09 },
+  F6: { F1: -0.22, F2: -0.17, F3: -0.29, F4: 0.41, F5: 0.67, F6: 1.00, F8: 0.29, F9: -0.13 },
+  F8: { F1: -0.31, F2: -0.25, F3: -0.38, F4: 0.52, F5: 0.18, F6: 0.29, F8: 1.00, F9: -0.19 },
+  F9: { F1: 0.28, F2: 0.19, F3: 0.33, F4: -0.24, F5: -0.09, F6: -0.13, F8: -0.19, F9: 1.00 },
 }
 
 // ─── Current Positions ───────────────────────────────────────────────

@@ -4,7 +4,7 @@ import { correlationMatrix } from '@/data/mockData'
 import { factors } from '@/data/mockData'
 import clsx from 'clsx'
 
-const FACTOR_IDS = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9']
+const FACTOR_IDS = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F8', 'F9']
 const HIGH_CORR_THRESHOLD = 0.7
 
 function corrColor(v: number): string {

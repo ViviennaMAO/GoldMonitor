@@ -16,6 +16,26 @@ from config import (
 from features import get_factor_columns
 
 
+class NaNSafeEncoder(json.JSONEncoder):
+    """JSON encoder that converts NaN/Inf to null."""
+    def default(self, obj):
+        return super().default(obj)
+
+    def encode(self, o):
+        return super().encode(self._clean(o))
+
+    def _clean(self, obj):
+        if isinstance(obj, float):
+            if np.isnan(obj) or np.isinf(obj):
+                return None
+            return obj
+        if isinstance(obj, dict):
+            return {k: self._clean(v) for k, v in obj.items()}
+        if isinstance(obj, list):
+            return [self._clean(v) for v in obj]
+        return obj
+
+
 def classify_signal(pred_return: float) -> str:
     """Classify predicted return into signal category."""
     if pred_return > SIGNAL_THRESHOLDS["strong_buy"]:
@@ -97,7 +117,7 @@ def build_regime_heatmap(features_df: pd.DataFrame, months: int = 6) -> list:
     recent = features_df.dropna(subset=factor_cols).tail(months * 22)  # ~22 trading days/month
 
     # Group by month
-    monthly = recent.resample("M").last()
+    monthly = recent.resample("ME").last()
     heatmap = []
 
     for date, row in monthly.iterrows():
@@ -114,26 +134,37 @@ def build_regime_heatmap(features_df: pd.DataFrame, months: int = 6) -> list:
 
 
 def compute_correlation_matrix(features_df: pd.DataFrame) -> dict:
-    """Compute correlation matrix between factors."""
+    """Compute correlation matrix between factors. Handles constant/NaN columns."""
     factor_cols = get_factor_columns()
     valid = features_df[factor_cols].dropna().tail(252)
 
     if valid.empty:
         return {"factors": factor_cols, "matrix": []}
 
-    corr = valid.corr(method="spearman")
+    # Drop constant columns (zero variance → NaN correlations)
+    non_constant = [c for c in factor_cols if valid[c].std() > 1e-10]
+    dropped = [c for c in factor_cols if c not in non_constant]
+    if dropped:
+        print(f"  Correlation: dropped constant factors: {dropped}")
+
+    corr = valid[non_constant].corr(method="spearman")
+
     matrix = []
-    for i, fi in enumerate(factor_cols):
-        for j, fj in enumerate(factor_cols):
-            matrix.append({
-                "x": fi,
-                "y": fj,
-                "value": round(float(corr.iloc[i, j]), 3),
-            })
+    for fi in factor_cols:
+        for fj in factor_cols:
+            if fi in non_constant and fj in non_constant:
+                val = float(corr.loc[fi, fj])
+                val = 0.0 if np.isnan(val) else round(val, 3)
+            elif fi == fj:
+                val = 1.0  # self-correlation
+            else:
+                val = 0.0  # constant factor has no correlation
+            matrix.append({"x": fi, "y": fj, "value": val})
 
     return {
         "factors": factor_cols,
         "matrix": matrix,
+        "dropped_constant": dropped,
     }
 
 
@@ -238,13 +269,21 @@ def run_inference(features_df: pd.DataFrame) -> dict:
             "F6_GVZ": "raw_GVZ",
         }
         raw_col = raw_map.get(fname)
-        raw_val = float(latest[raw_col]) if raw_col and raw_col in latest.index else None
+        raw_val = None
+        if raw_col and raw_col in latest.index:
+            v = float(latest[raw_col])
+            if not np.isnan(v) and not np.isinf(v):
+                raw_val = round(v, 4)
+
+        zscore_val = float(latest[fname])
+        if np.isnan(zscore_val) or np.isinf(zscore_val):
+            zscore_val = 0.0
 
         signal_data["factors"].append({
             "name": fname,
             "label": FACTOR_DISPLAY.get(fname, fname),
-            "zscore": round(float(latest[fname]), 4),
-            "raw_value": round(raw_val, 4) if raw_val is not None else None,
+            "zscore": round(zscore_val, 4),
+            "raw_value": raw_val,
         })
 
     # ── Regime Heatmap ────────────────────────────────────────────────────────
@@ -269,7 +308,7 @@ def run_inference(features_df: pd.DataFrame) -> dict:
     for filename, data in outputs.items():
         path = OUTPUT_DIR / filename
         with open(path, "w") as f:
-            json.dump(data, f, indent=2, ensure_ascii=False)
+            json.dump(data, f, indent=2, ensure_ascii=False, cls=NaNSafeEncoder)
         print(f"Saved {path}")
 
     return signal_data

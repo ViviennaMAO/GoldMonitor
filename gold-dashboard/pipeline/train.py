@@ -109,34 +109,48 @@ def train_model(features_df: pd.DataFrame) -> xgb.XGBRegressor:
 
 
 def compute_ic_history(features_df: pd.DataFrame, model: xgb.XGBRegressor):
-    """Compute rolling 60-day Spearman IC and save to JSON."""
+    """Compute rolling 60-day Spearman IC on pure OOS data only (after TRAIN_END)."""
     factor_cols = get_factor_columns()
-    valid = features_df.dropna(subset=factor_cols + ["target"])
 
-    X_all = valid[factor_cols].values
-    y_all = valid["target"].values
-    pred_all = model.predict(X_all)
+    # Only use out-of-sample data for IC calculation to avoid inflated metrics
+    oos_mask = features_df.index > pd.Timestamp(TRAIN_END)
+    oos_df = features_df[oos_mask].dropna(subset=factor_cols + ["target"])
 
-    # Rolling 60-day IC
-    window = 60
+    if oos_df.empty or len(oos_df) < 20:
+        print("WARNING: Not enough OOS data for IC calculation")
+        output = {"rolling_ic": [], "factor_ic": [], "cv_mean_ic": 0.0}
+        out_path = OUTPUT_DIR / "ic_history.json"
+        with open(out_path, "w") as f:
+            json.dump(output, f, indent=2)
+        print(f"IC history saved to {out_path} (empty — insufficient OOS data)")
+        return
+
+    X_oos = np.nan_to_num(oos_df[factor_cols].fillna(0).values.astype(np.float64),
+                          nan=0.0, posinf=5.0, neginf=-5.0)
+    y_oos = oos_df["target"].values
+    pred_oos = model.predict(X_oos)
+
+    # Rolling 60-day IC (OOS only)
+    window = min(60, len(oos_df) // 2)  # adapt window to available data
+    window = max(window, 10)  # minimum 10 days
     ic_records = []
-    dates = valid.index
+    dates = oos_df.index
 
     for i in range(window, len(dates)):
         start = i - window
-        pred_win = pred_all[start:i]
-        actual_win = y_all[start:i]
+        pred_win = pred_oos[start:i]
+        actual_win = y_oos[start:i]
         ic, _ = spearmanr(pred_win, actual_win)
         ic_records.append({
             "date": dates[i].strftime("%Y-%m-%d"),
             "ic": round(float(ic), 4) if not np.isnan(ic) else 0.0,
         })
 
-    # Also compute per-factor IC
+    # Per-factor IC on OOS data
     factor_ic = []
     for j, fname in enumerate(factor_cols):
-        factor_vals = X_all[-252:, j]  # last year
-        target_vals = y_all[-252:]
+        factor_vals = X_oos[:, j]
+        target_vals = y_oos
         if len(factor_vals) > 20:
             ic, _ = spearmanr(factor_vals, target_vals)
             factor_ic.append({
@@ -144,10 +158,13 @@ def compute_ic_history(features_df: pd.DataFrame, model: xgb.XGBRegressor):
                 "ic": round(float(ic), 4) if not np.isnan(ic) else 0.0,
             })
 
+    ic_values = [r["ic"] for r in ic_records]
     output = {
-        "rolling_ic": ic_records[-252:],  # last year
+        "rolling_ic": ic_records,
         "factor_ic": factor_ic,
-        "cv_mean_ic": round(float(np.mean([r["ic"] for r in ic_records[-60:]])), 4),
+        "cv_mean_ic": round(float(np.mean(ic_values)), 4) if ic_values else 0.0,
+        "oos_start": TRAIN_END,
+        "oos_samples": len(oos_df),
     }
 
     out_path = OUTPUT_DIR / "ic_history.json"

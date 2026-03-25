@@ -168,11 +168,8 @@ export async function GET() {
     }
   }
 
-  // ── F7: 央行需求 (WGC — no free API, keep mock) ────────────────────
-  const f7 = MOCK_FACTORS[6]
-
   // ── F8: ETF资金流 (GLD + IAU 5日变化率) ────────────────────────────
-  let f8 = MOCK_FACTORS[7]
+  let f8 = MOCK_FACTORS[6]
   if (gldHistory && iauHistory && gldHistory.length >= 6 && iauHistory.length >= 6) {
     const gldFlow5d = (gldHistory.slice(-1)[0].close - gldHistory.slice(-6)[0].close)
     const iauFlow5d = (iauHistory.slice(-1)[0].close - iauHistory.slice(-6)[0].close)
@@ -196,7 +193,7 @@ export async function GET() {
   }
 
   // ── F9: 金矿产能 (GDX vs Gold 相对强弱) ─────────────────────────────
-  let f9 = MOCK_FACTORS[8]
+  let f9 = MOCK_FACTORS[7]
   if (gdxHistory && gcHistory && gdxHistory.length >= 6 && gcHistory.length >= 6) {
     const gdxNow = gdxHistory.slice(-1)[0].close
     const gcNow = gcHistory.slice(-1)[0].close
@@ -225,7 +222,7 @@ export async function GET() {
 
   const etfSource = gldHistory ? 'live' : null
   const result = {
-    factors: [f1, f2, f3, f4, f5, f6, f7, f8, f9],
+    factors: [f1, f2, f3, f4, f5, f6, f8, f9],
     dataSource: {
       fred: !!(fredTIPS10Y || fredBEI || fredDXY || fredFedFunds),
       yahoo: !!(yfQuotes),

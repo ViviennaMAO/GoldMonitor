@@ -72,7 +72,6 @@ FACTOR_NAMES = [
     "F4_BEI",
     "F5_GPR",
     "F6_GVZ",
-    "F7_WGC",
     "F8_ETFFlow",
     "F9_GDXRatio",
 ]
@@ -86,7 +85,6 @@ FACTOR_DISPLAY = {
     "F4_BEI": "通胀预期 BEI",
     "F5_GPR": "地缘政治风险 GPR",
     "F6_GVZ": "黄金波动率 GVZ",
-    "F7_WGC": "央行购金需求",
     "F8_ETFFlow": "ETF 资金流",
     "F9_GDXRatio": "矿业股/金价比",
 }

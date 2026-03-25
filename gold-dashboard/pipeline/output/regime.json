@@ -17,7 +17,6 @@
         "F4_BEI": 0.36,
         "F5_GPR": -0.59,
         "F6_GVZ": 0.76,
-        "F7_WGC": 0.0,
         "F8_ETFFlow": -0.66,
         "F9_GDXRatio": 2.95
       }
@@ -33,7 +32,6 @@
         "F4_BEI": -0.66,
         "F5_GPR": 0.14,
         "F6_GVZ": 1.18,
-        "F7_WGC": 0.0,
         "F8_ETFFlow": -0.48,
         "F9_GDXRatio": 1.33
       }
@@ -49,7 +47,6 @@
         "F4_BEI": -1.68,
         "F5_GPR": -0.3,
         "F6_GVZ": 1.08,
-        "F7_WGC": 0.0,
         "F8_ETFFlow": -0.67,
         "F9_GDXRatio": 1.91
       }
@@ -65,7 +62,6 @@
         "F4_BEI": -1.2,
         "F5_GPR": -0.35,
         "F6_GVZ": 1.21,
-        "F7_WGC": 0.0,
         "F8_ETFFlow": -0.33,
         "F9_GDXRatio": 1.59
       }
@@ -81,7 +77,6 @@
         "F4_BEI": 0.59,
         "F5_GPR": -0.42,
         "F6_GVZ": 5.0,
-        "F7_WGC": 0.0,
         "F8_ETFFlow": 4.21,
         "F9_GDXRatio": 1.31
       }
@@ -97,7 +92,6 @@
         "F4_BEI": -1.12,
         "F5_GPR": -0.48,
         "F6_GVZ": 1.97,
-        "F7_WGC": 0.0,
         "F8_ETFFlow": -0.12,
         "F9_GDXRatio": 2.01
       }
@@ -105,17 +99,16 @@
     {
       "month": "2026-03",
       "factors": {
-        "F1_DXY": -0.25,
-        "F2_FedFunds": -0.27,
-        "F2b_RateMomentum": 1.68,
-        "F2c_RateExpect": 1.16,
+        "F1_DXY": -0.22,
+        "F2_FedFunds": -0.13,
+        "F2b_RateMomentum": 1.6,
+        "F2c_RateExpect": 0.9,
         "F3_TIPS10Y": 0.72,
-        "F4_BEI": 0.28,
-        "F5_GPR": -0.41,
-        "F6_GVZ": 2.75,
-        "F7_WGC": 0.0,
-        "F8_ETFFlow": -0.34,
-        "F9_GDXRatio": 0.46
+        "F4_BEI": 0.29,
+        "F5_GPR": -0.39,
+        "F6_GVZ": 2.77,
+        "F8_ETFFlow": -0.79,
+        "F9_GDXRatio": 0.5
       }
     }
   ]

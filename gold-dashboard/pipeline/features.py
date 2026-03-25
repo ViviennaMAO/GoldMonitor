@@ -85,9 +85,6 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     else:
         features["F6_GVZ"] = 0.0
 
-    # F7: WGC Central Bank Demand (no public API — use constant placeholder)
-    features["F7_WGC"] = 0.0
-
     # F8: ETF Flow — GLD+IAU volume change rate
     if "GLD_volume" in df.columns and "IAU_volume" in df.columns:
         etf_vol = df["GLD_volume"].fillna(0) + df["IAU_volume"].fillna(0)

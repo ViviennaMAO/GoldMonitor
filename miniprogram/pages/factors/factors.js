@@ -10,7 +10,6 @@ var FACTOR_SHORT = {
   'F4_BEI': 'BEI',
   'F5_GPR': 'GPR',
   'F6_GVZ': 'GVZ',
-  'F7_WGC': 'WGC',
   'F8_ETFFlow': 'ETF',
   'F9_GDXRatio': 'GDX'
 }
@@ -164,7 +163,7 @@ Page({
         }
 
         if (regimeData.heatmap) {
-          var factorKeys = ['F1_DXY', 'F2_FedFunds', 'F2b_RateMomentum', 'F2c_RateExpect', 'F3_TIPS10Y', 'F4_BEI', 'F5_GPR', 'F6_GVZ', 'F7_WGC', 'F8_ETFFlow', 'F9_GDXRatio']
+          var factorKeys = ['F1_DXY', 'F2_FedFunds', 'F2b_RateMomentum', 'F2c_RateExpect', 'F3_TIPS10Y', 'F4_BEI', 'F5_GPR', 'F6_GVZ', 'F8_ETFFlow', 'F9_GDXRatio']
           updateObj.heatmapFactors = factorKeys.map(function (k) { return FACTOR_SHORT[k] || k })
 
           updateObj.heatmapRows = regimeData.heatmap.map(function (row) {
@@ -204,7 +203,6 @@ function getFactorDescription(id) {
     'F4': '通胀预期 BEI — 通胀利好黄金',
     'F5': '地缘政治风险 GPR — 经济政策不确定性',
     'F6': '黄金波动率 GVZ — 市场恐慌指标',
-    'F7': '央行购金需求 — 实物需求支撑',
     'F8': 'ETF 资金流 — 投资者情绪',
     'F9': '矿业股/金价比 — 板块相对强弱'
   }

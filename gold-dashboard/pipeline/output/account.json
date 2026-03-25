@@ -1,13 +1,13 @@
 {
   "initial_equity": 100000.0,
-  "final_equity": 101916.46,
-  "total_return": 1.92,
-  "total_trades": 26,
-  "win_rate": 46.2,
-  "winners": 12,
-  "losers": 14,
-  "max_drawdown": 6.93,
-  "sharpe_ratio": 0.5906,
-  "avg_win": 925.18,
-  "avg_loss": -656.12
+  "final_equity": 99812.28,
+  "total_return": -0.19,
+  "total_trades": 28,
+  "win_rate": 53.6,
+  "winners": 15,
+  "losers": 12,
+  "max_drawdown": 7.71,
+  "sharpe_ratio": 0.1979,
+  "avg_win": 607.47,
+  "avg_loss": -774.98
 }
