@@ -219,6 +219,7 @@ export interface AccountData {
 export interface EquityCurvePoint {
   date: string
   equity: number
+  gld: number
   drawdown: number
   gold_price: number
 }
