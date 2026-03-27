@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GoldMonitor 系统设计回顾 — 从数据到信号的量化方法论</title>
+<style>
+  /* ── 全局排版 ─────────────────────────────────────────────────── */
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d2e;
+    --surface2: #252840;
+    --border: #2e3158;
+    --gold: #f5c842;
+    --gold2: #e6a817;
+    --accent: #7c85f0;
+    --accent2: #a8b0ff;
+    --green: #4ade80;
+    --red: #f87171;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Georgia', 'Noto Serif SC', serif;
+    font-size: 16.5px;
+    line-height: 1.9;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 32px 120px;
+  }
+
+  /* ── 标题层级 ────────────────────────────────────────────────── */
+  h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--gold);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: var(--accent2);
+    margin: 60px 0 18px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  h3 {
+    font-size: 1.18rem;
+    font-weight: 600;
+    color: var(--gold);
+    margin: 36px 0 12px;
+  }
+  h4 {
+    font-size: 1.0rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin: 24px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: sans-serif;
+  }
+
+  p { margin-bottom: 16px; }
+
+  /* ── 封面区 ──────────────────────────────────────────────────── */
+  .cover {
+    text-align: center;
+    padding: 60px 0 50px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 60px;
+  }
+  .cover .badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #f5c84222, #7c85f022);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 22px;
+  }
+  .cover .subtitle {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    font-style: italic;
+    margin-top: 10px;
+  }
+  .cover .meta {
+    margin-top: 28px;
+    font-family: sans-serif;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+
+  /* ── 摘要框 ──────────────────────────────────────────────────── */
+  .abstract {
+    background: var(--surface);
+    border-left: 3px solid var(--gold);
+    padding: 24px 28px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 48px;
+  }
+  .abstract strong { color: var(--gold); font-style: normal; }
+
+  /* ── 引用框（名人名言）─────────────────────────────────────────── */
+  .quote {
+    background: var(--surface);
+    border-left: 4px solid var(--accent);
+    padding: 20px 24px;
+    margin: 28px 0;
+    border-radius: 0 8px 8px 0;
+    position: relative;
+  }
+  .quote::before {
+    content: '"';
+    font-size: 4rem;
+    color: var(--accent);
+    opacity: 0.25;
+    position: absolute;
+    top: -8px;
+    left: 16px;
+    line-height: 1;
+    font-family: Georgia, serif;
+  }
+  .quote p {
+    color: var(--text);
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+  .quote .attribution {
+    font-family: sans-serif;
+    font-size: 0.85rem;
+    color: var(--accent2);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  /* ── 代码块 ──────────────────────────────────────────────────── */
+  pre {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.6;
+    margin: 20px 0;
+    color: #c9d1d9;
+  }
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.87em;
+    background: #1e2230;
+    padding: 2px 7px;
+    border-radius: 4px;
+    color: var(--gold);
+  }
+  pre code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+    font-size: inherit;
+  }
+  /* 简单语法高亮 */
+  .kw { color: #ff7b72; }
+  .fn { color: #d2a8ff; }
+  .str { color: #a5d6ff; }
+  .num { color: #f2cc60; }
+  .cm { color: #8b949e; font-style: italic; }
+
+  /* ── 表格 ────────────────────────────────────────────────────── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-family: sans-serif;
+    font-size: 0.9rem;
+  }
+  th {
+    background: var(--surface2);
+    color: var(--accent2);
+    font-weight: 600;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+  tr:hover td { background: #1c1f35; }
+
+  /* ── 信息卡片 ────────────────────────────────────────────────── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px 26px;
+    margin: 24px 0;
+  }
+  .card.gold-border { border-color: var(--gold2); }
+  .card h4 { margin-top: 0; }
+
+  /* ── 图表/流程图（纯 CSS）────────────────────────────────────── */
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 28px 0;
+    overflow-x: auto;
+  }
+  .pipe-step {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .pipe-step .step-num {
+    display: block;
+    font-size: 0.68rem;
+    color: var(--gold);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .pipe-arrow {
+    color: var(--border);
+    font-size: 1.2rem;
+    padding: 0 6px;
+    flex-shrink: 0;
+  }
+
+  /* ── 四象限图 ────────────────────────────────────────────────── */
+  .quadrant-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 3px;
+    margin: 20px 0;
+    max-width: 520px;
+    position: relative;
+  }
+  .quad {
+    padding: 18px;
+    border-radius: 6px;
+    text-align: center;
+    font-family: sans-serif;
+  }
+  .quad .name { font-weight: 700; font-size: 1rem; margin-bottom: 4px; }
+  .quad .drivers { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; }
+  .quad .signal {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-top: 8px;
+  }
+  .quad-stagflation { background: #1a0a2e; border: 1px solid #a855f7; }
+  .quad-stagflation .name { color: #c084fc; }
+  .quad-stagflation .signal { background: #a855f722; color: #c084fc; border: 1px solid #a855f7; }
+  .quad-overheating { background: #1a1200; border: 1px solid var(--gold2); }
+  .quad-overheating .name { color: var(--gold); }
+  .quad-overheating .signal { background: #f5c84222; color: var(--gold); border: 1px solid var(--gold2); }
+  .quad-deflation { background: #0a1a2e; border: 1px solid #3b82f6; }
+  .quad-deflation .name { color: #60a5fa; }
+  .quad-deflation .signal { background: #3b82f622; color: #60a5fa; border: 1px solid #3b82f6; }
+  .quad-reflation { background: #001a0e; border: 1px solid #22c55e; }
+  .quad-reflation .name { color: #4ade80; }
+  .quad-reflation .signal { background: #22c55e22; color: #4ade80; border: 1px solid #22c55e; }
+  .quad-axis {
+    font-family: sans-serif;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  /* ── HMM 状态图 ──────────────────────────────────────────────── */
+  .hmm-states {
+    display: flex;
+    gap: 16px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+  .hmm-state {
+    flex: 1;
+    min-width: 140px;
+    padding: 16px;
+    border-radius: 8px;
+    text-align: center;
+    font-family: sans-serif;
+  }
+  .hmm-state .label { font-weight: 700; font-size: 1rem; margin-bottom: 4px; }
+  .hmm-state .desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; }
+  .hmm-bull { background: #001a0e; border: 1px solid #22c55e; }
+  .hmm-bull .label { color: #4ade80; }
+  .hmm-neutral { background: var(--surface2); border: 1px solid var(--border); }
+  .hmm-neutral .label { color: var(--text-muted); }
+  .hmm-bear { background: #1a0000; border: 1px solid #ef4444; }
+  .hmm-bear .label { color: #f87171; }
+
+  /* ── 层级架构图 ──────────────────────────────────────────────── */
+  .layer-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 20px 0;
+  }
+  .layer {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+  }
+  .layer-label {
+    width: 120px;
+    flex-shrink: 0;
+    font-family: sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    color: var(--text-dim);
+  }
+  .layer-content {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-family: sans-serif;
+    font-size: 0.84rem;
+  }
+  .layer-content .title { font-weight: 600; color: var(--accent2); margin-bottom: 4px; }
+  .layer-content .detail { color: var(--text-muted); font-size: 0.78rem; line-height: 1.5; }
+  .layer-freq {
+    width: 80px;
+    flex-shrink: 0;
+    font-family: sans-serif;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .layer-arrow {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 1.1rem;
+    margin: 0 auto;
+  }
+  .output-box {
+    background: linear-gradient(135deg, #f5c84215, #7c85f015);
+    border: 1px solid var(--gold2);
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-family: sans-serif;
+    font-size: 0.84rem;
+    text-align: center;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* ── 大师卡片 ────────────────────────────────────────────────── */
+  .master-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px 24px;
+    margin: 20px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .master-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+  }
+  .master-simons::before { background: #a855f7; }
+  .master-dalio::before { background: var(--gold); }
+  .master-druck::before { background: #3b82f6; }
+  .master-tudor::before { background: #22c55e; }
+  .master-soros::before { background: #ef4444; }
+  .master-name {
+    font-weight: 700;
+    font-size: 1.0rem;
+    margin-bottom: 2px;
+  }
+  .master-title {
+    font-family: sans-serif;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+  .master-link {
+    font-family: sans-serif;
+    font-size: 0.82rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 10px;
+    display: inline-block;
+    color: var(--accent2);
+    margin-top: 10px;
+  }
+
+  /* ── 指标徽章 ────────────────────────────────────────────────── */
+  .metric-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+  .metric {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    text-align: center;
+    font-family: sans-serif;
+    min-width: 110px;
+  }
+  .metric .val { font-size: 1.4rem; font-weight: 700; color: var(--gold); }
+  .metric .lbl { font-size: 0.72rem; color: var(--text-dim); margin-top: 2px; }
+
+  /* ── 警告框 ──────────────────────────────────────────────────── */
+  .callout {
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-family: sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  .callout.info { background: #0f1a3a; border: 1px solid #3b82f6; color: #93c5fd; }
+  .callout.warn { background: #1a1200; border: 1px solid var(--gold2); color: var(--gold); }
+  .callout.tip  { background: #001a0e; border: 1px solid #22c55e; color: #86efac; }
+  .callout strong { font-weight: 700; }
+
+  /* ── 目录 ────────────────────────────────────────────────────── */
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 48px;
+  }
+  .toc h4 { margin: 0 0 14px; color: var(--text-muted); }
+  .toc ol {
+    margin: 0; padding-left: 20px;
+    color: var(--text-muted);
+    font-family: sans-serif;
+    font-size: 0.9rem;
+    line-height: 2.0;
+  }
+  .toc a { color: var(--accent2); text-decoration: none; }
+  .toc a:hover { color: var(--gold); }
+
+  /* ── 分隔线 ──────────────────────────────────────────────────── */
+  hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+  /* ── 页脚 ────────────────────────────────────────────────────── */
+  footer {
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    font-family: sans-serif;
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    text-align: center;
+    line-height: 2;
+  }
+  footer a { color: var(--text-dim); }
+
+  ul, ol { padding-left: 22px; margin-bottom: 16px; }
+  li { margin-bottom: 6px; }
+
+  @media (max-width: 640px) {
+    body { padding: 32px 20px 80px; font-size: 15.5px; }
+    h1 { font-size: 1.8rem; }
+    h2 { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════ COVER -->
+<div class="cover">
+  <div class="badge">量化研究 · 科普版</div>
+  <h1>用代码读懂黄金</h1>
+  <p class="subtitle">GoldMonitor 系统设计回顾 — 从数据治理到三层 Regime 的完整量化方法论</p>
+  <div class="meta">
+    GoldMonitor Project · 2026 · 面向量化初学者与分析师
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ ABSTRACT -->
+<div class="abstract">
+  <p>
+    <strong>摘要：</strong>本文以 GoldMonitor 系统的实际代码为蓝本，系统梳理一套黄金量化交易系统从数据获取到信号生成的完整方法论。
+    内容涵盖<strong>数据治理</strong>（多源数据拼接与清洗）、<strong>因子工程</strong>（7 基础因子 + 6 逻辑因子的设计逻辑）、
+    <strong>XGBoost 模型训练</strong>（正则化策略与过拟合控制）、<strong>三层 Regime 检测</strong>（宏观四象限 × HMM × 事件归因）
+    以及<strong>模型评估</strong>（IC、SHAP 稳定性、ATR 仓位管理）。
+    每个模块均附有关键概念解读，并与西蒙斯、达利欧、德鲁肯米勒等交易大师的方法论做横向对比，帮助读者建立完整的量化思维框架。
+  </p>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ TOC -->
+<div class="toc">
+  <h4>目录</h4>
+  <ol>
+    <li><a href="#s1">为什么是黄金？— 选品逻辑与资产特性</a></li>
+    <li><a href="#s2">数据治理 — 量化系统的地基</a></li>
+    <li><a href="#s3">因子工程 — 将经济学翻译成数字</a></li>
+    <li><a href="#s4">模型训练 — XGBoost 与过拟合的博弈</a></li>
+    <li><a href="#s5">Regime 检测 — 让机器读懂市场气候</a></li>
+    <li><a href="#s6">模型评估 — 如何知道系统是否有效</a></li>
+    <li><a href="#s7">交易大师的视角 — 方法论横向对比</a></li>
+    <li><a href="#s8">结语 — 系统化思维的边界</a></li>
+  </ol>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ S1 -->
+<h2 id="s1">第一章：为什么是黄金？</h2>
+
+<p>
+  在所有大宗商品中，黄金拥有一个独特的双重身份：它既是商品（珠宝、工业需求），
+  也是货币（数千年的价值储存载体）。这种双重性使黄金成为量化建模的理想对象——
+  它的价格变动由宏观力量驱动，而非供需博弈，因此可以通过宏观因子加以解释和预测。
+</p>
+
+<p>
+  黄金通常被称为"恐慌温度计"。当市场不确定性上升、实际利率下降、美元走弱，
+  黄金就会吸引资金流入。这些驱动力彼此关联但又相互独立，
+  正是构建多因子模型的理想土壤。
+</p>
+
+<div class="quote">
+  <p>黄金的真正竞争对手不是股票，而是现金——当现金回报（实际利率）为负时，黄金才真正成为有吸引力的资产。</p>
+  <span class="attribution">— Warren Buffett（反向逻辑）的挑战者视角，Peter Schiff 的核心命题</span>
+</div>
+
+<h3>黄金的核心定价方程</h3>
+
+<p>虽然黄金价格由复杂的供需决定，但最具解释力的框架可以简化为：</p>
+
+<pre><code><span class="cm"># 黄金定价直觉公式（非正式，但逻辑清晰）</span>
+Gold_Price ∝  (1 / 实际利率)      <span class="cm"># 利率越低，黄金越贵</span>
+           ×  (1 / 美元强度)      <span class="cm"># 美元越弱，黄金越贵（美元计价）</span>
+           ×  通胀预期             <span class="cm"># 通胀越高，黄金对冲价值越大</span>
+           ×  地缘风险溢价         <span class="cm"># 风险越高，避险需求越强</span></code></pre>
+
+<p>
+  这四个变量——<strong>TIPS 实际收益率、DXY 美元指数、BEI 盈亏平衡通胀率、GPR 地缘政治风险</strong>——
+  恰好构成了 GoldMonitor 前四个核心因子的理论基础。
+</p>
+
+<!-- ══════════════════════════════════════════════════════ S2 -->
+<h2 id="s2">第二章：数据治理 — 量化系统的地基</h2>
+
+<div class="quote">
+  <p>垃圾进，垃圾出。数据质量决定了模型能达到的上限。</p>
+  <span class="attribution">— Jim Simons，大奖章基金创始人，文艺复兴科技</span>
+</div>
+
+<p>
+  大多数量化课程会花大量时间讲模型，却对"数据从哪里来、如何清洗"轻描淡写。
+  但在实际系统中，数据管线（Data Pipeline）的质量往往比模型本身更重要。
+  数据错误是隐蔽的：它不会报错，只会让你的模型默默学到错误的规律。
+</p>
+
+<h3>2.1 数据源架构</h3>
+
+<p>GoldMonitor 使用两个数据源，各司其职：</p>
+
+<table>
+  <thead>
+    <tr><th>数据源</th><th>获取内容</th><th>更新频率</th><th>特点</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>FRED API</strong><br><small>美联储经济数据库</small></td>
+      <td>DXY、TIPS_10Y、BEI、GPR、DGS2</td>
+      <td>每个交易日</td>
+      <td>官方权威，延迟 1 天，部分周度发布</td>
+    </tr>
+    <tr>
+      <td><strong>Stooq</strong></td>
+      <td>XAUUSD、GLD、IAU、GDX、GDXJ</td>
+      <td>每个交易日</td>
+      <td>开高低收完整 OHLCV，免费，无 API Key</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout info">
+  <strong>概念解读：OHLCV</strong><br>
+  Open（开盘）、High（最高）、Low（最低）、Close（收盘）、Volume（成交量）。
+  Close 用于因子计算，High/Low 用于 ATR（真实波幅均值）计算，Volume 用于 ETF 资金流因子。
+</div>
+
+<h3>2.2 时间对齐问题</h3>
+
+<p>
+  FRED 的宏观数据（TIPS、BEI 等）和 Stooq 的价格数据有不同的发布频率与日历。
+  将二者合并时，面临一个核心问题：<strong>非交易日的缺口怎么处理？</strong>
+</p>
+
+<p>
+  GoldMonitor 的选择是<strong>前向填充（forward-fill）</strong>：
+  节假日或数据缺失时，沿用上一个有效值。
+  这在逻辑上等同于说"在新数据公布之前，我们持有上一次的观测值作为最优估计"。
+</p>
+
+<pre><code><span class="cm"># FRED 数据拉取与前向填充（简化）</span>
+<span class="kw">def</span> <span class="fn">fetch_fred</span>(series_id, start):
+    data = fred.get_series(series_id, observation_start=start)
+    <span class="kw">return</span> data.resample(<span class="str">'B'</span>).last().ffill()  <span class="cm"># 'B' = 工作日频率</span></code></pre>
+
+<div class="callout warn">
+  <strong>前向填充的陷阱：</strong>
+  如果某个数据源长期不更新（如 GPR 延迟一周），
+  你的模型会在这段时间内使用"过期"的因子值。
+  数据治理需要监控每个数据源的最后更新时间，而不只是假设它是新鲜的。
+</div>
+
+<h3>2.3 训练与推断的数据集划分</h3>
+
+<div class="metric-row">
+  <div class="metric"><div class="val">2015</div><div class="lbl">数据起始年份</div></div>
+  <div class="metric"><div class="val">2025.09</div><div class="lbl">训练截止</div></div>
+  <div class="metric"><div class="val">~2500</div><div class="lbl">有效交易日</div></div>
+  <div class="metric"><div class="val">20D</div><div class="lbl">预测窗口</div></div>
+</div>
+
+<p>
+  数据起于 2015 年有充分的理由：2013 年黄金大跌（"Taper Tantrum"）改变了黄金的定价结构，
+  2015 年之后的数据代表了"后 QE 时代"的市场环境，与当前更为相关。
+  使用过早的数据可能会引入已经失效的规律，产生虚假的回测优异表现。
+</p>
+
+<div class="pipeline">
+  <div class="pipe-step"><span class="step-num">Step 1</span>FRED + Stooq<br>原始拉取</div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step"><span class="step-num">Step 2</span>时间对齐<br>前向填充</div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step"><span class="step-num">Step 3</span>build_features<br>因子计算</div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step"><span class="step-num">Step 4</span>Z-Score<br>标准化</div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step"><span class="step-num">Step 5</span>XGBoost<br>训练 / 推断</div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step"><span class="step-num">Step 6</span>Regime v2<br>乘数调整</div>
+  <span class="pipe-arrow">→</span>
+  <div class="pipe-step"><span class="step-num">Step 7</span>JSON 输出<br>Dashboard</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ S3 -->
+<h2 id="s3">第三章：因子工程 — 将经济学翻译成数字</h2>
+
+<p>
+  因子工程（Feature Engineering）是量化建模中最考验经验与直觉的环节。
+  好的因子不是数据的堆砌，而是对市场运作逻辑的数字化表达。
+  GoldMonitor 的因子体系经历了从 10 个到 7 个基础因子的"瘦身"过程，
+  这本身就是一次重要的方法论实践。
+</p>
+
+<h3>3.1 为什么需要 Z-Score 标准化？</h3>
+
+<p>
+  不同因子的量纲完全不同：DXY 在 90–115 范围波动，TIPS 利率在 -1% 到 +3% 间变化，
+  GPR 指数可能在 50–300 之间。如果直接输入模型，量纲大的因子会主导模型，
+  量纲小的因子被噪声淹没。
+</p>
+
+<p>
+  <strong>滚动 Z-Score</strong> 的核心公式是：
+</p>
+
+<pre><code>Z(t) = (X(t) − μ(t)) / σ(t)
+
+<span class="cm"># 其中 μ(t) 和 σ(t) 是过去 252 个交易日（约一年）的滚动均值和标准差</span>
+Z(t) > +2 → 历史罕见的高位（极端偏高）
+Z(t) < -2 → 历史罕见的低位（极端偏低）
+Z(t) ≈ 0  → 接近历史中枢</code></pre>
+
+<div class="callout info">
+  <strong>为什么用"滚动"而不是全局 Z-Score？</strong><br>
+  金融市场的均值和方差会随时间漂移。
+  2015 年的"正常利率"是 2%，2022 年是 5%。
+  用全局均值计算 2022 年的 Z-Score 会让所有数据都显示"极端偏高"，失去区分度。
+  滚动窗口（252 天）让 Z-Score 相对于"近一年的市场环境"有意义。
+</div>
+
+<h3>3.2 七个基础因子</h3>
+
+<table>
+  <thead>
+    <tr><th>因子</th><th>经济逻辑</th><th>黄金含义</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>F1_DXY</code><br>美元指数</td>
+      <td>黄金以美元计价。美元越强，同样的美元买到更多黄金，需求下降</td>
+      <td>Z↑ → 看空（美元强）</td>
+    </tr>
+    <tr>
+      <td><code>F3_TIPS10Y</code><br>10Y 实际利率</td>
+      <td>黄金的持有机会成本。实际利率越高，无息资产黄金越不划算</td>
+      <td>Z↑ → 看空（利率高）</td>
+    </tr>
+    <tr>
+      <td><code>F4_BEI</code><br>盈亏平衡通胀率</td>
+      <td>市场对未来通胀的预期（10Y名义利率 − TIPS利率）。通胀预期上升，黄金抗通胀价值显现</td>
+      <td>Z↑ → 看多（通胀预期升）</td>
+    </tr>
+    <tr>
+      <td><code>F5_GPR</code><br>地缘政治风险</td>
+      <td>GEPUCURRENT 指数衡量全球政策不确定性。危机时期避险需求推高黄金</td>
+      <td>Z↑ → 看多（风险升）</td>
+    </tr>
+    <tr>
+      <td><code>F6_GVZ</code><br>黄金波动率</td>
+      <td>类似黄金市场的 VIX。波动率飙升通常伴随恐慌性买入或卖出，信号方向取决于背景</td>
+      <td>Z↑ → 谨慎（波动放大）</td>
+    </tr>
+    <tr>
+      <td><code>F8_ETFFlow</code><br>ETF 资金流</td>
+      <td>GLD + IAU 成交量 5 日变化率。机构通过 ETF 建仓黄金，资金流是需求的领先指标</td>
+      <td>Z↑ → 看多（资金流入）</td>
+    </tr>
+    <tr>
+      <td><code>F9_GDXRatio</code><br>矿业股/金价比</td>
+      <td>矿业公司是黄金的高杠杆衍生品。比值回升表明市场在矿业股定价中预期金价上涨</td>
+      <td>Z↑ → 看多（矿业领涨）</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>3.3 六个逻辑因子：从"一阶"到"二阶"信号</h3>
+
+<p>
+  仅靠基础因子的水平值，无法捕捉因子之间的交互效应和变化速率。
+  逻辑因子（Logical Factors）是对基础因子的二次加工：
+</p>
+
+<div class="card">
+  <h4>逻辑因子设计思路</h4>
+  <table>
+    <thead><tr><th>因子</th><th>构造方式</th><th>捕捉的信息</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>F10_TIPSBEISpread</code></td>
+        <td>TIPS − BEI 利差</td>
+        <td>实际利率相对通胀预期的强弱。利差扩大 → 实际利率上升更快 → 看空</td>
+      </tr>
+      <tr>
+        <td><code>F11_DXYMomentum</code></td>
+        <td>DXY 20日动量（变化率）</td>
+        <td>不是美元强不强，而是美元加速变强还是变弱。动量 > 水平，领先性更强</td>
+      </tr>
+      <tr>
+        <td><code>F12_DXYDownGPRUp</code></td>
+        <td>(−DXY_Z) × max(GPR_Z, 0)</td>
+        <td>交叉因子：弱美元 × 高地缘风险。两者同时触发时，黄金最强烈的顺风组合</td>
+      </tr>
+      <tr>
+        <td><code>F13_GoldGDXDivergence</code></td>
+        <td>Gold_Z − GDX_Z</td>
+        <td>背离因子：金价领涨矿业股往往不可持续；矿业超涨则金价可能跟随</td>
+      </tr>
+      <tr>
+        <td><code>F14_GVZMomentum</code></td>
+        <td>GVZ 10日涨跌幅</td>
+        <td>波动率加速上升（而非高水平）往往先于价格的大幅调整</td>
+      </tr>
+      <tr>
+        <td><code>F15_ETFFlowAccel</code></td>
+        <td>5日流量 − 20日流量</td>
+        <td>资金流的加速度。从"有人买"到"越来越多人买"的跃迁信号</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="callout tip">
+  <strong>设计哲学：</strong>
+  逻辑因子的本质是"一阶导数"的思维——不只看状态，还看变化方向；
+  不只看单个因子，还看因子之间的共振。
+  F12 的交叉因子尤其典型：弱美元与高风险单独出现时对黄金都是利好，
+  但同时出现时效应不是加法而是乘法。
+</div>
+
+<h3>3.4 多重共线性问题与因子精简</h3>
+
+<p>
+  GoldMonitor 经历了一次重要的迭代：将 10 个基础因子压缩到 7 个，
+  核心原因是<strong>多重共线性（Multicollinearity）</strong>。
+</p>
+
+<p>
+  原版本中包含三个利率相关因子：Fed Funds 利率（F2）、利率动量（F2b）、利率预期（F2c）。
+  这三个因子高度相关（Spearman 相关性 > 0.85），它们携带的信息几乎重叠。
+  当多个高度相关的因子输入模型时：
+</p>
+
+<ul>
+  <li>模型权重在高相关因子之间随机分配，系数不稳定</li>
+  <li>SHAP 值被"稀释"，真实归因变得模糊</li>
+  <li>其中某个因子的数据延迟会干扰另外两个因子的解读</li>
+</ul>
+
+<p>
+  解决方案：保留 OOS IC 最高的 F3_TIPS10Y（IC = +0.32），移除另外两个。
+  这是"奥卡姆剃刀原则"在量化中的直接应用：<em>在效果相近的情况下，模型越简单越好</em>。
+</p>
+
+<!-- ══════════════════════════════════════════════════════ S4 -->
+<h2 id="s4">第四章：模型训练 — XGBoost 与过拟合的博弈</h2>
+
+<div class="quote">
+  <p>如果你的模型在训练集上表现完美，而在真实市场中一塌糊涂，那你只是学到了历史噪声的形状。</p>
+  <span class="attribution">— 量化研究领域通识，AQR Capital Management 核心理念</span>
+</div>
+
+<h3>4.1 为什么选择 XGBoost？</h3>
+
+<p>
+  金融预测不是图像识别。黄金价格的驱动因子之间存在非线性交互关系：
+  比如"高通胀 × 低实际利率"的组合对黄金的推动力远超"高通胀 + 低实际利率"的简单加总。
+  线性模型（OLS、Ridge 回归）无法捕捉这种交互。
+</p>
+
+<p>
+  XGBoost 通过集成多棵决策树处理这类非线性关系，同时具备以下优势：
+</p>
+
+<ul>
+  <li><strong>内建正则化</strong>：L1（稀疏化）和 L2（平滑化）两种惩罚项</li>
+  <li><strong>特征随机采样</strong>：每棵树只看部分特征，减少树之间的相关性</li>
+  <li><strong>SHAP 原生支持</strong>：可解释性是量化系统的必要条件</li>
+</ul>
+
+<h3>4.2 过拟合：量化模型最大的敌人</h3>
+
+<p>
+  金融数据的一个特殊性：<strong>样本量少，但特征维度高，噪声大</strong>。
+  13 个因子 × 2500 天数据，听起来不少，但 20 日预测窗口使得有效独立样本只有约 125 个。
+  XGBoost 的配置体现了极度保守的过拟合控制策略：
+</p>
+
+<pre><code>XGB_PARAMS = {
+    <span class="str">"max_depth"</span>:         <span class="num">3</span>,    <span class="cm"># 树深很浅，防止过于复杂的规则</span>
+    <span class="str">"min_child_weight"</span>:  <span class="num">30</span>,   <span class="cm"># 每个叶节点至少 30 个样本</span>
+    <span class="str">"learning_rate"</span>:     <span class="num">0.03</span>, <span class="cm"># 小学习率 × 多棵树（更稳定）</span>
+    <span class="str">"n_estimators"</span>:      <span class="num">300</span>,
+    <span class="str">"subsample"</span>:         <span class="num">0.7</span>,  <span class="cm"># 每棵树仅用 70% 的样本</span>
+    <span class="str">"colsample_bytree"</span>:  <span class="num">0.7</span>,  <span class="cm"># 每棵树仅用 70% 的特征</span>
+    <span class="str">"reg_alpha"</span>:         <span class="num">1.0</span>,  <span class="cm"># L1：驱动部分因子权重归零（稀疏化）</span>
+    <span class="str">"reg_lambda"</span>:        <span class="num">5.0</span>,  <span class="cm"># L2：防止单个因子主导预测</span>
+}</code></pre>
+
+<div class="callout info">
+  <strong>L1 vs L2 正则化</strong><br>
+  <strong>L1（LASSO）</strong>倾向于将不重要特征的权重压缩到恰好为零，产生稀疏模型——适合因子精选。<br>
+  <strong>L2（Ridge）</strong>将所有特征的权重向零收缩但不归零，产生更平滑的预测——适合防止单一因子主导。<br>
+  GoldMonitor 同时使用两者（Elastic Net 风格），兼顾稀疏性与平滑性。
+</div>
+
+<h3>4.3 预测目标：20 日远期收益率</h3>
+
+<p>
+  模型预测的不是"明天的价格"，而是"未来 20 个交易日的持仓收益率"。
+  这个设计决策背后有几个重要考量：
+</p>
+
+<ul>
+  <li><strong>宏观因子的传导滞后</strong>：TIPS 利率变化通常需要 2–4 周才能充分反映在黄金价格中</li>
+  <li><strong>降低交易频率</strong>：20 日周期过滤了日内噪声，降低摩擦成本</li>
+  <li><strong>与 Regime 检测对齐</strong>：宏观 regime 也以月为单位演变，时间尺度匹配</li>
+</ul>
+
+<h3>4.4 Walk-Forward 验证：诚实的回测</h3>
+
+<p>
+  <strong>回测偏差（Backtest Bias）</strong>是量化研究中最常被忽视的陷阱。
+  最危险的是"未来信息泄露"——用未来数据来预测过去，制造出虚假的优异表现。
+</p>
+
+<p>
+  GoldMonitor 使用<strong>Walk-Forward 验证</strong>：在任何给定时点，
+  模型只能看到该时点之前的数据，严格模拟"当时的信息集"。
+  训练集截止于 2025 年 9 月，之后的数据留作真正的样本外（OOS）验证。
+</p>
+
+<pre><code><span class="cm"># Walk-Forward 的核心逻辑（伪代码）</span>
+<span class="kw">for</span> t <span class="kw">in</span> range(train_end, test_end, step=20):
+    X_train = features[:t]      <span class="cm"># 只用 t 之前的数据</span>
+    y_train = target[:t]
+    model.fit(X_train, y_train)
+
+    X_test = features[t:t+20]   <span class="cm"># 预测未来 20 天</span>
+    preds[t:t+20] = model.predict(X_test)</code></pre>
+
+<!-- ══════════════════════════════════════════════════════ S5 -->
+<h2 id="s5">第五章：Regime 检测 — 让机器读懂市场气候</h2>
+
+<p>
+  如果说因子工程和 XGBoost 是系统的"感知层"，那么 Regime 检测就是"理解层"。
+  同样的 TIPS 利率上升，在 2022 年（Fed 激进加息周期）和 2023 年（SVB 危机）对黄金的意义截然不同。
+  一个没有 Regime 意识的系统会把这两种情景一视同仁——这正是规则系统的局限。
+</p>
+
+<h3>5.1 从规则系统到三层架构</h3>
+
+<p>GoldMonitor 的 Regime 系统经历了两代演进：</p>
+
+<div class="card gold-border">
+  <h4>第一代（V1）— 投票打分制</h4>
+  <p>
+    5 个因子（GVZ、GPR、TIPS、DXY、BEI）各自独立投票，
+    累计 Risk-Off 或 Risk-On 票数超过阈值则触发对应 Regime。
+    简单可解释，但对"假信号"和"信号来源"是盲的。
+  </p>
+</div>
+
+<div class="card gold-border">
+  <h4>第二代（V2）— 三层复合架构</h4>
+  <div class="layer-diagram">
+    <div class="layer">
+      <div class="layer-label">Layer 1</div>
+      <div class="layer-content">
+        <div class="title">宏观 Regime — Bridgewater 四象限 × Fed 周期</div>
+        <div class="detail">增长方向（收益率曲线斜率）× 通胀方向（BEI 动量）= 4 个象限<br>叠加 2Y 利率 20 日变化判断 Fed 紧缩 / 宽松 / 中性</div>
+      </div>
+      <div class="layer-freq">月度频率</div>
+    </div>
+    <div class="layer-arrow">↓ 基础乘数 × Fed 调整</div>
+    <div class="layer">
+      <div class="layer-label">Layer 2</div>
+      <div class="layer-content">
+        <div class="title">市场 Regime — HMM 状态 × 流动性 / 波动率矩阵</div>
+        <div class="detail">HMM 在 7 因子空间拟合 3 个隐藏状态（Bull / Neutral / Bear）<br>GVZ 水平 × ETF 资金流 = 4 种市场微观结构状态</div>
+      </div>
+      <div class="layer-freq">周度频率</div>
+    </div>
+    <div class="layer-arrow">↓ × HMM 调整系数</div>
+    <div class="layer">
+      <div class="layer-label">Layer 3</div>
+      <div class="layer-content">
+        <div class="title">事件 Overlay — 2Y 冲击归因 + 变点检测 + 美元微笑</div>
+        <div class="detail">2Y 国债异常波动 → 来源归因（债市脆弱 / 利率预期 / 通胀重定价）<br>PELT 算法检测金价结构性断裂；美元强势来源判断</div>
+      </div>
+      <div class="layer-freq">日度频率</div>
+    </div>
+    <div class="layer-arrow">↓ + L3 Delta 修正</div>
+    <div class="output-box">
+      最终乘数 = clip(L1_mult × L2_adj + L3_delta, 0.1, 1.5)
+    </div>
+  </div>
+</div>
+
+<h3>5.2 Layer 1：Bridgewater 四象限</h3>
+
+<p>
+  Ray Dalio 创立的全天候策略（All Weather）核心思想是：
+  所有资产的风险溢价最终都是对"经济增长"和"通胀"这两个变量的赌注。
+  这个框架被 GoldMonitor 直接用于第一层宏观分类。
+</p>
+
+<div class="quadrant-grid">
+  <div class="quad quad-stagflation">
+    <div class="name">滞胀 Stagflation</div>
+    <div class="drivers">Growth↓ × Inflation↑<br>2022前·1970s</div>
+    <div class="signal">黄金 ⭐⭐⭐ 极强看多</div>
+  </div>
+  <div class="quad quad-overheating">
+    <div class="name">过热 Overheating</div>
+    <div class="drivers">Growth↑ × Inflation↑<br>2021年</div>
+    <div class="signal">黄金 ⭐⭐ 中性偏多</div>
+  </div>
+  <div class="quad quad-deflation">
+    <div class="name">通缩 Deflation</div>
+    <div class="drivers">Growth↓ × Inflation↓<br>2020 COVID</div>
+    <div class="signal">黄金 ⭐ 避险 vs 利率</div>
+  </div>
+  <div class="quad quad-reflation">
+    <div class="name">复苏 Reflation</div>
+    <div class="drivers">Growth↑ × Inflation↓<br>2019·2023后</div>
+    <div class="signal">黄金 〇 中性偏空</div>
+  </div>
+</div>
+<div class="quad-axis">← 经济增长方向 →　　　↕ 通胀方向</div>
+
+<pre><code><span class="cm"># 象限基础乘数 × Fed 周期调整</span>
+QUADRANT_MULTIPLIERS = {
+    <span class="str">"Stagflation"</span>: <span class="num">1.10</span>,  <span class="cm"># 滞胀：黄金最强顺风</span>
+    <span class="str">"Overheating"</span>: <span class="num">1.00</span>,  <span class="cm"># 过热：中性</span>
+    <span class="str">"Deflation"</span>:   <span class="num">0.75</span>,  <span class="cm"># 通缩：安全边际降低</span>
+    <span class="str">"Reflation"</span>:   <span class="num">0.65</span>,  <span class="cm"># 复苏：风险资产更受欢迎</span>
+}
+
+FED_CYCLE_ADJ = {
+    <span class="str">"Easing"</span>:     <span class="num">+0.15</span>,  <span class="cm"># 降息：黄金的最大催化剂</span>
+    <span class="str">"Tightening"</span>: <span class="num">-0.15</span>,  <span class="cm"># 加息：实际利率上升，压制黄金</span>
+}</code></pre>
+
+<h3>5.3 Layer 2：隐马尔可夫模型（HMM）</h3>
+
+<p>
+  <strong>核心直觉：</strong>市场的运行状态不是直接可观测的。
+  我们能观测到的只是因子值，但"市场究竟处于牛市状态、熊市状态还是震荡状态"是隐藏的。
+  HMM 的假设是：市场存在若干"隐藏状态"，每个状态产生一个特定的因子值分布。
+</p>
+
+<div class="hmm-states">
+  <div class="hmm-state hmm-bull">
+    <div class="label">Bull 牛市</div>
+    <div class="desc">ETF资金流入<br>GVZ低位平稳<br>BEI上行</div>
+  </div>
+  <div class="hmm-state hmm-neutral">
+    <div class="label">Neutral 震荡</div>
+    <div class="desc">因子信号混合<br>方向不明确<br>波动中等</div>
+  </div>
+  <div class="hmm-state hmm-bear">
+    <div class="label">Bear 熊市</div>
+    <div class="desc">GVZ飙升<br>ETF资金流出<br>TIPS上行</div>
+  </div>
+</div>
+
+<div class="callout info">
+  <strong>HMM 与普通分类的区别：</strong><br>
+  普通分类（如第一代规则系统）直接用因子值决定状态，每天独立判断。
+  HMM 额外考虑<strong>状态转移概率</strong>——从 Bull 状态转向 Bear 状态通常要经过 Neutral 过渡期，
+  直接跳变的概率很低。这使得 HMM 的状态序列更平滑，减少因子噪声导致的假信号。
+</div>
+
+<h3>5.4 Layer 3：2Y 利率冲击归因</h3>
+
+<p>
+  这是 GoldMonitor 中最具创新性的部分——不只检测"利率在动"，而是判断"利率为什么在动"。
+  同样是 2Y 美债收益率急升，可能来自三种完全不同的力量：
+</p>
+
+<table>
+  <thead>
+    <tr><th>来源</th><th>信号特征</th><th>对黄金含义</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>🔴 <strong>债市脆弱</strong><br>Bond Fragility</td>
+      <td>MOVE proxy 飙升 + DXY 横盘（无方向）</td>
+      <td>看多 +0.10 — 流动性危机推动避险（SVB 2023）</td>
+    </tr>
+    <tr>
+      <td>🔵 <strong>利率预期重定价</strong><br>Expectation</td>
+      <td>收益率曲线趋平（2Y升快 > 10Y）+ MOVE 正常</td>
+      <td>看空 −0.20 — Fed 加息预期压制黄金（2022）</td>
+    </tr>
+    <tr>
+      <td>🟡 <strong>通胀重定价</strong><br>Inflation</td>
+      <td>BEI 同向上升 + 2Y-TIPS 利差扩张</td>
+      <td>中性 +0.05 — 通胀溢价对冲利率压力</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>核心检测逻辑使用三个新数据特征：</p>
+
+<pre><code><span class="cm"># P0: 2Y-TIPS 利差 — 衡量 Fed 紧缩预期 vs 实际利率</span>
+spread_2y_tips = DGS2 - TIPS_10Y
+
+<span class="cm"># P1: DXY 横盘检测 — ATR 比值 + 效率系数双重确认</span>
+dxy_atr_ratio = ATR_5day / ATR_20day  <span class="cm"># < 0.75 → 最近波动收缩</span>
+dxy_efficiency = net_move / path_sum  <span class="cm"># < 0.35 → 方向性弱</span>
+dxy_sideways = dxy_efficiency < 0.35 <span class="kw">or</span> dxy_atr_ratio < 0.75
+
+<span class="cm"># P2: MOVE 替代 — GVZ 水平 × GVZ 动量的合成代理</span>
+move_proxy_z = 0.6 × GVZ_level_z + 0.4 × GVZ_momentum_z</code></pre>
+
+<h3>5.5 PELT 变点检测</h3>
+
+<p>
+  <strong>PELT（Pruned Exact Linear Time）</strong>算法检测时间序列中的"结构性断裂点"——
+  即市场行为模式发生根本性改变的时刻。在黄金的日对数收益率上运行 PELT，
+  可以识别出"过去 60 天内是否有统计显著的 regime 切换"。
+</p>
+
+<p>
+  如果检测到变点，系统施加 −0.10 的惩罚乘数，逻辑是：
+  <em>在结构不确定性高的时刻，降低模型对历史模式的信任程度</em>。
+</p>
+
+<!-- ══════════════════════════════════════════════════════ S6 -->
+<h2 id="s6">第六章：模型评估 — 如何知道系统是否有效</h2>
+
+<h3>6.1 IC：信息系数</h3>
+
+<p>
+  <strong>信息系数（Information Coefficient，IC）</strong>是量化因子研究的核心评估指标，
+  定义为<strong>因子预测值与实际收益率之间的 Spearman 相关系数</strong>。
+</p>
+
+<pre><code>IC = Spearman_correlation(predicted_return, actual_return)
+
+IC > 0.05  → 因子有微弱预测力
+IC > 0.10  → 因子有实用价值
+IC > 0.20  → 因子非常强（稀少）
+IC > 0.30  → 极强（需要警惕过拟合）</code></pre>
+
+<p>
+  F3_TIPS10Y 在样本外的 IC = +0.32 是系统中最强的单因子，
+  但这也正是为什么系统使用了强正则化——避免模型过度依赖这一个因子。
+</p>
+
+<div class="callout warn">
+  <strong>为什么用 Spearman 而不是 Pearson 相关？</strong><br>
+  金融收益率有尖峰厚尾（fat tail），不符合正态分布假设。
+  Spearman 只计算<strong>排名</strong>的相关性，对极端值不敏感，更为稳健。
+</div>
+
+<h3>6.2 SHAP 稳定性监控</h3>
+
+<p>
+  一个训练好的模型可能在某天突然让某个因子主导了 90% 的预测，
+  这往往是模型泛化能力退化的信号。GoldMonitor 实现了一个自动监控机制：
+</p>
+
+<pre><code><span class="cm"># 使用过去 10 个交易日的 SHAP 值均值检测主导因子</span>
+<span class="kw">if</span> max_shap_share > <span class="num">0.60</span>:  <span class="cm"># 单因子占比超 60%</span>
+    shap_stability[<span class="str">"stable"</span>] = <span class="kw">False</span>
+    <span class="fn">print</span>(<span class="str">f"⚠ SHAP 不稳定: {factor} 主导 {share*100:.1f}%"</span>)</code></pre>
+
+<p>
+  SHAP（SHapley Additive exPlanations）来自博弈论中的 Shapley 值，
+  核心思想是：把每个特征对预测结果的贡献度，按照"公平分配"的原则拆解出来。
+  当某个因子的 SHAP 份额过高，通常意味着：
+  (a) 该因子当前处于历史极端值，或 (b) 模型退化，需要重新训练。
+</p>
+
+<h3>6.3 ATR 仓位管理</h3>
+
+<p>
+  优秀的系统不只有信号质量，还要有严格的风险管理。
+  GoldMonitor 使用<strong>基于 ATR（真实波幅均值）的仓位管理</strong>：
+</p>
+
+<pre><code>stop_distance = ATR × 2.5          <span class="cm"># 止损距离 = 2.5 倍 ATR</span>
+risk_amount   = account × 2%       <span class="cm"># 每笔风险不超过账户 2%</span>
+position_size = risk_amount / stop_distance
+
+<span class="cm"># 最终仓位 × Regime 乘数</span>
+final_size = position_size × regime_multiplier  <span class="cm"># [0.1, 1.5]</span></code></pre>
+
+<p>
+  这种方法的精妙之处在于：<strong>不是给每次交易分配固定资金，而是给每次交易分配固定风险</strong>。
+  黄金波动大时（ATR 高），自动降低仓位；市场平静时，可以适当加大。
+  这使得每次交易的风险暴露是均等的，不会因为偶然进入了一个高波动时期而爆仓。
+</p>
+
+<div class="metric-row">
+  <div class="metric"><div class="val">2%</div><div class="lbl">每笔风险预算</div></div>
+  <div class="metric"><div class="val">2.5×</div><div class="lbl">ATR 止损倍数</div></div>
+  <div class="metric"><div class="val">0.1</div><div class="lbl">Regime 乘数下限</div></div>
+  <div class="metric"><div class="val">1.5</div><div class="lbl">Regime 乘数上限</div></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ S7 -->
+<h2 id="s7">第七章：交易大师的视角 — 方法论横向对比</h2>
+
+<p>
+  GoldMonitor 的设计决策并非凭空而来——它们折射出几代顶级交易员积累的智慧。
+  本章将系统的核心模块与交易大师的理念做横向对比，
+  帮助读者理解这些技术选择背后更深层的思考框架。
+</p>
+
+<div class="master-card master-simons">
+  <div class="master-name">Jim Simons — "数学家的市场观"</div>
+  <div class="master-title">大奖章基金 (Medallion Fund) · 文艺复兴科技 · 30年年化66%</div>
+
+  <div class="quote">
+    <p>我不读华尔街研究报告，不看宏观分析师的预测，也不在乎联储的声明。我只信数据。</p>
+    <span class="attribution">— Jim Simons</span>
+  </div>
+
+  <p>
+    西蒙斯的核心信念：市场存在可重复的统计规律，这些规律可以通过足够多的数据和足够强的数学工具发现。
+    他招募的是物理学家、数学家和密码学家，而非经济学家。
+  </p>
+
+  <p><strong>与 GoldMonitor 的共鸣：</strong></p>
+  <ul>
+    <li>滚动 Z-Score 标准化：跨时间的统计可比性，正是西蒙斯式信号提取的基础</li>
+    <li>SHAP 稳定性监控：追踪信号是否仍然有效（信号衰减是西蒙斯团队的核心研究课题）</li>
+    <li>Walk-Forward 验证：严格的样本外测试，拒绝"模型拟合历史"的虚假成功</li>
+  </ul>
+
+  <p><strong>GoldMonitor 的差异与局限：</strong></p>
+  <p>
+    西蒙斯的系统是纯数据驱动的黑盒，连公司内部人员都无法解释单个信号的来源。
+    GoldMonitor 反其道而行——每个因子都有明确的经济学解释。
+    这是可解释性 vs 性能的权衡：西蒙斯的方式可能捕捉到人类无法理解的微弱规律，
+    但代价是完全失去对模型行为的直觉感知。
+  </p>
+</div>
+
+<div class="master-card master-dalio">
+  <div class="master-name">Ray Dalio — "经济机器的设计者"</div>
+  <div class="master-title">桥水基金 (Bridgewater Associates) · 全天候策略 · All Weather Portfolio</div>
+
+  <div class="quote">
+    <p>债务周期、生产效率和通胀预期是驱动所有资产定价的底层力量。理解这台机器，你就能理解市场。</p>
+    <span class="attribution">— Ray Dalio，《经济机器是怎样运转的》</span>
+  </div>
+
+  <p>
+    达利欧的贡献在于建立了一套<strong>统一的宏观框架</strong>：
+    用增长和通胀两个轴把所有宏观环境分成四个象限，
+    每个象限都有其最适合的资产配置。
+    这个框架直接成为 GoldMonitor Layer 1 的设计蓝图。
+  </p>
+
+  <p><strong>与 GoldMonitor 的直接映射：</strong></p>
+  <ul>
+    <li><code>Stagflation（滞胀）</code>= 达利欧眼中黄金最强的象限，multiplier = 1.10</li>
+    <li><code>Reflation（复苏）</code>= 风险资产主导，黄金吸引力最弱，multiplier = 0.65</li>
+    <li>Fed 周期调整 = 达利欧长期债务周期理论的短周期实现</li>
+  </ul>
+
+  <p><strong>超越原版 Bridgewater 的地方：</strong></p>
+  <p>
+    达利欧的原始框架是月度、静态的。GoldMonitor 在此基础上叠加了 HMM（周度）和事件 Overlay（日度），
+    使框架能在不同时间尺度上响应市场。这类似于把"地图"（战略）和"GPS 导航"（战术）结合起来。
+  </p>
+</div>
+
+<div class="master-card master-druck">
+  <div class="master-name">Stanley Druckenmiller — "美联储的影子"</div>
+  <div class="master-title">量子基金合伙人 · 索罗斯管理合伙人 · Duquesne Capital</div>
+
+  <div class="quote">
+    <p>在宏观交易中，利率是一切的基础。你不需要正确地分析所有事情，但你必须对利率的方向有一个正确的判断。</p>
+    <span class="attribution">— Stanley Druckenmiller</span>
+  </div>
+
+  <p>
+    德鲁肯米勒的核心方法：<strong>重仓押注 Fed 政策的拐点</strong>。
+    他的传奇来自于准确判断"Fed 即将转向"的时机，并在拐点前建立头寸。
+  </p>
+
+  <p><strong>与 GoldMonitor 的对照：</strong></p>
+  <p>
+    Layer 1 的 Fed Cycle 判断（2Y 利率 20 日绝对变化 ± 0.15bp 触发）
+    正是在系统化地执行德鲁肯米勒的直觉：
+    "宽松拐点是黄金最大的上行催化剂（+0.15 multiplier），
+    加息路径中则是最大的阻力（-0.15 multiplier）"。
+  </p>
+  <p>
+    Layer 3 的 2Y 利率冲击归因进一步细化了这个逻辑：
+    同样的 2Y 上升，来自 Fed 预期（看空）和来自债市脆弱（看多），方向截然相反。
+    这种区分正是德鲁肯米勒所说的"不只看数字，更要理解数字背后的力量"。
+  </p>
+</div>
+
+<div class="master-card master-tudor">
+  <div class="master-name">Paul Tudor Jones — "风险守门人"</div>
+  <div class="master-title">Tudor Investment Corp · 黑色星期一中大赚 · 持续 35 年正收益</div>
+
+  <div class="quote">
+    <p>最重要的规则是：做好防守，不要亏钱。如果你能在下行时保住本金，上行时自然会来。</p>
+    <span class="attribution">— Paul Tudor Jones</span>
+  </div>
+
+  <p>
+    琼斯的方法论核心是<strong>非对称风险管理</strong>：
+    把 80% 的精力用于构思交易的退出策略，只用 20% 构思进入策略。
+    "如何输"比"如何赢"更重要。
+  </p>
+
+  <p><strong>与 GoldMonitor 的对应：</strong></p>
+  <ul>
+    <li><strong>ATR × 2.5 止损</strong>：琼斯式的"预设退出点"，而非随机直觉</li>
+    <li><strong>2% 风险预算</strong>：控制每笔交易的最大损失，没有任何一笔交易可以对账户造成毁灭性打击</li>
+    <li><strong>Regime 乘数下限 0.1</strong>：在最恶劣的 Regime（如 Systemic Risk）下，仓位被强制压缩到 10%</li>
+    <li><strong>ATR 自适应仓位</strong>：波动率高时自动降仓——这是 PTJ 风格的"自动安全带"</li>
+  </ul>
+</div>
+
+<div class="master-card master-soros">
+  <div class="master-name">George Soros — "反身性理论的缔造者"</div>
+  <div class="master-title">量子基金 · 狙击英镑 · 《金融炼金术》</div>
+
+  <div class="quote">
+    <p>市场参与者的认知会影响市场本身，而市场变化又反过来改变参与者的认知——这就是反身性。市场永远是错的，只是有时候方向对了。</p>
+    <span class="attribution">— George Soros，《金融炼金术》</span>
+  </div>
+
+  <p>
+    索罗斯的<strong>反身性理论（Reflexivity）</strong>认为市场不是一个自我均衡的系统，
+    而是参与者认知与市场实际之间的持续互动循环。
+    这在量化语境中可以理解为：因子之间的相关性会随时间变化，
+    因为市场参与者对这些因子的解读方式本身就在演化。
+  </p>
+
+  <p><strong>对 GoldMonitor 的启示：</strong></p>
+  <p>
+    Layer 3 的 PELT 变点检测，正是在捕捉索罗斯所说的"反身性突变点"——
+    市场从一种认知框架跳到另一种认知框架的时刻。
+    当变点被检测到，系统主动降低信心（-0.10 multiplier），承认"过去的规律可能暂时失效"。
+    这是对索罗斯思想最直接的量化实现。
+  </p>
+  <p>
+    更深层的启发是：<strong>没有任何量化系统可以完全绕开反身性</strong>。
+    当一个信号被足够多的人使用，它的预测力就会被套利消耗殆尽。
+    这也是西蒙斯始终保持神秘、达利欧不断迭代框架的原因。
+  </p>
+</div>
+
+<h3>方法论对比总结</h3>
+
+<table>
+  <thead>
+    <tr><th>维度</th><th>Simons</th><th>Dalio</th><th>Druckenmiller</th><th>Tudor Jones</th><th>GoldMonitor</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>核心驱动</td>
+      <td>统计规律</td>
+      <td>宏观框架</td>
+      <td>政策判断</td>
+      <td>风险管理</td>
+      <td>宏观 + 统计</td>
+    </tr>
+    <tr>
+      <td>可解释性</td>
+      <td>黑盒</td>
+      <td>完全透明</td>
+      <td>论文式</td>
+      <td>直觉 + 规则</td>
+      <td>SHAP + 规则</td>
+    </tr>
+    <tr>
+      <td>时间框架</td>
+      <td>高频</td>
+      <td>月度 / 季度</td>
+      <td>周到月</td>
+      <td>日到周</td>
+      <td>20 日（月度）</td>
+    </tr>
+    <tr>
+      <td>风控核心</td>
+      <td>组合分散</td>
+      <td>风险平价</td>
+      <td>重仓高确信</td>
+      <td>止损优先</td>
+      <td>ATR + 乘数</td>
+    </tr>
+    <tr>
+      <td>Regime 意识</td>
+      <td>隐含于模型</td>
+      <td>四象限显式</td>
+      <td>Fed 周期</td>
+      <td>趋势跟随</td>
+      <td>三层显式</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ══════════════════════════════════════════════════════ S8 -->
+<h2 id="s8">第八章：结语 — 系统化思维的边界</h2>
+
+<p>
+  读到这里，你可能会想：有了这么完整的系统，是不是就可以稳定盈利了？
+  答案是：<strong>不是的，而且这个"不是"本身就是最重要的认知</strong>。
+</p>
+
+<h3>8.1 模型能做什么，不能做什么</h3>
+
+<p>
+  GoldMonitor 能做的是：
+  在给定的信息集下，提供比随机猜测更有依据的方向性判断，
+  并以一致、可重复、可审计的方式管理风险。
+  它是一个辅助决策工具，不是预言机。
+</p>
+
+<p>
+  它不能做的是：
+  预测"黑天鹅"事件（2020 年 COVID 的黄金闪崩）、
+  捕捉纯粹的流动性驱动行情（央行大规模干预市场），
+  以及应对模型训练期之后出现的全新市场结构。
+</p>
+
+<h3>8.2 系统设计的真正价值</h3>
+
+<p>
+  这套系统最大的价值不是它的预测精度，而是它强迫开发者去思考：
+</p>
+
+<ul>
+  <li>这个因子背后的经济逻辑是什么？（防止垃圾因子进入模型）</li>
+  <li>在什么 regime 下，这个逻辑可能失效？（防止在错误的时机硬套框架）</li>
+  <li>如果我错了，我会亏多少？（在设计时就计算最坏情况）</li>
+  <li>我现在看到的好结果，是模型真的有效，还是数据恰好支持了我的信念？（对抗确认偏误）</li>
+</ul>
+
+<div class="quote">
+  <p>一个好的量化交易员和一个坏的量化交易员的区别，不在于使用了什么模型，而在于他是否真正理解了自己为什么会输。</p>
+  <span class="attribution">— 量化从业者通识</span>
+</div>
+
+<h3>8.3 给初学者的三条路标</h3>
+
+<div class="card">
+  <p>
+    <strong>第一条：</strong>先学经济学，再学统计，最后学编程。
+    顺序不能反。没有经济学直觉的因子是数据挖掘（Data Snooping），
+    最终会在真实市场中失效。没有统计训练的经济直觉是讲故事，无法被系统化。
+  </p>
+</div>
+
+<div class="card">
+  <p>
+    <strong>第二条：</strong>永远重视样本外（OOS）表现。
+    只要给足够的时间，任何人都能用历史数据"训练"出一个漂亮的回测曲线。
+    真正的问题是：当你用明天的钱来验证时，它还能工作吗？
+  </p>
+</div>
+
+<div class="card">
+  <p>
+    <strong>第三条：</strong>把风险管理作为系统的核心，而不是附属模块。
+    西蒙斯、达利欧、琼斯的共同之处不是他们的信号有多强，
+    而是他们的亏损控制有多严格。
+    <em>复利的本质是不要把本金输光，让时间做剩下的事。</em>
+  </p>
+</div>
+
+<hr>
+
+<p style="text-align:center; color: var(--text-muted); font-style: italic; font-size: 0.95rem;">
+  量化不是寻找"完美的预言"，而是在不确定性中构建有统计优势的决策框架。
+  市场不会因为你建了一个好系统就善待你，但它会因为你没有系统而惩罚你。
+</p>
+
+<footer>
+  <p>GoldMonitor Quantitative Research · 2026</p>
+  <p>本文仅用于研究与教育目的，不构成投资建议。</p>
+  <p>Pipeline: Python / XGBoost / HMM / SHAP · Dashboard: Next.js / Tailwind CSS</p>
+</footer>
+
+</body>
+</html>

@@ -274,6 +274,8 @@ def fetch_all_data() -> pd.DataFrame:
         merged["BEI"] = merged["BEI"].ffill()
     if "GPR" in merged.columns:
         merged["GPR"] = merged["GPR"].ffill()
+    if "DGS2" in merged.columns:
+        merged["DGS2"] = merged["DGS2"].ffill()
     # Drop rows where gold price is missing
     if "XAUUSD_close" in merged.columns:
         merged = merged.dropna(subset=["XAUUSD_close"])

@@ -118,12 +118,56 @@ export interface ICHistoryData {
   cv_mean_ic: number
 }
 
+export interface RegimeLayer1 {
+  quadrant: string
+  quadrant_zh: string
+  growth_direction: 'up' | 'down' | 'neutral'
+  inflation_direction: 'up' | 'down' | 'neutral'
+  fed_cycle: string
+  fed_cycle_zh: string
+  multiplier: number
+}
+
+export interface RegimeLayer2 {
+  hmm_state: number
+  hmm_label: 'Bull' | 'Neutral' | 'Bear'
+  hmm_label_zh: string
+  hmm_confidence: number
+  hmm_available: boolean
+  vol_level: 'high' | 'low'
+  liq_level: 'good' | 'poor'
+  market_regime: string
+  market_regime_zh: string
+  adj_factor: number
+}
+
+export interface RegimeLayer3 {
+  rate_shock_detected: boolean
+  shock_source: 'fragility' | 'expectation' | 'inflation' | null
+  shock_source_zh: string | null
+  dgs2_zscore: number | null
+  shock_direction: 'up' | 'down' | null
+  changepoint_detected: boolean
+  days_since_changepoint: number | null
+  n_breakpoints: number
+  cp_available: boolean
+  dollar_type: 'risk_off' | 'growth' | 'weak' | 'neutral'
+  dollar_type_zh: string
+  overlay_delta: number
+}
+
 export interface RegimeData {
   current: {
     regime: string
+    regime_en?: string
     multiplier: number
     risk_off_score: number
     risk_on_score: number
+    confidence?: number
+    layer1?: RegimeLayer1
+    layer2?: RegimeLayer2
+    layer3?: RegimeLayer3
+    version?: string
   }
   heatmap: Array<{
     month: string
@@ -253,6 +297,95 @@ export interface ModelHealthData {
 
 export function useModelHealth() {
   return useSWR<ModelHealthData>('/api/model-health', fetcher, {
+    refreshInterval: HOURLY,
+    revalidateOnFocus: false,
+  })
+}
+
+// ── P0: Stress Test Data ────────────────────────────────────────────────────
+
+export interface StressTestPeriod {
+  name: string
+  name_en: string
+  start: string
+  end: string
+  description: string
+  samples: number
+  is_oos: boolean
+  ic: number | null
+  direction_hit_rate: number | null
+  gold_return?: number
+  gold_max_drawdown?: number
+  pred_mean: number
+  pred_std: number
+  logic_breaks: Array<{
+    type: string
+    severity: string
+    detail: string
+  }>
+  logic_break_count: number
+  max_severity: string
+  factor_analysis: Array<{
+    factor: string
+    mean_zscore: number
+    max_abs_zscore: number
+    pct_extreme: number
+  }>
+}
+
+export interface StressTestData {
+  generated_at: string
+  periods: Record<string, StressTestPeriod>
+  summary: {
+    total_periods_tested: number
+    periods_with_data: number
+    total_logic_breaks: number
+    high_severity_periods: number
+    avg_crisis_ic: number | null
+    avg_direction_hit_rate: number | null
+    overall_assessment: string
+  }
+}
+
+export function useStressTest() {
+  return useSWR<StressTestData>('/api/stress-test', fetcher, {
+    refreshInterval: HOURLY,
+    revalidateOnFocus: false,
+  })
+}
+
+// ── P2: Granger Causality Data ──────────────────────────────────────────────
+
+export interface GrangerFactorResult {
+  display_name: string
+  contemporaneous_ic: number
+  oos_ic: number | null
+  granger_causes_gold: boolean
+  optimal_lag_days: number | null
+  optimal_lag_ic: number | null
+  n_significant_lags: number
+  verdict: string
+}
+
+export interface GrangerData {
+  generated_at: string
+  total_samples: number
+  factors: Record<string, GrangerFactorResult>
+  regime_ic: Record<string, {
+    samples: number
+    factor_ics: Record<string, number | null>
+  }>
+  summary: {
+    granger_pass: number
+    granger_fail: number
+    total_factors: number
+    pass_rate: number
+    recommendation: string
+  }
+}
+
+export function useGranger() {
+  return useSWR<GrangerData>('/api/granger', fetcher, {
     refreshInterval: HOURLY,
     revalidateOnFocus: false,
   })

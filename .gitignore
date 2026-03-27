@@ -17,6 +17,7 @@ __pycache__/
 *.egg-info/
 .venv/
 venv/
+.libomp/
 
 # Pipeline model (large binary, not tracked)
 gold-dashboard/pipeline/model.json

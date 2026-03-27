@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gold Monitor — System Architecture</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0A0F1A; color: #E2E8F0; font-family: -apple-system, "PingFang SC", "SF Pro Display", sans-serif; overflow-x: hidden; }
+
+  /* ── Layout ── */
+  .page { width: 1400px; margin: 0 auto; padding: 60px 40px 80px; }
+
+  /* ── Header ── */
+  .header { text-align: center; margin-bottom: 60px; }
+  .header .logo { font-size: 14px; letter-spacing: 6px; color: #B8860B; font-weight: 600; margin-bottom: 8px; }
+  .header h1 { font-size: 36px; font-weight: 700; color: #F1F5F9; margin-bottom: 6px; }
+  .header .sub { font-size: 15px; color: #64748B; }
+  .header .line { width: 80px; height: 3px; background: linear-gradient(90deg, transparent, #B8860B, transparent); margin: 20px auto 0; border-radius: 2px; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 48px; }
+  .section-title { font-size: 13px; letter-spacing: 3px; color: #64748B; font-weight: 600; margin-bottom: 16px; text-transform: uppercase; }
+
+  /* ── Layer boxes ── */
+  .layer { border-radius: 16px; padding: 0; overflow: hidden; margin-bottom: 0; position: relative; }
+  .layer-header { padding: 14px 24px; display: flex; align-items: center; gap: 12px; }
+  .layer-header .tag { font-size: 11px; font-weight: 700; letter-spacing: 2px; padding: 3px 10px; border-radius: 4px; color: #fff; }
+  .layer-header .name { font-size: 16px; font-weight: 600; color: #F1F5F9; }
+  .layer-header .desc { font-size: 12px; color: #94A3B8; margin-left: auto; font-family: "Menlo", monospace; }
+  .layer-body { padding: 20px 24px 24px; }
+
+  /* Layer colors */
+  .layer-ext { border: 1px solid #1565C033; }
+  .layer-ext .layer-header { background: #1565C0; }
+  .layer-ext .layer-body { background: #0D1B2A; }
+  .layer-ext .tag { background: #0D47A1; }
+
+  .layer-pipe { border: 1px solid #2E7D3233; }
+  .layer-pipe .layer-header { background: #2E7D32; }
+  .layer-pipe .layer-body { background: #0D1F12; }
+  .layer-pipe .tag { background: #1B5E20; }
+
+  .layer-api { border: 1px solid #E6510033; }
+  .layer-api .layer-header { background: #E65100; }
+  .layer-api .layer-body { background: #1F150D; }
+  .layer-api .tag { background: #BF360C; }
+
+  .layer-fe { border: 1px solid #6A1B9A33; }
+  .layer-fe .layer-header { background: #6A1B9A; }
+  .layer-fe .layer-body { background: #1A0D24; }
+  .layer-fe .tag { background: #4A148C; }
+
+  .layer-mini { border: 1px solid #00695C33; }
+  .layer-mini .layer-header { background: #00695C; }
+  .layer-mini .layer-body { background: #0D1F1C; }
+  .layer-mini .tag { background: #004D40; }
+
+  /* ── Flow arrows ── */
+  .arrow { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 0; color: #475569; }
+  .arrow svg { width: 20px; height: 20px; fill: #B8860B; opacity: 0.6; }
+  .arrow .label { font-size: 12px; color: #64748B; font-style: italic; }
+
+  /* ── Node grid ── */
+  .nodes { display: flex; gap: 12px; flex-wrap: wrap; }
+  .node { background: #ffffff08; border: 1px solid #ffffff10; border-radius: 10px; padding: 12px 16px; flex: 1; min-width: 150px; }
+  .node .icon { font-size: 20px; margin-bottom: 6px; }
+  .node .n-title { font-size: 13px; font-weight: 600; color: #E2E8F0; margin-bottom: 2px; }
+  .node .n-sub { font-size: 11px; color: #64748B; line-height: 1.4; }
+  .node code { font-family: "Menlo", monospace; font-size: 10px; color: #94A3B8; background: #ffffff08; padding: 1px 5px; border-radius: 3px; }
+
+  /* ── Pipeline flow ── */
+  .pipe-flow { display: flex; align-items: stretch; gap: 0; }
+  .pipe-step { flex: 1; text-align: center; padding: 14px 8px; position: relative; background: #ffffff05; border: 1px solid #ffffff08; }
+  .pipe-step:first-child { border-radius: 10px 0 0 10px; }
+  .pipe-step:last-child { border-radius: 0 10px 10px 0; }
+  .pipe-step .step-num { font-size: 10px; color: #4ADE80; font-weight: 700; letter-spacing: 1px; }
+  .pipe-step .step-name { font-size: 12px; font-weight: 600; color: #E2E8F0; margin: 4px 0 2px; }
+  .pipe-step .step-file { font-size: 10px; color: #64748B; font-family: "Menlo", monospace; }
+  .pipe-step::after { content: "→"; position: absolute; right: -8px; top: 50%; transform: translateY(-50%); color: #4ADE80; font-size: 16px; z-index: 1; font-weight: bold; }
+  .pipe-step:last-child::after { display: none; }
+
+  /* ── Output grid ── */
+  .output-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
+  .output-item { background: #ffffff06; border: 1px solid #ffffff0a; border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
+  .output-item .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .output-item .o-name { font-size: 11px; font-family: "Menlo", monospace; color: #94A3B8; }
+  .output-item .o-desc { font-size: 11px; color: #64748B; margin-left: auto; }
+
+  /* ── API grid ── */
+  .api-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .api-item { background: #ffffff06; border: 1px solid #ffffff0a; border-radius: 8px; padding: 10px 12px; text-align: center; transition: all 0.2s; }
+  .api-item:hover { background: #ffffff10; border-color: #E6510040; }
+  .api-item .a-path { font-size: 11px; font-family: "Menlo", monospace; color: #FB923C; font-weight: 600; }
+  .api-item .a-src { font-size: 10px; color: #64748B; margin-top: 3px; }
+  .api-item .a-badge { display: inline-block; font-size: 9px; padding: 1px 6px; border-radius: 3px; margin-top: 4px; }
+  .a-badge.pipe { background: #2E7D3220; color: #4ADE80; }
+  .a-badge.live { background: #1565C020; color: #60A5FA; }
+  .a-badge.mix { background: #E6510020; color: #FB923C; }
+
+  /* ── Frontend layout ── */
+  .fe-layout { display: flex; gap: 0; border: 1px solid #ffffff10; border-radius: 12px; overflow: hidden; }
+  .fe-section { padding: 16px; }
+  .fe-topbar { background: #1B2A4A; padding: 12px 20px; display: flex; align-items: center; gap: 16px; border-radius: 10px; margin-bottom: 12px; }
+  .fe-topbar .t-logo { color: #B8860B; font-weight: 700; font-size: 14px; }
+  .fe-topbar .t-price { color: #4ADE80; font-family: "Menlo", monospace; font-size: 18px; font-weight: 700; }
+  .fe-topbar .t-factors { color: #64748B; font-size: 11px; margin-left: auto; }
+  .fe-main { display: flex; gap: 12px; }
+  .fe-left { flex: 1; background: #0D1526; border: 1px solid #ffffff0a; border-radius: 10px; padding: 14px; }
+  .fe-right { width: 260px; background: #0D1526; border: 1px solid #ffffff0a; border-radius: 10px; padding: 14px; }
+  .fe-status { background: #111827; border: 1px solid #ffffff08; border-radius: 10px; padding: 10px 16px; margin-top: 12px; display: flex; align-items: center; gap: 12px; }
+  .fe-tab { display: inline-block; font-size: 11px; padding: 4px 10px; border-radius: 6px; margin: 2px; }
+  .fe-tab.active { background: #6A1B9A30; color: #CE93D8; border: 1px solid #6A1B9A40; }
+  .fe-tab.inactive { background: #ffffff06; color: #64748B; border: 1px solid transparent; }
+  .fe-comp { font-size: 11px; color: #94A3B8; padding: 4px 0; border-bottom: 1px solid #ffffff06; }
+  .fe-comp:last-child { border: none; }
+  .fe-comp span { color: #CE93D8; font-weight: 600; }
+
+  /* ── Factor table ── */
+  .factor-row { display: grid; grid-template-columns: 80px 1fr 1fr 1fr 80px; gap: 0; font-size: 11px; border-bottom: 1px solid #ffffff08; padding: 6px 0; }
+  .factor-row.header { color: #64748B; font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
+  .factor-id { color: #B8860B; font-family: "Menlo", monospace; font-weight: 600; }
+  .factor-ic { font-family: "Menlo", monospace; text-align: right; }
+  .ic-pos { color: #4ADE80; }
+  .ic-neg { color: #EF4444; }
+
+  /* ── Two-col ── */
+  .two-col { display: flex; gap: 16px; }
+  .two-col > * { flex: 1; }
+
+  /* ── Mini program ── */
+  .mini-pages { display: flex; gap: 10px; }
+  .mini-page { flex: 1; background: #ffffff06; border: 1px solid #ffffff0a; border-radius: 10px; padding: 14px; text-align: center; }
+  .mini-page .m-icon { font-size: 24px; margin-bottom: 6px; }
+  .mini-page .m-name { font-size: 13px; font-weight: 600; color: #E2E8F0; }
+  .mini-page .m-path { font-size: 10px; color: #64748B; font-family: "Menlo", monospace; margin: 3px 0; }
+  .mini-page .m-apis { font-size: 10px; color: #2DD4BF; }
+
+  /* ── Data flow connector ── */
+  .connector { text-align: center; padding: 6px 0; }
+  .connector .c-line { width: 2px; height: 24px; background: linear-gradient(#B8860B60, #B8860B20); margin: 0 auto; }
+  .connector .c-arrow { color: #B8860B; font-size: 14px; }
+  .connector .c-label { font-size: 11px; color: #64748B; font-style: italic; }
+
+  /* ── Legend ── */
+  .legend { display: flex; gap: 24px; justify-content: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid #ffffff08; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 11px; color: #64748B; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+
+  /* ── Footer ── */
+  .footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid #ffffff06; }
+  .footer p { font-size: 12px; color: #475569; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ═══════════ HEADER ═══════════ -->
+  <div class="header">
+    <div class="logo">GOLD MONITOR</div>
+    <h1>产品架构全景图</h1>
+    <div class="sub">System Architecture Overview &nbsp;·&nbsp; v2.0 &nbsp;·&nbsp; 7 Factors &nbsp;·&nbsp; 11 APIs &nbsp;·&nbsp; 3 Platforms</div>
+    <div class="line"></div>
+  </div>
+
+  <!-- ═══════════ LAYER 0: EXTERNAL DATA ═══════════ -->
+  <div class="layer layer-ext">
+    <div class="layer-header">
+      <span class="tag">L0</span>
+      <span class="name">外部数据源 External Data Sources</span>
+      <span class="desc">FRED · Yahoo Finance · Stooq</span>
+    </div>
+    <div class="layer-body">
+      <div class="nodes">
+        <div class="node">
+          <div class="icon">🏛️</div>
+          <div class="n-title">FRED API</div>
+          <div class="n-sub">美联储经济数据库<br><code>DTWEXBGS</code> <code>DFII10</code> <code>T10YIE</code> <code>GEPUCURRENT</code></div>
+        </div>
+        <div class="node">
+          <div class="icon">📈</div>
+          <div class="n-title">Yahoo Finance</div>
+          <div class="n-sub">v8 Chart API (主力)<br><code>GC=F</code> <code>^GVZ</code> <code>^OVX</code><br>无需 crumb 认证</div>
+        </div>
+        <div class="node">
+          <div class="icon">📊</div>
+          <div class="n-title">Stooq</div>
+          <div class="n-sub">ETF & 矿业股价格<br><code>GLD</code> <code>IAU</code> <code>GDX</code> <code>GDXJ</code></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Arrow -->
+  <div class="connector">
+    <div class="c-line"></div>
+    <div class="c-arrow">▼</div>
+    <div class="c-label">HTTP GET · fredapi · pandas_datareader</div>
+    <div class="c-line"></div>
+  </div>
+
+  <!-- ═══════════ LAYER 1: PIPELINE ═══════════ -->
+  <div class="layer layer-pipe">
+    <div class="layer-header">
+      <span class="tag">L1</span>
+      <span class="name">数据管道 Python Pipeline</span>
+      <span class="desc">gold-dashboard/pipeline/</span>
+    </div>
+    <div class="layer-body">
+      <!-- Pipeline flow -->
+      <div class="pipe-flow">
+        <div class="pipe-step">
+          <div class="step-num">STEP 1</div>
+          <div class="step-name">数据获取</div>
+          <div class="step-file">fetch_data.py</div>
+        </div>
+        <div class="pipe-step">
+          <div class="step-num">STEP 2</div>
+          <div class="step-name">因子工程</div>
+          <div class="step-file">features.py</div>
+        </div>
+        <div class="pipe-step">
+          <div class="step-num">STEP 3</div>
+          <div class="step-name">模型训练</div>
+          <div class="step-file">train.py</div>
+        </div>
+        <div class="pipe-step">
+          <div class="step-num">STEP 4</div>
+          <div class="step-name">推理 + SHAP</div>
+          <div class="step-file">inference.py</div>
+        </div>
+        <div class="pipe-step">
+          <div class="step-num">STEP 5</div>
+          <div class="step-name">回测评估</div>
+          <div class="step-file">backtest.py</div>
+        </div>
+      </div>
+
+      <!-- Factor table -->
+      <div style="margin-top: 20px;">
+        <div style="font-size: 11px; color: #4ADE80; font-weight: 600; letter-spacing: 2px; margin-bottom: 8px;">7-FACTOR FRAMEWORK</div>
+        <div class="factor-row header">
+          <div>因子ID</div><div>名称</div><div>数据源</div><div>计算方法</div><div style="text-align:right">OOS IC</div>
+        </div>
+        <div class="factor-row"><div class="factor-id">F1</div><div>美元指数 DXY</div><div>FRED DTWEXBGS</div><div>252d Rolling Z</div><div class="factor-ic ic-pos">+0.063</div></div>
+        <div class="factor-row"><div class="factor-id">F3</div><div>TIPS 10Y 实际利率</div><div>FRED DFII10</div><div>252d Rolling Z</div><div class="factor-ic ic-pos">+0.322</div></div>
+        <div class="factor-row"><div class="factor-id">F4</div><div>通胀预期 BEI</div><div>FRED T10YIE</div><div>252d Rolling Z</div><div class="factor-ic ic-neg">-0.518</div></div>
+        <div class="factor-row"><div class="factor-id">F5</div><div>地缘政治风险 GPR</div><div>FRED GEPUCURRENT</div><div>252d Rolling Z</div><div class="factor-ic ic-pos">+0.312</div></div>
+        <div class="factor-row"><div class="factor-id">F6</div><div>黄金波动率 GVZ</div><div>Yahoo ^GVZ</div><div>252d Rolling Z</div><div class="factor-ic ic-neg">-0.488</div></div>
+        <div class="factor-row"><div class="factor-id">F8</div><div>ETF 资金流</div><div>Stooq GLD+IAU</div><div>AUM 变化率 Z</div><div class="factor-ic ic-neg">-0.052</div></div>
+        <div class="factor-row"><div class="factor-id">F9</div><div>矿业股/金价比</div><div>Stooq GDX/XAUUSD</div><div>均值回归 Z</div><div class="factor-ic ic-pos">+0.222</div></div>
+      </div>
+
+      <!-- Outputs -->
+      <div style="margin-top: 20px;">
+        <div style="font-size: 11px; color: #4ADE80; font-weight: 600; letter-spacing: 2px; margin-bottom: 8px;">OUTPUT → 9 JSON FILES</div>
+        <div class="output-grid">
+          <div class="output-item"><div class="dot" style="background:#4ADE80"></div><div class="o-name">signal.json</div><div class="o-desc">信号+因子</div></div>
+          <div class="output-item"><div class="dot" style="background:#60A5FA"></div><div class="o-name">shap_values.json</div><div class="o-desc">SHAP归因</div></div>
+          <div class="output-item"><div class="dot" style="background:#F472B6"></div><div class="o-name">regime.json</div><div class="o-desc">Regime热力</div></div>
+          <div class="output-item"><div class="dot" style="background:#A78BFA"></div><div class="o-name">correlation.json</div><div class="o-desc">相关性矩阵</div></div>
+          <div class="output-item"><div class="dot" style="background:#FB923C"></div><div class="o-name">ic_history.json</div><div class="o-desc">IC追踪</div></div>
+          <div class="output-item"><div class="dot" style="background:#FACC15"></div><div class="o-name">model_health.json</div><div class="o-desc">模型健康</div></div>
+          <div class="output-item"><div class="dot" style="background:#2DD4BF"></div><div class="o-name">equity_curve.json</div><div class="o-desc">净值曲线</div></div>
+          <div class="output-item"><div class="dot" style="background:#34D399"></div><div class="o-name">account.json</div><div class="o-desc">回测统计</div></div>
+          <div class="output-item"><div class="dot" style="background:#818CF8"></div><div class="o-name">positions.json</div><div class="o-desc">持仓记录</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Arrow -->
+  <div class="connector">
+    <div class="c-line"></div>
+    <div class="c-arrow">▼</div>
+    <div class="c-label">readPipelineJson() · fs.readFile</div>
+    <div class="c-line"></div>
+  </div>
+
+  <!-- ═══════════ LAYER 2: API ═══════════ -->
+  <div class="layer layer-api">
+    <div class="layer-header">
+      <span class="tag">L2</span>
+      <span class="name">API 网关层 Next.js API Routes</span>
+      <span class="desc">11 REST Endpoints · Vercel Edge</span>
+    </div>
+    <div class="layer-body">
+      <div class="api-grid">
+        <div class="api-item">
+          <div class="a-path">/gold-price</div>
+          <div class="a-src">Yahoo→Stooq→Pipeline</div>
+          <div><span class="a-badge mix">4层降级</span></div>
+        </div>
+        <div class="api-item">
+          <div class="a-path">/signal</div>
+          <div class="a-src">signal.json</div>
+          <div><span class="a-badge pipe">Pipeline</span></div>
+        </div>
+        <div class="api-item">
+          <div class="a-path">/shap</div>
+          <div class="a-src">shap_values.json</div>
+          <div><span class="a-badge pipe">Pipeline</span></div>
+        </div>
+        <div class="api-item">
+          <div class="a-path">/factors</div>
+          <div class="a-src">FRED+Yahoo+Pipeline</div>
+          <div><span class="a-badge mix">混合源</span></div>
+        </div>
+        <div class="api-item">
+          <div class="a-path">/regime</div>
+          <div class="a-src">regime.json</div>
+          <div><span class="a-badge pipe">Pipeline</span></div>
+        </div>
+        <div class="api-item">
+          <div class="a-path">/correlation</div>
+          <div class="a-src">correlation.json</div>
+          <div><span class="a-badge pipe">Pipeline</span></div>
+        </div>
+        <div class="api-item">
+          <div class="a-path">/ic-history</div>
+          <div class="a-src">ic_history.json</div>
+          <div><span class="a-badge pipe">Pipeline</span></div>
+        </div>
+        <div class="api-item">
+          <div class="a-path">/model-health</div>
+          <div class="a-src">model_health.json</div>
+          <div><span class="a-badge pipe">Pipeline</span></div>
+        </div>
+        <div class="api-item">
+          <div class="a-path">/equity-curve</div>
+          <div class="a-src">equity_curve.json</div>
+          <div><span class="a-badge pipe">Pipeline</span></div>
+        </div>
+        <div class="api-item">
+          <div class="a-path">/account</div>
+          <div class="a-src">account.json</div>
+          <div><span class="a-badge pipe">Pipeline</span></div>
+        </div>
+        <div class="api-item">
+          <div class="a-path">/positions</div>
+          <div class="a-src">positions.json</div>
+          <div><span class="a-badge pipe">Pipeline</span></div>
+        </div>
+        <div class="api-item" style="border-style: dashed; opacity: 0.5;">
+          <div class="a-path" style="color: #64748B;">降级策略</div>
+          <div class="a-src">每个端点有 fallback</div>
+          <div><span class="a-badge" style="background:#ffffff10; color:#94A3B8;">兜底</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Arrow split -->
+  <div style="display: flex; justify-content: center; gap: 300px; padding: 8px 0;">
+    <div class="connector">
+      <div class="c-line"></div>
+      <div class="c-arrow">▼</div>
+      <div class="c-label">SWR Hooks (60s/3600s)</div>
+      <div class="c-line"></div>
+    </div>
+    <div class="connector">
+      <div class="c-line"></div>
+      <div class="c-arrow">▼</div>
+      <div class="c-label">wx.request (HTTP GET)</div>
+      <div class="c-line"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════ LAYER 3: CLIENTS ═══════════ -->
+  <div class="two-col">
+    <!-- Web Dashboard -->
+    <div class="layer layer-fe">
+      <div class="layer-header">
+        <span class="tag">L3A</span>
+        <span class="name">Web 仪表板</span>
+        <span class="desc">Next.js 14 · React · Recharts · Tailwind</span>
+      </div>
+      <div class="layer-body">
+        <!-- TopBar -->
+        <div class="fe-topbar">
+          <span class="t-logo">Au Gold Monitor</span>
+          <span class="t-price">$4,451.50</span>
+          <span class="t-factors">F1 F3 F4 F5 F6 F8 F9 · 7 因子卡片</span>
+        </div>
+        <!-- Main -->
+        <div class="fe-main">
+          <div class="fe-left">
+            <div style="font-size: 11px; color: #CE93D8; font-weight: 600; margin-bottom: 8px;">LeftPanel · 5 标签页</div>
+            <div>
+              <span class="fe-tab active">SHAP 归因</span>
+              <span class="fe-tab inactive">IC 追踪</span>
+              <span class="fe-tab inactive">Regime</span>
+              <span class="fe-tab inactive">相关性</span>
+              <span class="fe-tab inactive">净值曲线</span>
+            </div>
+            <div style="margin-top: 10px;">
+              <div class="fe-comp"><span>ShapWaterfall</span> · 因子贡献瀑布图</div>
+              <div class="fe-comp"><span>ICTracking</span> · 滚动IC折线图</div>
+              <div class="fe-comp"><span>RegimeHeatmap</span> · 12月×5因子热力图</div>
+              <div class="fe-comp"><span>CorrelationMatrix</span> · 7×7相关性矩阵</div>
+              <div class="fe-comp"><span>EquityCurveChart</span> · 策略 vs GLD基准</div>
+            </div>
+          </div>
+          <div class="fe-right">
+            <div style="font-size: 11px; color: #CE93D8; font-weight: 600; margin-bottom: 8px;">RightSidebar</div>
+            <div class="fe-comp"><span>SignalCard</span> · 信号+置信度+Regime</div>
+            <div class="fe-comp"><span>ShapWaterfall</span> · 移动端归因</div>
+            <div class="fe-comp"><span>PositionCard</span> · 持仓+交易记录</div>
+            <div class="fe-comp"><span>AccountCard</span> · 净值+风控+Sharpe</div>
+          </div>
+        </div>
+        <!-- Status -->
+        <div class="fe-status">
+          <span style="width:8px;height:8px;border-radius:50%;background:#4ADE80"></span>
+          <span style="font-size:11px;color:#94A3B8">StatusBar · 模型状态 + OOS IC + 警告 + 时间戳</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Miniprogram -->
+    <div class="layer layer-mini">
+      <div class="layer-header">
+        <span class="tag">L3B</span>
+        <span class="name">微信小程序</span>
+        <span class="desc">WXML · WXSS · JS</span>
+      </div>
+      <div class="layer-body">
+        <div style="font-size: 11px; color: #2DD4BF; font-weight: 600; margin-bottom: 12px;">
+          API Base: gold-monitor-delta.vercel.app
+        </div>
+        <div class="mini-pages">
+          <div class="mini-page">
+            <div class="m-icon">🏠</div>
+            <div class="m-name">首页</div>
+            <div class="m-path">pages/index/</div>
+            <div class="m-apis">/gold-price · /signal · /factors</div>
+          </div>
+          <div class="mini-page">
+            <div class="m-icon">📊</div>
+            <div class="m-name">因子</div>
+            <div class="m-path">pages/factors/</div>
+            <div class="m-apis">/factors · /shap</div>
+          </div>
+          <div class="mini-page">
+            <div class="m-icon">💰</div>
+            <div class="m-name">账户</div>
+            <div class="m-path">pages/account/</div>
+            <div class="m-apis">/equity-curve · /positions</div>
+          </div>
+          <div class="mini-page">
+            <div class="m-icon">📈</div>
+            <div class="m-name">回测</div>
+            <div class="m-path">pages/backtest/</div>
+            <div class="m-apis">/ic-history · /equity-curve</div>
+          </div>
+        </div>
+        <div style="margin-top: 16px; padding: 12px; background: #ffffff06; border-radius: 8px;">
+          <div style="font-size: 11px; color: #64748B; margin-bottom: 6px;">数据链路</div>
+          <div style="font-size: 12px; color: #2DD4BF; font-family: Menlo, monospace; text-align: center;">
+            WeChat → <span style="color:#FB923C">Vercel CDN</span> → <span style="color:#4ADE80">Pipeline JSON</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ TECH STACK & RUNTIME ═══════════ -->
+  <div style="margin-top: 48px;">
+    <div class="section-title" style="text-align: center;">Technology Stack & Model Config</div>
+    <div style="display: flex; gap: 12px; margin-top: 16px;">
+      <div class="node" style="text-align: center; border-color: #2E7D3030;">
+        <div style="font-size: 11px; color: #4ADE80; font-weight: 600; margin-bottom: 8px;">Pipeline</div>
+        <div style="font-size: 12px; color: #94A3B8; line-height: 1.8;">
+          Python 3.9+<br>XGBoost 2.x<br>SHAP TreeExplainer<br>Pandas · NumPy · SciPy<br>fredapi
+        </div>
+      </div>
+      <div class="node" style="text-align: center; border-color: #6A1B9A30;">
+        <div style="font-size: 11px; color: #CE93D8; font-weight: 600; margin-bottom: 8px;">Web Frontend</div>
+        <div style="font-size: 12px; color: #94A3B8; line-height: 1.8;">
+          Next.js 14 (App Router)<br>React 18 + SWR<br>Recharts 2.x<br>Tailwind CSS<br>Vercel Deploy
+        </div>
+      </div>
+      <div class="node" style="text-align: center; border-color: #00695C30;">
+        <div style="font-size: 11px; color: #2DD4BF; font-weight: 600; margin-bottom: 8px;">Miniprogram</div>
+        <div style="font-size: 12px; color: #94A3B8; line-height: 1.8;">
+          WXML + WXSS<br>JavaScript<br>wx.request (HTTP)<br>wx-charts<br>微信开发者工具
+        </div>
+      </div>
+      <div class="node" style="text-align: center; border-color: #B8860B30;">
+        <div style="font-size: 11px; color: #B8860B; font-weight: 600; margin-bottom: 8px;">XGBoost Config</div>
+        <div style="font-size: 12px; color: #94A3B8; line-height: 1.8; font-family: Menlo, monospace;">
+          max_depth: 3<br>n_estimators: 300<br>learning_rate: 0.03<br>reg_lambda: 5.0<br>reg_alpha: 1.0
+        </div>
+      </div>
+      <div class="node" style="text-align: center; border-color: #E6510030;">
+        <div style="font-size: 11px; color: #FB923C; font-weight: 600; margin-bottom: 8px;">Risk Management</div>
+        <div style="font-size: 12px; color: #94A3B8; line-height: 1.8; font-family: Menlo, monospace;">
+          ATR Stop: 2.5×<br>Risk Budget: 2%<br>Forward: 20 days<br>3-Tier Drawdown<br>Regime Sizing
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ LEGEND ═══════════ -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#1565C0"></div>外部数据源</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#2E7D32"></div>Python 管道</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#E65100"></div>API 网关</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#6A1B9A"></div>Web 仪表板</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#00695C"></div>微信小程序</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#B8860B"></div>数据流方向</div>
+  </div>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <div class="footer">
+    <p>Gold Monitor System Architecture &nbsp;·&nbsp; v2.0 &nbsp;·&nbsp; 2026-03 &nbsp;·&nbsp; End-to-end quantitative trading intelligence for gold markets</p>
+  </div>
+
+</div>
+</body>
+</html>

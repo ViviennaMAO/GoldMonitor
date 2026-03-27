@@ -15,6 +15,7 @@ from config import (
     REGIME_Z_HIGH, REGIME_Z_LOW,
 )
 from features import get_factor_columns
+from regime_v2 import detect_regime_v2
 
 
 class NaNSafeEncoder(json.JSONEncoder):
@@ -275,8 +276,8 @@ def run_inference(features_df: pd.DataFrame) -> dict:
     risk_amount = account_equity * RISK_BUDGET
     position_size = risk_amount / stop_distance if stop_distance > 0 else 0
 
-    # Apply regime multiplier
-    regime_info = detect_regime(dict(latest[factor_cols]))
+    # Apply regime multiplier (v2: three-layer detection)
+    regime_info = detect_regime_v2(valid)
     position_size *= regime_info["multiplier"]
 
     # ── Signal Output ─────────────────────────────────────────────────────────

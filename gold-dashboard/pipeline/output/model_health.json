@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-03-25T13:56:57.350081",
-  "n_factors": 7,
+  "timestamp": "2026-03-27T23:18:38.465507",
+  "n_factors": 13,
   "factors": [
     "F1_DXY",
     "F3_TIPS10Y",
@@ -8,26 +8,38 @@
     "F5_GPR",
     "F6_GVZ",
     "F8_ETFFlow",
-    "F9_GDXRatio"
+    "F9_GDXRatio",
+    "F10_TIPSBEISpread",
+    "F11_DXYMomentum",
+    "F12_DXYDownGPRUp",
+    "F13_GoldGDXDivergence",
+    "F14_GVZMomentum",
+    "F15_ETFFlowAccel"
   ],
   "train_end": "2025-09-30",
-  "oos_samples": 164,
+  "oos_samples": 103,
   "status": "healthy",
   "warnings": [
-    "High correlation pairs: F1_DXY×F9_GDXRatio: -0.748"
+    "High correlation pairs: F3_TIPS10Y×F10_TIPSBEISpread: 0.875, F5_GPR×F12_DXYDownGPRUp: 1.000, F9_GDXRatio×F13_GoldGDXDivergence: -0.827"
   ],
-  "oos_ic": -0.1036,
-  "recent_60d_ic": 0.5143,
-  "ic_first_half": -0.487,
-  "ic_second_half": 0.2792,
+  "oos_ic": 0.1975,
+  "recent_60d_ic": 0.3974,
+  "ic_first_half": 0.309,
+  "ic_second_half": 0.4106,
   "factor_ics": {
-    "F1_DXY": -0.1779,
-    "F3_TIPS10Y": -0.0304,
-    "F4_BEI": -0.5425,
-    "F5_GPR": 0.1598,
-    "F6_GVZ": -0.5261,
-    "F8_ETFFlow": -0.0477,
-    "F9_GDXRatio": 0.3789
+    "F1_DXY": 0.3603,
+    "F3_TIPS10Y": 0.5768,
+    "F4_BEI": -0.3672,
+    "F5_GPR": -0.0661,
+    "F6_GVZ": -0.5024,
+    "F8_ETFFlow": -0.0259,
+    "F9_GDXRatio": -0.0879,
+    "F10_TIPSBEISpread": 0.7289,
+    "F11_DXYMomentum": -0.1905,
+    "F12_DXYDownGPRUp": -0.0666,
+    "F13_GoldGDXDivergence": -0.2472,
+    "F14_GVZMomentum": -0.1751,
+    "F15_ETFFlowAccel": 0.0458
   },
-  "high_corr_pairs": 1
+  "high_corr_pairs": 3
 }

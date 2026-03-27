@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GoldMonitor Regime 系统：设计回顾与方法论评述</title>
+<style>
+  :root {
+    --gold: #B8960C;
+    --gold-light: #F5E27A;
+    --dark: #1a1a2e;
+    --surface: #16213e;
+    --surface2: #0f3460;
+    --text: #e0e0e0;
+    --muted: #9ca3af;
+    --accent: #e2b96f;
+    --border: rgba(184,150,12,0.25);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Georgia', 'Noto Serif SC', serif;
+    font-size: 16px;
+    line-height: 1.85;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+  /* ── HEADER ── */
+  .paper-header {
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 36px;
+    margin-bottom: 48px;
+    text-align: center;
+  }
+  .paper-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-size: 26px;
+    color: var(--accent);
+    line-height: 1.4;
+    margin-bottom: 10px;
+    font-weight: normal;
+  }
+  .subtitle {
+    font-size: 14px;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 20px;
+  }
+  .meta {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  /* ── ABSTRACT ── */
+  .abstract-box {
+    background: var(--surface);
+    border-left: 3px solid var(--gold);
+    padding: 24px 28px;
+    margin-bottom: 48px;
+    border-radius: 0 8px 8px 0;
+  }
+  .abstract-box .label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .abstract-box p {
+    font-size: 15px;
+    color: #c9c9c9;
+    line-height: 1.9;
+  }
+  /* ── SECTIONS ── */
+  h2 {
+    font-size: 20px;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+    margin: 52px 0 24px;
+    font-weight: normal;
+  }
+  h3 {
+    font-size: 16px;
+    color: var(--gold-light);
+    margin: 32px 0 14px;
+    font-weight: bold;
+  }
+  h4 {
+    font-size: 14px;
+    color: var(--accent);
+    margin: 20px 0 10px;
+    font-style: italic;
+  }
+  p { margin-bottom: 16px; color: #d4d4d4; }
+  /* ── CONCEPT BOX ── */
+  .concept {
+    background: rgba(15, 52, 96, 0.6);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .concept-title {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .concept p { font-size: 14px; margin-bottom: 10px; }
+  .concept p:last-child { margin-bottom: 0; }
+  /* ── TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 14px;
+  }
+  thead tr {
+    background: var(--surface2);
+    border-bottom: 2px solid var(--border);
+  }
+  th {
+    padding: 10px 14px;
+    text-align: left;
+    color: var(--accent);
+    font-weight: normal;
+    letter-spacing: 0.5px;
+  }
+  td { padding: 9px 14px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  tr:hover td { background: rgba(184,150,12,0.05); }
+  /* ── CODE / FORMULA ── */
+  .formula {
+    background: #0d0d1a;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: var(--gold-light);
+    margin: 16px 0;
+    overflow-x: auto;
+  }
+  /* ── FIGURE ── */
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px 24px;
+    margin: 28px 0;
+    text-align: center;
+    font-size: 13px;
+    font-family: monospace;
+    color: #b0b0c0;
+    line-height: 1.8;
+  }
+  .diagram .caption {
+    font-family: Georgia, serif;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 14px;
+    font-style: italic;
+  }
+  /* ── HIGHLIGHT ── */
+  .highlight { color: var(--accent); font-weight: bold; }
+  .warn { color: #f87171; }
+  .ok { color: #4ade80; }
+  /* ── FOOTNOTE ── */
+  .footnote {
+    font-size: 13px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    margin-top: 60px;
+    padding-top: 20px;
+    line-height: 1.7;
+  }
+  /* ── TOC ── */
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin-bottom: 48px;
+  }
+  .toc-title {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .toc ol { padding-left: 20px; }
+  .toc li { color: var(--muted); font-size: 14px; margin: 6px 0; }
+  .toc li span { color: #c4c4c4; }
+  ul, ol { padding-left: 24px; margin-bottom: 16px; }
+  li { color: #d4d4d4; margin-bottom: 6px; font-size: 15px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="paper-header">
+  <div class="paper-label">Technical Review Paper · GoldMonitor Project · 2026</div>
+  <h1>GoldMonitor Regime 系统：<br>设计回顾与方法论评述</h1>
+  <div class="subtitle">
+    从数据治理、因子工程、模型训练、回测到评估体系的全链路分析
+  </div>
+  <div class="meta">GoldMonitor Research · 2026-03-27 · Internal Reference Document</div>
+</div>
+
+<!-- ABSTRACT -->
+<div class="abstract-box">
+  <div class="label">摘要 Abstract</div>
+  <p>
+    本文系统回顾 GoldMonitor 黄金量化交易仪表盘的 Regime（市场状态）检测模块的设计逻辑与演化历程。
+    系统以 XGBoost 预测 20 日黄金远期收益为核心信号，以三层 Regime 乘数体系动态调节仓位规模。
+    三层架构分别对应：宏观象限识别（Bridgewater Growth×Inflation 四象限 + 美联储周期）、
+    市场微观结构识别（隐马尔可夫模型 + 流动性−波动率矩阵），
+    以及事件叠加层（2 年期国债冲击归因 + 变点检测 + 美元微笑理论）。
+    本文从数据治理的缺失值处理策略、因子工程的多共线性消除与逻辑因子设计、
+    Purged Time-Series Cross-Validation 的必要性、回测的风险管理三档设计，
+    到 Granger 因果检验与压力测试体系，逐一展开分析，
+    并指出现有系统的内部不一致性与若干改进方向。
+  </p>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-title">目录 Contents</div>
+  <ol>
+    <li><span>引言：为什么 Regime 是黄金量化的核心问题</span></li>
+    <li><span>数据治理：数据源、频率错位与前向填充策略</span></li>
+    <li><span>因子工程：从基础因子到逻辑因子</span></li>
+    <li><span>Regime 三层架构详解</span></li>
+    <li><span>模型训练：XGBoost、正则化与时序 CV</span></li>
+    <li><span>回测框架：仿真逻辑与风险管理设计</span></li>
+    <li><span>模型评估体系：IC、Granger 与压力测试</span></li>
+    <li><span>现有问题与改进建议</span></li>
+    <li><span>结论</span></li>
+  </ol>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2>1. 引言：为什么 Regime 是黄金量化的核心问题</h2>
+
+<p>
+  黄金是一种在宏观叙事驱动下高度非线性的资产。与股票不同，黄金的定价不依附于未来现金流折现，
+  而是漂浮于实际利率、美元强弱、通胀预期和避险情绪的多维向量场中。
+  这意味着，<span class="highlight">一个在某一宏观背景下有效的线性预测因子，可能在另一背景下完全失效甚至反转</span>。
+</p>
+<p>
+  典型案例如下：在 2022 年美联储激进加息周期中，TIPS 收益率快速上行，黄金价格受实际利率压制跌幅显著；
+  而在 2023 年 SVB 银行危机期间，2 年期国债同样大幅波动，但黄金却因流动性恐慌而上涨。
+  两次事件中利率的"表象"相似，但"因"完全不同——前者是市场对 Fed 政策路径的预期重定价，
+  后者是债券市场本身的脆弱性爆发。若模型无法区分这两种 regime，信号的方向会出现系统性错误。
+</p>
+<p>
+  GoldMonitor 的 Regime 系统正是为解决这一问题而设计：
+  它不替代 XGBoost 的预测，而是作为一个动态乘数 <span class="highlight">multiplier ∈ [0.1, 1.5]</span>，
+  在不同宏观和市场状态下调整最终仓位规模，从而在模型信号与市场情景之间引入一层"现实锚定"。
+</p>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2>2. 数据治理</h2>
+
+<h3>2.1 数据源架构</h3>
+<p>
+  系统采用三条独立数据线并行拉取后合并的架构：
+</p>
+
+<table>
+  <thead>
+    <tr><th>数据线</th><th>数据类型</th><th>来源</th><th>频率</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>FRED 宏观数据</td><td>DXY、TIPS、BEI、GPR、DGS2</td><td>St. Louis Fed REST API</td><td>周/月度，不规则</td></tr>
+    <tr><td>Stooq 价格数据</td><td>XAUUSD、GLD、IAU、GDX、GDXJ</td><td>Stooq CSV 接口</td><td>日度</td></tr>
+    <tr><td>Yahoo 波动率数据</td><td>GVZ（黄金波动率）、OVX</td><td>Yahoo Finance v8 API</td><td>日度</td></tr>
+  </tbody>
+</table>
+
+<p>
+  三线数据在日期索引上执行外连接（outer join），以 <code>XAUUSD_close</code> 是否为 NaN 作为行锚点，
+  删除黄金价格缺失的所有行。这一设计确保：<span class="highlight">宏观数据的稀疏性不会导致价格行情的丢失</span>。
+</p>
+
+<h3>2.2 频率错位与前向填充策略</h3>
+
+<div class="concept">
+  <div class="concept-title">核心概念：前向填充（Forward Fill）</div>
+  <p>
+    FRED 的宏观序列（如 TIPS 收益率、BEI 通胀预期）以周度甚至月度频率更新，
+    而黄金价格是日度的。将低频宏观数据与高频价格对齐时，最常见的处理方式是
+    <strong>前向填充（ffill）</strong>：对于没有新观测值的日期，沿用最后一个已知值。
+  </p>
+  <p>
+    前向填充隐含的假设是：<em>在下一次公布之前，市场对该宏观变量的定价不变</em>。
+    对于缓慢变动的变量（如通胀预期、实际收益率），这个假设在多数情况下合理。
+    但对于快速变化的市场隐含变量，前向填充会引入<strong>陈旧性偏差（staleness bias）</strong>，
+    即因子的时间序列在发布间隔内被人为"拉平"，导致 Z-Score 计算偏低。
+  </p>
+</div>
+
+<p>
+  GoldMonitor 对 DXY、TIPS_10Y、BEI、GPR、DGS2 五个 FRED 序列统一执行 <code>.ffill()</code>，
+  这在设计上是合理的，但其代价是：这些因子的滚动 Z-Score 在数据稀疏的周末或节假日后
+  第一个交易日可能发生跳跃——这并不是市场真实变化，而是填充的"解冻"效应。
+  <span class="warn">建议未来引入"数据更新日"标志位，在 Z-Score 计算中对陈旧数据降权。</span>
+</p>
+
+<h3>2.3 数据起始锚与训练/测试切割</h3>
+<p>
+  所有历史数据从 2015-01-01 起算（<code>DATA_START</code>），覆盖约 10 年的市场周期，
+  包含 2018 年贸易战、2020 年 COVID、2022 年 Fed 激进加息、2023 年 SVB 危机和 2024 年黄金突破行情。
+  训练集切割点为 2025-09-30（<code>TRAIN_END</code>），之后所有数据严格作为样本外（OOS）使用，
+  不参与任何参数估计。这一设计避免了量化研究中最常见的<strong>前视偏差（look-ahead bias）</strong>。
+</p>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2>3. 因子工程</h2>
+
+<h3>3.1 滚动 Z-Score 标准化</h3>
+
+<div class="concept">
+  <div class="concept-title">核心概念：滚动 Z-Score</div>
+  <p>
+    将原始时间序列 <em>x(t)</em> 转换为相对当前窗口均值和标准差的标准化偏离：
+  </p>
+  <p style="text-align:center; font-style:italic;">
+    z(t) = [x(t) − μ(t, W)] / σ(t, W)，W = 252 交易日
+  </p>
+  <p>
+    选择 252 日窗口（约 1 个交易年）的逻辑在于：它足够长以捕捉完整年内季节性，
+    又足够短以适应结构性变化（如 Fed 政策转向后的利率中枢漂移）。
+    Z-Score 经 clip(−5, 5) 处理以压制极端值对模型的影响，并以 <code>min_periods=20</code>
+    保证冷启动阶段有足够样本。
+  </p>
+</div>
+
+<p>
+  Z-Score 标准化在此承担双重功能：第一，为 XGBoost 提供无量纲的可比因子；
+  第二，为 Regime 规则逻辑提供统一的阈值语言（如"Z > 1.0 = 极端"、"Z > 0.3 = 偏强"）。
+</p>
+
+<h3>3.2 七个基础因子（Base Factors）</h3>
+
+<table>
+  <thead>
+    <tr><th>因子代码</th><th>来源序列</th><th>经济逻辑</th><th>OOS IC</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>F1_DXY</td><td>DTWEXBGS（贸易加权美元）</td><td>美元强则黄金弱：美元是黄金的竞争性储值资产</td><td>−0.18</td></tr>
+    <tr><td>F3_TIPS10Y</td><td>DFII10（10Y TIPS 实际收益率）</td><td>机会成本：实际利率↑ = 持有无息黄金的成本↑</td><td>+0.32</td></tr>
+    <tr><td>F4_BEI</td><td>T10YIE（10Y 盈亏平衡通胀）</td><td>通胀对冲需求：BEI↑ = 市场预期通胀↑ = 黄金需求↑</td><td>+0.22</td></tr>
+    <tr><td>F5_GPR</td><td>GEPUCURRENT（地缘政治风险）</td><td>避险需求：地缘风险↑ = 避险流入黄金</td><td>+0.11</td></tr>
+    <tr><td>F6_GVZ</td><td>^GVZ（黄金波动率指数）</td><td>波动率扩张先于趋势转折（类 VIX 效应）</td><td>+0.09</td></tr>
+    <tr><td>F8_ETFFlow</td><td>GLD+IAU 成交量 5D 变化率</td><td>机构资金流向：ETF 增量买入 = 趋势确认</td><td>+0.14</td></tr>
+    <tr><td>F9_GDXRatio</td><td>GDX / XAUUSD</td><td>矿商比：矿商相对黄金的领先/滞后关系</td><td>+0.08</td></tr>
+  </tbody>
+</table>
+
+<p>
+  值得注意的是，<span class="highlight">F3_TIPS10Y 的 OOS IC 高达 +0.32</span>，
+  是所有因子中信号最强的。这反映黄金定价的本质：当市场在实际利率与黄金之间做跨资产比较时，
+  TIPS 收益率是最直接的机会成本锚点。
+</p>
+
+<h3>3.3 六个逻辑因子（Logical Factors）</h3>
+<p>
+  逻辑因子并非直接观测量，而是通过算术组合捕捉基础因子之间的非线性交互效应：
+</p>
+
+<table>
+  <thead>
+    <tr><th>因子代码</th><th>构造方式</th><th>捕捉的市场现象</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>F10_TIPSBEISpread</td><td>Z(TIPS − BEI)</td><td>实际利率与通胀预期的相对变化：扩大 = 实际利率压力加大</td></tr>
+    <tr><td>F11_DXYMomentum</td><td>Z(DXY 20日变化率)</td><td>美元趋势加速度，捕捉趋势延续性而非水平</td></tr>
+    <tr><td>F12_DXYDownGPRUp</td><td>Z((−F1_DXY) × F5_GPR.clip(0))</td><td>交互项：美元弱 AND 地缘高 = 黄金最强顺风</td></tr>
+    <tr><td>F13_GoldGDXDivergence</td><td>Z(XAUUSD) − Z(GDX)</td><td>黄金与矿商的背离：黄金领涨矿商 = 后续均值回归</td></tr>
+    <tr><td>F14_GVZMomentum</td><td>Z(GVZ 10日变化率)</td><td>波动率加速度：regime 切换预警信号</td></tr>
+    <tr><td>F15_ETFFlowAccel</td><td>Z(5日流速 − 20日流速)</td><td>机构资金流入加速度：短期 vs 长期流速差</td></tr>
+  </tbody>
+</table>
+
+<div class="concept">
+  <div class="concept-title">核心概念：交互因子（Interaction Term）</div>
+  <p>
+    F12_DXYDownGPRUp = Z[(−F1_DXY) × F5_GPR.clip(0)] 是一个乘法交互项。
+    其逻辑是：当美元弱势（−F1_DXY > 0）且地缘政治风险高（GPR > 0）同时成立时，
+    黄金面临最强的双重顺风。单独的 DXY 弱或单独的 GPR 高信号较弱，
+    但两者同时出现时，黄金的避险溢价和计价效应叠加，信号显著增强。
+    XGBoost 本可以通过树的分裂学习这种交互，但显式构造交互项有助于<strong>稳定性</strong>——
+    减少模型需要"发现"此规律所需的样本量。
+  </p>
+</div>
+
+<h3>3.4 因子精简历史：F2 的移除</h3>
+<p>
+  系统早期版本包含联邦基金利率相关的三个因子（F2_FedFunds、F2b_RateMomentum、F2c_RateExpect）。
+  在 "P1" 重构中被全部移除，原因是与 F3_TIPS10Y 存在高度多重共线性
+  （Spearman |r| > 0.7，已超过多重共线性阈值）。
+</p>
+
+<div class="concept">
+  <div class="concept-title">核心概念：多重共线性（Multicollinearity）</div>
+  <p>
+    当两个或多个因子之间高度相关时，XGBoost 在分配特征重要性时会产生"权重稀释"问题：
+    两个相关因子各获得部分权重，但它们本质上携带相同信息。
+    更危险的是，其中一个因子可能在训练集中碰巧与目标稍强相关而获得高权重，
+    在 OOS 中却因为这个微小差异反而表现更差。
+  </p>
+  <p>
+    系统通过 Granger 分析中的多重共线性检查（|Spearman r| > 0.7 触发 flag）持续监控，
+    并在 <code>model_health.json</code> 中报告。
+  </p>
+</div>
+
+<h3>3.5 Regime 专用辅助特征（不进入 XGBoost）</h3>
+<p>
+  除 13 个模型因子外，<code>build_features()</code> 还计算 8 个专用于 Regime 逻辑的辅助特征：
+</p>
+<ul>
+  <li><strong>yield_curve / yield_curve_z</strong>：10Y 名义收益率 (TIPS+BEI) 减 2Y，收益率曲线斜率</li>
+  <li><strong>spread_2y_tips / _z / _mom</strong>：2Y 名义利率减 10Y 实际利率，衡量短端利率预期强度</li>
+  <li><strong>dxy_atr_ratio</strong>：5日平均绝对变动 / 20日平均绝对变动，DXY 波动收缩信号</li>
+  <li><strong>dxy_efficiency</strong>：Kaufman 效率比，衡量 DXY 方向性强弱</li>
+  <li><strong>move_proxy_z</strong>：0.6 × GVZ_z + 0.4 × GVZ_momentum_z，合成 MOVE 指数替代</li>
+  <li><strong>bei_momentum_20d</strong>：BEI 的 20 日原始变化量（百分点）</li>
+</ul>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2>4. Regime 三层架构详解</h2>
+
+<div class="diagram">
+  ┌─────────────────────────────────────────────────────────────────┐
+  │                    Regime v2 合成乘数流程                         │
+  ├─────────────────────────────────────────────────────────────────┤
+  │                                                                   │
+  │  Layer 1: 宏观象限       mult_L1 ∈ [0.30, 1.40]                 │
+  │  (月度频率)              Bridgewater 四象限 × Fed 周期修正        │
+  │           ×                                                       │
+  │  Layer 2: 市场微观       adj_L2 ∈ [0.50, 1.15]                  │
+  │  (周度频率)              HMM 状态 × 流动性−波动率矩阵             │
+  │           ↓                                                       │
+  │       mult_12 = clip(mult_L1 × adj_L2, 0.3, 1.5)                │
+  │           +                                                       │
+  │  Layer 3: 事件叠加       delta_L3 ∈ [−0.35, +0.25]              │
+  │  (日度频率)              2Y 冲击归因 + 变点检测 + 美元微笑        │
+  │           ↓                                                       │
+  │  final_mult = clip(mult_12 + delta_L3, 0.10, 1.50)              │
+  │                                                                   │
+  └─────────────────────────────────────────────────────────────────┘
+  <div class="caption">图1：三层 Regime 乘数合成架构。L1×L2 乘法体现慢变量的相对重要性，L3 加法体现事件冲击的绝对影响。</div>
+</div>
+
+<p>
+  这一架构的核心设计理念是<span class="highlight">频率分离</span>：
+  宏观象限（L1）对应月度至季度变化，用乘法确保其主导方向；
+  市场微观（L2）对应周度变化，作为 L1 的调制因子；
+  事件冲击（L3）是日度高频信号，用加法叠加以保证单次极端事件能够快速生效，
+  而不会被乘法链中的其他层"稀释"。
+</p>
+
+<h3>4.1 Layer 1：Bridgewater 四象限宏观 Regime</h3>
+
+<div class="concept">
+  <div class="concept-title">核心概念：Bridgewater Growth×Inflation 四象限</div>
+  <p>
+    Bridgewater 在其全天候（All Weather）策略框架中，将宏观环境分解为
+    <strong>经济增长方向</strong>和<strong>通胀方向</strong>两个维度，形成四个象限。
+    不同象限对各类资产（股票、债券、黄金、商品）的超额回报有不同含义。
+    黄金在滞胀（增长↓ + 通胀↑）和过热（增长↑ + 通胀↑）环境中表现最佳，
+    在复苏（增长↑ + 通胀↓）中表现最差。
+  </p>
+</div>
+
+<p>Layer 1 的实现细节：</p>
+
+<table>
+  <thead>
+    <tr><th>维度</th><th>判断来源</th><th>评分规则</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>增长方向</td><td>yield_curve_z, yield_curve_mom_z</td><td>各项 > 0.3 得 +1；< −0.3 得 −1；合计 > 0 = up</td></tr>
+    <tr><td>通胀方向</td><td>F4_BEI (Z), bei_momentum_20d</td><td>BEI_z > 0.3 得 +1；bei_mom > 0.02pp 得 +1；合计 > 0 = up</td></tr>
+    <tr><td>Fed 周期</td><td>raw_DGS2 的 20日变化</td><td>> +0.15pp AND 水平 > 2% = Tightening；< −0.15pp = Easing</td></tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr><th>象限</th><th>增长</th><th>通胀</th><th>基础乘数</th><th>Fed 加成</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><span class="highlight">滞胀 Stagflation</span></td><td>↓</td><td>↑</td><td>1.10</td><td rowspan="4">Easing: +0.15<br>Tightening: −0.15<br>Neutral: 0.0</td></tr>
+    <tr><td>过热 Overheating</td><td>↑</td><td>↑</td><td>1.00</td></tr>
+    <tr><td>通缩 Deflation</td><td>↓</td><td>↓</td><td>0.75</td></tr>
+    <tr><td>复苏 Reflation</td><td>↑</td><td>↓</td><td>0.65</td></tr>
+  </tbody>
+</table>
+
+<h3>4.2 Layer 2：HMM + 流动性−波动率矩阵</h3>
+
+<div class="concept">
+  <div class="concept-title">核心概念：隐马尔可夫模型（Hidden Markov Model, HMM）</div>
+  <p>
+    HMM 假设市场在任意时刻处于若干个"隐藏状态"（如牛市、熊市、震荡）之一，
+    这些状态本身不可直接观测，但会影响可观测的因子序列。
+    模型通过最大似然估计学习每个状态下因子的分布（高斯假设：均值向量 + 协方差矩阵），
+    以及状态之间的转移概率矩阵。
+  </p>
+  <p>
+    在 GoldMonitor 中，HMM 使用 504 天（约 2 个交易年）的 7 个基础因子滑动窗口，
+    拟合三状态高斯 HMM。状态标签由训练期内各状态对应的<strong>平均 20 日黄金远期收益</strong>确定：
+    均值最高的状态标记为 "Bull"，最低为 "Bear"，中间为 "Neutral"。
+    这使得状态标签具有可解释的经济含义，而非纯粹的统计分群。
+  </p>
+</div>
+
+<p>
+  流动性−波动率矩阵（Liquidity-Volatility Matrix）是对 HMM 的补充，
+  捕捉 HMM 难以区分的高频市场结构变化：
+</p>
+
+<table>
+  <thead>
+    <tr><th>波动率状态</th><th>流动性状态</th><th>市场 Regime</th><th>乘数</th><th>含义</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>低 (GVZ_z ≤ 1.0)</td><td>良好 (ETF流入)</td><td>Trending 顺势</td><td>1.05</td><td>信号可信度高，顺势运行</td></tr>
+    <tr><td>高 (GVZ_z > 1.0)</td><td>良好</td><td>Crisis Spike 危机冲击</td><td>0.80</td><td>短期避险买入，不宜加仓</td></tr>
+    <tr><td>低</td><td>差 (ETF流出)</td><td>Grinding 震荡磨损</td><td>0.92</td><td>信号噪声大，适度保守</td></tr>
+    <tr><td>高</td><td>差</td><td><span class="warn">Systemic Risk 系统性风险</span></td><td>0.65</td><td>全面降仓，防御优先</td></tr>
+  </tbody>
+</table>
+
+<p>
+  Layer 2 综合乘数 = <code>clip(HMM 状态调整 × LiqVol 矩阵调整, 0.5, 1.15)</code>，
+  乘法结构确保两个子信号同向时效果叠加（如 HMM=Bull 且 Trending），
+  反向时相互制衡（如 HMM=Bull 但 Systemic Risk）。
+</p>
+
+<h3>4.3 Layer 3：事件叠加层</h3>
+
+<p>Layer 3 由三个相互独立的子模块组成，各模块产生一个加法 delta：</p>
+
+<h4>子模块 A：2 年期国债冲击归因</h4>
+<p>
+  当 2Y 国债收益率 Z-Score 的绝对值超过 1.0 时，触发归因分析。
+  系统区分三种来源，对黄金含义截然不同：
+</p>
+
+<table>
+  <thead>
+    <tr><th>归因类型</th><th>判断条件</th><th>Delta</th><th>黄金含义</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><span class="warn">债市脆弱 Fragility</span></td><td>move_proxy_z > 0.8 OR GVZ_z > 1.0，且 DXY 横盘</td><td><span class="ok">+0.10</span></td><td>流动性危机，黄金获避险溢价</td></tr>
+    <tr><td>通胀重定价 Inflation</td><td>BEI 同向运动 + spread_2y_tips_mom > 0.05 + MOVE 正常</td><td><span class="ok">+0.05</span></td><td>通胀担忧，黄金温和受益</td></tr>
+    <tr><td><span class="warn">利率预期 Expectation</span></td><td>2Y 上行 + 收益率曲线趋平（10Y-2Y 收窄）</td><td>−0.20</td><td>Fed 加息预期，实际利率压制黄金</td></tr>
+  </tbody>
+</table>
+
+<p>
+  DXY 横盘的判断使用双重条件：
+  <code>dxy_efficiency &lt; 0.35（无方向）OR dxy_atr_ratio &lt; 0.75（近期波幅收缩）</code>。
+  OR 逻辑体现两类横盘的不同表现形式：效率比低代表方向性缺失，ATR 比低代表幅度收敛，
+  两者任一满足即认为 DXY 没有形成有效趋势方向。
+</p>
+
+<div class="concept">
+  <div class="concept-title">核心概念：美元微笑理论（Dollar Smile Theory）</div>
+  <p>
+    由 Stephen Jen 提出。理论认为美元走强有两种截然不同的原因：
+    ①<strong>增长驱动型</strong>（Growth USD）：美国经济相对强劲，资本流入，美元升值。
+    此时风险偏好高，黄金等避险资产需求下降。
+    ②<strong>避险驱动型</strong>（Risk-off USD）：全球风险事件爆发，美元作为全球储备货币被抢购。
+    此时黄金也是避险标的，两者可能同涨。
+  </p>
+  <p>
+    传统的"DXY 与黄金负相关"假设只对增长型美元成立。
+    系统通过 <code>GVZ_z &gt; 0.5</code> 作为分类器：
+    若 DXY 强且 GVZ 高，认定为避险型美元（delta: +0.10）；
+    若 DXY 强且 GVZ 低，认定为增长型美元（delta: −0.05）。
+  </p>
+</div>
+
+<h4>子模块 B：变点检测（Change Point Detection）</h4>
+
+<div class="concept">
+  <div class="concept-title">核心概念：PELT 变点检测算法</div>
+  <p>
+    PELT（Pruned Exact Linear Time）是一种用于时间序列的精确变点检测算法，
+    通过最小化带惩罚项的代价函数在序列中定位结构性断裂点：
+  </p>
+  <p style="text-align:center; font-style:italic;">
+    arg min Σ C(y[t1:t2]) + β × K，其中 K 为变点数，β 为惩罚系数
+  </p>
+  <p>
+    在 GoldMonitor 中，对近 60 日黄金对数收益率运行 PELT（RBF 核，penalty=3.0）。
+    若最近变点发生在过去 5 个交易日内，说明市场结构刚刚发生断裂，
+    信号的历史模式可能暂时失效，delta = −0.10（降仓保守处理）。
+  </p>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2>5. 模型训练</h2>
+
+<h3>5.1 目标变量设计</h3>
+
+<div class="formula">target(t) = [XAUUSD_close(t+20) / XAUUSD_close(t) − 1] × 100</div>
+
+<p>
+  预测目标为 20 个交易日（约一个月）的前向百分比收益。选择 20 日而非更短期（如 5 日）
+  是为了平滑短期市场噪声，让宏观因子（通常有 1−3 周的信号传导周期）有充分时间在目标变量中体现。
+  <span class="warn">这也意味着目标序列有 20 日的滚动重叠（overlapping returns），
+  需要专门的 CV 设计来处理。</span>
+</p>
+
+<h3>5.2 Purged Time-Series Cross-Validation</h3>
+
+<div class="concept">
+  <div class="concept-title">核心概念：Purged CV（带净化间隔的时序交叉验证）</div>
+  <p>
+    标准 K-Fold CV 对时间序列不适用，因为未来信息可能"泄漏"到训练集。
+    对于重叠目标变量（如 20 日前向收益），情况更严重：
+    若训练集的某个样本 t 的目标 target(t) = return[t, t+20]，
+    而验证集包含 t+5 的样本，则 target(t+5) = return[t+5, t+25] 与 target(t) 有 15 日重叠——
+    两者共享 return[t+5, t+20]。这会导致 IC 虚高，模型看起来能"预测未来"，
+    实际上是在利用泄漏信息。
+  </p>
+  <p>
+    解决方案是在每个训练−验证切割处设置一个<strong>净化间隔（purge gap）</strong>，
+    等于前向收益的窗口长度（20 日）：训练集末尾与验证集起点之间跳过 20 天。
+    这确保验证集的任何样本的目标都不依赖训练集末尾的价格。
+  </p>
+</div>
+
+<p>
+  系统实现了 <code>PurgedTimeSeriesSplit</code>，在 5 折滚动窗口 CV 中每次跳过 20 日，
+  并在验证集上报告 Spearman IC（按折报告，用于检测 IC 衰减趋势）。
+</p>
+
+<h3>5.3 XGBoost 超参数与正则化策略</h3>
+
+<table>
+  <thead>
+    <tr><th>超参数</th><th>值</th><th>设计意图</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>max_depth</td><td>3</td><td>浅树：限制模型捕捉高阶交互，防止在 ~2500 个样本上过拟合</td></tr>
+    <tr><td>min_child_weight</td><td>30</td><td>叶节点最少 30 个样本：防止在极端市场事件上过拟合</td></tr>
+    <tr><td>reg_alpha (L1)</td><td>1.0</td><td>稀疏化：鼓励不重要因子权重归零，自动做因子选择</td></tr>
+    <tr><td>reg_lambda (L2)</td><td>5.0</td><td>权重收缩：防止少数因子独霸（对应 SHAP 集中度问题）</td></tr>
+    <tr><td>subsample / colsample</td><td>0.7</td><td>随机化：减少对特定市场时期的记忆</td></tr>
+    <tr><td>learning_rate</td><td>0.03</td><td>慢学习率配合 300 棵树：稳定收敛，避免早期过拟合</td></tr>
+  </tbody>
+</table>
+
+<p>
+  重正则化的必要性来自一次历史观察：未加正则化的早期版本中，
+  F3_TIPS10Y 的 SHAP 贡献占比超过 60%，模型实际上退化为单因子预测器。
+  加入 L1+L2 后，SHAP 集中度问题得到缓解（系统有专门的 SHAP 稳定性检查，
+  单因子超过 60% 占比时触发预警）。
+</p>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2>6. 回测框架</h2>
+
+<h3>6.1 仿真逻辑</h3>
+
+<p>
+  回测在 <code>TRAIN_END</code>（2025-09-30）之后的纯 OOS 数据上逐日运行，
+  初始权益 $100,000，模拟真实的止损触发、仓位切换和资金管理。
+</p>
+
+<div class="diagram">
+每日仿真流程：
+
+  ① 检查止损是否触发（多头：价格 ≤ 止损价；空头：价格 ≥ 止损价）
+           ↓
+  ② XGBoost 预测信号 + 分类（Strong Buy / Buy / Neutral / Sell / Strong Sell）
+           ↓
+  ③ v1 规则 Regime 检测 → regime_multiplier
+           ↓
+  ④ 三档回撤风控：
+     回撤 > 15% → regime_mult = 0.0（熔断，不开新仓）
+     回撤 > 8%  → regime_mult = min(regime_mult, 0.6)
+           ↓
+  ⑤ 仓位规模 = (equity × 2%) / (ATR × 2.5) × regime_mult
+           ↓
+  ⑥ 执行：买入/卖出翻转方向，中性信号平仓
+  <div class="caption">图2：回测每日仿真逻辑流程</div>
+</div>
+
+<h3>6.2 ATR 仓位规模化</h3>
+
+<div class="concept">
+  <div class="concept-title">核心概念：ATR 仓位规模化（ATR-based Position Sizing）</div>
+  <p>
+    平均真实波幅（ATR）是衡量市场近期价格波动幅度的指标，计算方式为：
+    TR = max(H−L, |H−prevC|, |L−prevC|)，ATR = TR 的 14 期移动平均。
+  </p>
+  <p>
+    ATR 仓位规模化的核心思想是<strong>风险均等化</strong>（Risk Parity）：
+    无论市场当前波动率如何，每笔交易的账户风险敞口保持恒定（此处为权益的 2%）。
+    波动率高时（ATR 大）→ 止损距离大 → 仓位小；
+    波动率低时（ATR 小）→ 止损距离小 → 仓位大。
+    这防止了在低波动期积累过多仓位，在波动率突然放大时遭受超预期的损失。
+  </p>
+</div>
+
+<div class="formula">
+position_oz = (equity × RISK_BUDGET) / (ATR × ATR_STOP_MULT) × regime_multiplier
+stop_distance = ATR × 2.5
+take_profit   = entry_price + stop_distance × 1.5  (risk:reward = 1:1.5)
+</div>
+
+<h3>6.3 三档回撤风控的设计逻辑</h3>
+<p>
+  三档风控是一个"软熔断"机制，其背后的理论依据是<strong>Kelly Criterion 的保守实现</strong>：
+  当账户出现连续亏损时，策略的"边际期望"可能已经发生变化（市场 regime 切换导致模型失效），
+  此时应当主动降低风险暴露，而不是继续以固定仓位押注均值回归。
+</p>
+<ul>
+  <li><strong>8% 回撤 → 仓位上限 60%</strong>：模型可能进入低效区，适度保守</li>
+  <li><strong>15% 回撤 → 仓位归零（熔断）</strong>：模型很可能已进入 regime 失效区，完全停止新开仓，保护资本</li>
+</ul>
+
+<p class="warn">
+  ⚠️ 内部不一致性：当前回测模块调用的是 v1 旧版 Regime 检测（5 因子投票规则系统），
+  而推理模块（inference.py）使用的是 v2 三层架构。
+  这意味着回测结果并不反映 v2 Regime 系统的真实历史表现，是一个需要优先修复的技术债。
+</p>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2>7. 模型评估体系</h2>
+
+<h3>7.1 Spearman IC 作为核心评估指标</h3>
+
+<div class="concept">
+  <div class="concept-title">核心概念：信息系数（Information Coefficient, IC）</div>
+  <p>
+    IC 是量化研究中衡量因子预测能力的标准指标，定义为预测值与实际值之间的相关系数。
+    GoldMonitor 使用<strong>Spearman 等级相关系数</strong>（而非 Pearson），
+    因为它对非线性关系更鲁棒，对极端值（如 COVID 期间的剧烈波动）不敏感。
+  </p>
+  <p>
+    IC 的参考标准：|IC| > 0.1 = 有信号；|IC| > 0.15 = 有用；|IC| > 0.25 = 强信号。
+    F3_TIPS10Y 的 OOS IC +0.32 在黄金因子研究中属于显著强信号。
+  </p>
+  <p>
+    系统计算三个层级的 IC：全样本 IC（含过拟合风险）、OOS IC（仅 TRAIN_END 之后）、
+    以及 60 日滚动 IC（用于检测信号衰减趋势）。健康检查会比较 OOS 前半段与后半段的 IC，
+    若后半段 IC 为负则标记为 "degraded"。
+  </p>
+</div>
+
+<h3>7.2 Granger 因果分析</h3>
+
+<div class="concept">
+  <div class="concept-title">核心概念：Granger 因果检验（Granger Causality）</div>
+  <p>
+    Granger 因果检验（1969）测试变量 X 的过去值是否对预测 Y 的未来值提供统计上显著的增量信息。
+    注意：这是一种<strong>统计意义上的时序先行性</strong>，而非物理因果关系。
+    "X Granger-causes Y" 意味着："知道 X 的历史有助于预测 Y，超过仅知道 Y 自身历史。"
+  </p>
+  <p>
+    GoldMonitor 的实现为简化版：对每个因子检验 lag 1−20 日的 Spearman IC，
+    以 p &lt; 0.05 作为显著性标准，若至少一个 lag 显著，则认为该因子
+    Granger 先行于黄金收益率。最优 lag 为具有最高 |IC| 的显著 lag。
+  </p>
+</div>
+
+<p>每个因子被分类为四种诊断状态：</p>
+
+<table>
+  <thead>
+    <tr><th>状态</th><th>判断条件</th><th>建议</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><span class="ok">STRONG</span></td><td>Granger 显著 AND OOS |IC| > 0.1</td><td>保留，核心因子</td></tr>
+    <tr><td><span class="ok">VALID</span></td><td>Granger 显著，OOS IC 偏低</td><td>保留，辅助因子</td></tr>
+    <tr><td><span class="warn">SUSPECT</span></td><td>无 Granger，但 OOS |IC| > 0.15</td><td>谨慎，可能巧合</td></tr>
+    <tr><td><span class="warn">WEAK / REDUNDANT</span></td><td>仅有样本内 IC，无 OOS 或 Granger</td><td>考虑移除</td></tr>
+  </tbody>
+</table>
+
+<h3>7.3 压力测试体系</h3>
+
+<p>系统对五个历史极端情景进行专项测试，每个情景代表一种特定的"逻辑破坏"场景：</p>
+
+<table>
+  <thead>
+    <tr><th>情景 ID</th><th>时间</th><th>预期失效原因</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>COVID 流动性危机</td><td>2020.02–04</td><td>DXY↑ + 黄金↓（全资产抛售，避险逻辑失效）</td></tr>
+    <tr><td>Fed 激进加息</td><td>2022.03–2023.07</td><td>TIPS↑↑ 但黄金震荡（利率−黄金关系不稳定）</td></tr>
+    <tr><td>俄乌战争</td><td>2022.02–06</td><td>GPR 脉冲式飙升 → 黄金冲高后快速均值回归</td></tr>
+    <tr><td>SVB 银行危机</td><td>2023.03–05</td><td>GVZ↑ + 黄金↑ 但 ETF 流量滞后</td></tr>
+    <tr><td>黄金 2024 突破行情</td><td>2024.03–06</td><td>DXY↑ + TIPS↑ + 黄金↑↑（央行购金打破双因子逻辑）</td></tr>
+  </tbody>
+</table>
+
+<p>
+  每个情景输出四项逻辑破坏指标：IC 为负（negative_ic）、极端因子（> 3σ）、
+  方向预测错误（direction_mismatch）、预测过于保守（flat_predictions）。
+  总体评估标准：≥ 3 个高严重度情景 → CRITICAL；1−2 个 → WARNING；否则 → HEALTHY。
+</p>
+
+<p>
+  2024 年黄金突破行情（DXY↑ + TIPS↑ + 金价↑↑）是所有情景中最具理论挑战性的：
+  它同时违反了 DXY 负相关假设和实际利率负相关假设。
+  其背后的驱动力是<span class="highlight">全球央行（尤其是新兴市场）的战略性增持黄金</span>，
+  这一力量在现有 5 个 FRED 序列 + GVZ 的因子空间中完全不可见，
+  是当前系统最大的结构性盲点。
+</p>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2>8. 现有问题与改进建议</h2>
+
+<h3>8.1 关键内部不一致性</h3>
+
+<table>
+  <thead>
+    <tr><th>问题</th><th>当前状态</th><th>影响</th><th>建议修复</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>回测 vs 推理的 Regime 版本不一致</td>
+      <td>回测用 v1 规则系统；推理用 v2 三层</td>
+      <td>回测指标不能反映 v2 的真实历史表现</td>
+      <td>将 backtest.py 迁移至 detect_regime_v2()</td>
+    </tr>
+    <tr>
+      <td>MOVE 代理的校准缺失</td>
+      <td>move_proxy_z = 0.6×GVZ_z + 0.4×GVZ_mom_z，无实证校准</td>
+      <td>阈值 > 0.8 对应真实 MOVE 水平未经验证</td>
+      <td>用 ICE MOVE 历史数据（付费或 scraping）校准权重</td>
+    </tr>
+    <tr>
+      <td>前向填充的陈旧性偏差</td>
+      <td>宏观数据静默 ffill，无标志位</td>
+      <td>低频发布期间 Z-Score 被拉平</td>
+      <td>记录数据更新日，对陈旧数据在 Z-Score 中降权</td>
+    </tr>
+    <tr>
+      <td>央行购金因子缺失</td>
+      <td>无相关因子</td>
+      <td>2024 年行情完全不可解释</td>
+      <td>引入 WGC 月度数据或市场隐含央行需求代理变量</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>8.2 架构层面的改进方向</h3>
+<ul>
+  <li><strong>HMM 在线更新</strong>：当前 HMM 每次推理都重新拟合 504 天数据，
+    可改为增量 Baum-Welch 更新，降低计算开销并提升状态转移的时效性。</li>
+  <li><strong>Regime 置信度的概率校准</strong>：当前 confidence 计算为三层分数的简单平均，
+    缺乏 Platt Scaling 或 Isotonic Regression 的校准。未经校准的置信度数值不能直接解释为概率。</li>
+  <li><strong>L3 Attribution 的历史覆盖率</strong>：目前没有统计不同 shock source（fragility / expectation / inflation）
+    在历史上的分布，无法评估三条路径的触发频率是否合理。</li>
+  <li><strong>宏观增长代理的改进</strong>：当前用收益率曲线斜率代理经济增长，
+    信号提前量约 6−18 个月，对 20 日前向收益可能过于超前。
+    可引入 OECD CLI（领先指标）或 ISM PMI 作为更短期的增长代理。</li>
+</ul>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2>9. 结论</h2>
+
+<p>
+  GoldMonitor 的 Regime 系统体现了一种量化实践中的重要设计哲学：
+  <span class="highlight">不让模型独自面对市场，而是为模型配备一个"宏观感知层"来动态调整其置信度</span>。
+  三层架构将不同时间频率的信息源分离处理，避免了低频宏观信号和高频事件信号相互淹没的问题。
+</p>
+
+<p>
+  从数据治理角度看，前向填充策略是一个合理的工程权衡，但其陈旧性风险值得在下一版本中系统处理。
+  从因子工程角度看，基础因子的经济逻辑清晰，逻辑因子的交互设计有助于减少模型发现非线性关系所需的样本量；
+  F2 族因子的移除是一次正确的多共线性清理。
+  从模型训练角度看，Purged CV 和双重正则化（L1+L2）是应对时序数据特殊性的必要设计。
+  从回测角度看，ATR 仓位规模化和三档回撤风控体现了对 Kelly Criterion 的实践性近似。
+  从评估角度看，Granger 分析 + 压力测试 + 滚动 IC 的三维评估框架对因子信号的有效性和稳定性提供了较为全面的覆盖。
+</p>
+
+<p>
+  最重要的改进项是<span class="highlight">回测与推理之间的 Regime 版本对齐</span>。
+  在此修复之前，任何基于当前回测指标的参数调优都是在错误的评估基准上进行的。
+  其次是中央银行购金因子的引入——这是 2024 年以来黄金定价结构性变化的核心驱动，
+  也是现有因子空间最大的盲区。
+</p>
+
+<p>
+  量化系统的价值不在于预测的精准，而在于在边际信息充分时大胆决策、
+  在模型失效信号出现时快速保守。GoldMonitor 的 Regime 层正是服务于后者——
+  它是一个系统性的"我什么时候应该少信模型"的机制。
+  这一设计理念的正确性，在 2020 年 3 月的全资产抛售和 2024 年的"逆逻辑"黄金多头行情中
+  都得到了理论层面的验证，尽管实证验证仍有赖于 v2 版本回测的完成。
+</p>
+
+<!-- FOOTNOTE -->
+<div class="footnote">
+  <strong>关于本文</strong><br>
+  本文基于 GoldMonitor 项目截至 2026-03-27 的代码库进行回顾性梳理，
+  覆盖 config.py / fetch_data.py / features.py / regime_v2.py / train.py / inference.py / backtest.py / granger_test.py / stress_test.py 共 9 个核心模块。
+  OOS IC 数字引自 config.py 注释，为模型设计期间的估计值，非实时更新的评估结果。
+  所有阈值参数（RATE_SHOCK_THRESHOLD、PELT penalty、Regime 乘数等）均为当前版本的硬编码值，
+  未经系统性超参数优化。<br><br>
+  <strong>关键风险提示</strong>：量化模型的历史表现不代表未来收益。
+  黄金市场受到央行政策、地缘政治、货币制度等多重结构性因素影响，
+  任何单一模型均无法覆盖所有情景。本文仅供研究参考，不构成投资建议。
+</div>
+
+</body>
+</html>

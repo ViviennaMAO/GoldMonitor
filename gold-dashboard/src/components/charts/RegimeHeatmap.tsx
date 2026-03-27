@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { useRegime } from '@/lib/useGoldData'
+import { useRegime, RegimeLayer1, RegimeLayer2, RegimeLayer3 } from '@/lib/useGoldData'
 import clsx from 'clsx'
 
 const FACTOR_SHORT: Record<string, string> = {
@@ -21,6 +21,164 @@ const FACTOR_LABEL: Record<string, string> = {
   F6_GVZ: '波动',
   F8_ETFFlow: 'ETF',
   F9_GDXRatio: '矿业',
+}
+
+// ── Three-Layer Regime Panel ────────────────────────────────────────────────
+
+const DIRECTION_COLOR = {
+  up: 'text-green-400',
+  down: 'text-red-400',
+  neutral: 'text-slate-500',
+}
+
+const QUADRANT_COLOR: Record<string, string> = {
+  Stagflation: 'text-amber-400',
+  Overheating: 'text-orange-400',
+  Deflation:   'text-blue-400',
+  Reflation:   'text-green-400',
+  Neutral:     'text-slate-400',
+}
+
+const SHOCK_COLOR: Record<string, string> = {
+  fragility:   'text-red-400',
+  expectation: 'text-amber-400',
+  inflation:   'text-orange-400',
+}
+
+function LayerTag({ label, value, color }: { label: string; value: string; color: string }) {
+  return (
+    <div className="flex flex-col gap-0.5">
+      <span className="text-[8px] text-slate-600 uppercase tracking-wider">{label}</span>
+      <span className={clsx('text-[10px] font-semibold', color)}>{value}</span>
+    </div>
+  )
+}
+
+function ThreeLayerPanel({
+  layer1,
+  layer2,
+  layer3,
+  confidence,
+}: {
+  layer1?: RegimeLayer1
+  layer2?: RegimeLayer2
+  layer3?: RegimeLayer3
+  confidence?: number
+}) {
+  if (!layer1) return null
+
+  const confPct = confidence != null ? Math.round(confidence * 100) : null
+
+  return (
+    <div className="mt-2 space-y-1.5">
+      {/* Confidence bar */}
+      {confPct != null && (
+        <div className="flex items-center gap-2">
+          <span className="text-[8px] text-slate-600 w-12 flex-shrink-0">置信度</span>
+          <div className="flex-1 h-1.5 rounded-full bg-white/[0.05] overflow-hidden">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-slate-500 to-slate-300 transition-all duration-700"
+              style={{ width: `${confPct}%` }}
+            />
+          </div>
+          <span className="text-[8px] text-slate-500 font-mono w-6 text-right">{confPct}%</span>
+        </div>
+      )}
+
+      {/* Layer 1: Macro */}
+      <div className="p-1.5 rounded-lg bg-white/[0.025] border border-white/[0.04]">
+        <div className="text-[8px] text-slate-600 uppercase tracking-wider mb-1.5">L1 · 宏观四象限</div>
+        <div className="flex items-center gap-3">
+          <LayerTag
+            label="象限"
+            value={layer1.quadrant_zh}
+            color={QUADRANT_COLOR[layer1.quadrant] ?? 'text-slate-400'}
+          />
+          <div className="w-px h-7 bg-white/[0.06]" />
+          <LayerTag
+            label="增长"
+            value={layer1.growth_direction === 'up' ? '↑ 扩张' : layer1.growth_direction === 'down' ? '↓ 收缩' : '→ 中性'}
+            color={DIRECTION_COLOR[layer1.growth_direction] ?? 'text-slate-400'}
+          />
+          <div className="w-px h-7 bg-white/[0.06]" />
+          <LayerTag
+            label="通胀"
+            value={layer1.inflation_direction === 'up' ? '↑ 上行' : layer1.inflation_direction === 'down' ? '↓ 下行' : '→ 中性'}
+            color={DIRECTION_COLOR[layer1.inflation_direction] ?? 'text-slate-400'}
+          />
+          <div className="w-px h-7 bg-white/[0.06]" />
+          <LayerTag
+            label="美联储"
+            value={layer1.fed_cycle_zh}
+            color={layer1.fed_cycle === 'Tightening' ? 'text-red-400' : layer1.fed_cycle === 'Easing' ? 'text-green-400' : 'text-slate-400'}
+          />
+        </div>
+      </div>
+
+      {/* Layer 2: Market */}
+      {layer2 && (
+        <div className="p-1.5 rounded-lg bg-white/[0.025] border border-white/[0.04]">
+          <div className="text-[8px] text-slate-600 uppercase tracking-wider mb-1.5">L2 · 市场结构</div>
+          <div className="flex items-center gap-3">
+            <LayerTag
+              label={`HMM${!layer2.hmm_available ? ' (规则)' : ''}`}
+              value={`${layer2.hmm_label_zh} ${Math.round(layer2.hmm_confidence * 100)}%`}
+              color={layer2.hmm_label === 'Bull' ? 'text-green-400' : layer2.hmm_label === 'Bear' ? 'text-red-400' : 'text-slate-400'}
+            />
+            <div className="w-px h-7 bg-white/[0.06]" />
+            <LayerTag
+              label="流动性"
+              value={layer2.market_regime_zh}
+              color={
+                layer2.market_regime === 'Trending' ? 'text-green-400' :
+                layer2.market_regime === 'Systemic Risk' ? 'text-red-400' :
+                layer2.market_regime === 'Crisis Spike' ? 'text-amber-400' :
+                'text-slate-400'
+              }
+            />
+            <div className="w-px h-7 bg-white/[0.06]" />
+            <LayerTag label="调整" value={`${layer2.adj_factor}×`} color="text-slate-300" />
+          </div>
+        </div>
+      )}
+
+      {/* Layer 3: Event */}
+      {layer3 && (layer3.rate_shock_detected || layer3.changepoint_detected || layer3.overlay_delta !== 0) && (
+        <div className={clsx(
+          'p-1.5 rounded-lg border',
+          layer3.rate_shock_detected
+            ? 'bg-amber-500/[0.06] border-amber-500/20'
+            : layer3.changepoint_detected
+            ? 'bg-blue-500/[0.06] border-blue-500/20'
+            : 'bg-white/[0.025] border-white/[0.04]',
+        )}>
+          <div className="text-[8px] text-slate-600 uppercase tracking-wider mb-1.5">L3 · 事件叠加</div>
+          <div className="flex items-center gap-3 flex-wrap">
+            {layer3.rate_shock_detected && (
+              <LayerTag
+                label="利率冲击"
+                value={layer3.shock_source_zh ?? '检测中'}
+                color={SHOCK_COLOR[layer3.shock_source ?? ''] ?? 'text-amber-400'}
+              />
+            )}
+            {layer3.changepoint_detected && (
+              <LayerTag label="变点" value={`${layer3.days_since_changepoint}天前`} color="text-blue-400" />
+            )}
+            <LayerTag
+              label="美元形态"
+              value={layer3.dollar_type_zh}
+              color={layer3.dollar_type === 'risk_off' ? 'text-amber-400' : layer3.dollar_type === 'growth' ? 'text-blue-400' : layer3.dollar_type === 'weak' ? 'text-green-400' : 'text-slate-400'}
+            />
+            <LayerTag
+              label="叠加量"
+              value={`${layer3.overlay_delta >= 0 ? '+' : ''}${layer3.overlay_delta.toFixed(2)}`}
+              color={layer3.overlay_delta > 0 ? 'text-green-400' : layer3.overlay_delta < 0 ? 'text-red-400' : 'text-slate-400'}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  )
 }
 
 function getColor(value: number): string {
@@ -173,11 +331,13 @@ export function RegimeHeatmap() {
         </div>
       )}
 
-      {/* Regime scores */}
-      {current && (
+      {/* Three-layer regime detail (v2) */}
+      {current?.layer1 ? (
+        <ThreeLayerPanel layer1={current.layer1} layer2={current.layer2} layer3={current.layer3} confidence={current.confidence} />
+      ) : (
         <div className="mt-2 flex items-center justify-center gap-4 text-[9px]">
-          <span className="text-red-400/60">Risk-Off: {current.risk_off_score}/5</span>
-          <span className="text-green-400/60">Risk-On: {current.risk_on_score}/5</span>
+          <span className="text-red-400/60">Risk-Off: {current?.risk_off_score ?? 0}/5</span>
+          <span className="text-green-400/60">Risk-On: {current?.risk_on_score ?? 0}/5</span>
         </div>
       )}
     </div>

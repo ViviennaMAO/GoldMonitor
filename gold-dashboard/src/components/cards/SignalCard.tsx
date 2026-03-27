@@ -119,7 +119,7 @@ export function SignalCard({ signal }: SignalCardProps) {
       </div>
 
       {/* Warning indicator */}
-      {signal.shapBars[0].value > 0.35 && (
+      {signal.shapBars.length > 0 && signal.shapBars[0].value > 0.35 && (
         <div className="mt-3 flex items-start gap-2 p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
           <AlertTriangle className="w-3.5 h-3.5 text-amber-400 flex-shrink-0 mt-0.5" />
           <p className="text-[10px] text-amber-400/80">单因子贡献接近阈值，请关注信号集中风险</p>

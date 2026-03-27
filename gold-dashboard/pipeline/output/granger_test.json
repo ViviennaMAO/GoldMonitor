@@ -1,0 +1,212 @@
+{
+  "generated_at": "2026-03-27T23:18:38.681858",
+  "total_samples": 2735,
+  "factors": {
+    "F1_DXY": {
+      "display_name": "美元指数 DXY",
+      "contemporaneous_ic": 0.0657,
+      "oos_ic": 0.3603,
+      "granger_causes_gold": true,
+      "optimal_lag_days": 15,
+      "optimal_lag_ic": 0.0994,
+      "optimal_lag_pval": 0.0,
+      "n_significant_lags": 20,
+      "verdict": "STRONG — Granger causal + significant OOS IC"
+    },
+    "F3_TIPS10Y": {
+      "display_name": "TIPS 10Y 实际利率",
+      "contemporaneous_ic": -0.039,
+      "oos_ic": 0.5768,
+      "granger_causes_gold": true,
+      "optimal_lag_days": 11,
+      "optimal_lag_ic": -0.0487,
+      "optimal_lag_pval": 0.011049,
+      "n_significant_lags": 19,
+      "verdict": "STRONG — Granger causal + significant OOS IC"
+    },
+    "F4_BEI": {
+      "display_name": "通胀预期 BEI",
+      "contemporaneous_ic": -0.1887,
+      "oos_ic": -0.3672,
+      "granger_causes_gold": true,
+      "optimal_lag_days": 1,
+      "optimal_lag_ic": -0.1891,
+      "optimal_lag_pval": 0.0,
+      "n_significant_lags": 20,
+      "verdict": "STRONG — Granger causal + significant OOS IC"
+    },
+    "F5_GPR": {
+      "display_name": "地缘政治风险 GPR",
+      "contemporaneous_ic": 0.0908,
+      "oos_ic": -0.0661,
+      "granger_causes_gold": true,
+      "optimal_lag_days": 6,
+      "optimal_lag_ic": 0.0929,
+      "optimal_lag_pval": 1e-06,
+      "n_significant_lags": 19,
+      "verdict": "VALID — Granger causal, monitor OOS performance"
+    },
+    "F6_GVZ": {
+      "display_name": "黄金波动率 GVZ",
+      "contemporaneous_ic": -0.0052,
+      "oos_ic": -0.5024,
+      "granger_causes_gold": false,
+      "optimal_lag_days": 20,
+      "optimal_lag_ic": -0.0227,
+      "optimal_lag_pval": 0.237417,
+      "n_significant_lags": 0,
+      "verdict": "SUSPECT — No Granger causality but has OOS IC (possible coincidence)"
+    },
+    "F8_ETFFlow": {
+      "display_name": "ETF 资金流",
+      "contemporaneous_ic": -0.0012,
+      "oos_ic": -0.0259,
+      "granger_causes_gold": false,
+      "optimal_lag_days": 14,
+      "optimal_lag_ic": 0.0185,
+      "optimal_lag_pval": 0.334187,
+      "n_significant_lags": 0,
+      "verdict": "REDUNDANT — Consider removing from model"
+    },
+    "F9_GDXRatio": {
+      "display_name": "矿业股/金价比",
+      "contemporaneous_ic": -0.028,
+      "oos_ic": -0.0879,
+      "granger_causes_gold": false,
+      "optimal_lag_days": 2,
+      "optimal_lag_ic": -0.0363,
+      "optimal_lag_pval": 0.057495,
+      "n_significant_lags": 0,
+      "verdict": "REDUNDANT — Consider removing from model"
+    },
+    "F10_TIPSBEISpread": {
+      "display_name": "实际利率-通胀利差",
+      "contemporaneous_ic": 0.0432,
+      "oos_ic": 0.7289,
+      "granger_causes_gold": true,
+      "optimal_lag_days": 15,
+      "optimal_lag_ic": 0.0532,
+      "optimal_lag_pval": 0.005534,
+      "n_significant_lags": 20,
+      "verdict": "STRONG — Granger causal + significant OOS IC"
+    },
+    "F11_DXYMomentum": {
+      "display_name": "美元动量 20D",
+      "contemporaneous_ic": -0.0044,
+      "oos_ic": -0.1905,
+      "granger_causes_gold": true,
+      "optimal_lag_days": 11,
+      "optimal_lag_ic": 0.0382,
+      "optimal_lag_pval": 0.046473,
+      "n_significant_lags": 2,
+      "verdict": "STRONG — Granger causal + significant OOS IC"
+    },
+    "F12_DXYDownGPRUp": {
+      "display_name": "弱美元×高风险",
+      "contemporaneous_ic": -0.0774,
+      "oos_ic": -0.0666,
+      "granger_causes_gold": true,
+      "optimal_lag_days": 1,
+      "optimal_lag_ic": -0.0778,
+      "optimal_lag_pval": 4.6e-05,
+      "n_significant_lags": 14,
+      "verdict": "VALID — Granger causal, monitor OOS performance"
+    },
+    "F13_GoldGDXDivergence": {
+      "display_name": "金价-矿业股背离",
+      "contemporaneous_ic": -0.1063,
+      "oos_ic": -0.2472,
+      "granger_causes_gold": true,
+      "optimal_lag_days": 1,
+      "optimal_lag_ic": -0.0942,
+      "optimal_lag_pval": 1e-06,
+      "n_significant_lags": 20,
+      "verdict": "STRONG — Granger causal + significant OOS IC"
+    },
+    "F14_GVZMomentum": {
+      "display_name": "波动率动量",
+      "contemporaneous_ic": -0.0274,
+      "oos_ic": -0.1751,
+      "granger_causes_gold": true,
+      "optimal_lag_days": 20,
+      "optimal_lag_ic": -0.0552,
+      "optimal_lag_pval": 0.004046,
+      "n_significant_lags": 7,
+      "verdict": "STRONG — Granger causal + significant OOS IC"
+    },
+    "F15_ETFFlowAccel": {
+      "display_name": "ETF资金加速度",
+      "contemporaneous_ic": -0.0377,
+      "oos_ic": 0.0458,
+      "granger_causes_gold": true,
+      "optimal_lag_days": 2,
+      "optimal_lag_ic": -0.0384,
+      "optimal_lag_pval": 0.044699,
+      "n_significant_lags": 1,
+      "verdict": "VALID — Granger causal, monitor OOS performance"
+    }
+  },
+  "regime_ic": {
+    "trend_up": {
+      "samples": 836,
+      "factor_ics": {
+        "F1_DXY": -0.0405,
+        "F3_TIPS10Y": -0.1315,
+        "F4_BEI": -0.1452,
+        "F5_GPR": 0.0879,
+        "F6_GVZ": -0.0332,
+        "F8_ETFFlow": -0.0043,
+        "F9_GDXRatio": 0.0085,
+        "F10_TIPSBEISpread": -0.0622,
+        "F11_DXYMomentum": -0.0923,
+        "F12_DXYDownGPRUp": 0.048,
+        "F13_GoldGDXDivergence": -0.1366,
+        "F14_GVZMomentum": -0.015,
+        "F15_ETFFlowAccel": -0.0708
+      }
+    },
+    "trend_down": {
+      "samples": 175,
+      "factor_ics": {
+        "F1_DXY": -0.1588,
+        "F3_TIPS10Y": -0.0419,
+        "F4_BEI": 0.0451,
+        "F5_GPR": 0.0155,
+        "F6_GVZ": -0.0976,
+        "F8_ETFFlow": -0.0266,
+        "F9_GDXRatio": 0.1709,
+        "F10_TIPSBEISpread": -0.0465,
+        "F11_DXYMomentum": 0.0322,
+        "F12_DXYDownGPRUp": -0.2281,
+        "F13_GoldGDXDivergence": -0.5222,
+        "F14_GVZMomentum": -0.0449,
+        "F15_ETFFlowAccel": -0.0617
+      }
+    },
+    "range": {
+      "samples": 861,
+      "factor_ics": {
+        "F1_DXY": 0.2337,
+        "F3_TIPS10Y": 0.0932,
+        "F4_BEI": -0.2181,
+        "F5_GPR": 0.1875,
+        "F6_GVZ": 0.0211,
+        "F8_ETFFlow": 0.0554,
+        "F9_GDXRatio": -0.0806,
+        "F10_TIPSBEISpread": 0.1573,
+        "F11_DXYMomentum": 0.0841,
+        "F12_DXYDownGPRUp": -0.1105,
+        "F13_GoldGDXDivergence": 0.0253,
+        "F14_GVZMomentum": 0.019,
+        "F15_ETFFlowAccel": -0.0477
+      }
+    }
+  },
+  "summary": {
+    "granger_pass": 10,
+    "granger_fail": 3,
+    "total_factors": 13,
+    "pass_rate": 76.9,
+    "recommendation": "HEALTHY — 7 strong + 3 valid factors. Good causal foundation."
+  }
+}

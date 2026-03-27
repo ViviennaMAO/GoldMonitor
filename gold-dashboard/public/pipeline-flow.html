@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gold Monitor — 全流程管道图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #FAFAF8; color: #2D2D2D; font-family: -apple-system, "PingFang SC", "SF Pro Display", "Helvetica Neue", sans-serif; }
+
+  .page { width: 960px; margin: 0 auto; padding: 48px 40px 60px; position: relative; }
+
+  /* ── Header ── */
+  .header { text-align: center; margin-bottom: 48px; }
+  .header .logo { font-size: 12px; letter-spacing: 5px; color: #B8860B; font-weight: 600; }
+  .header h1 { font-size: 28px; font-weight: 700; color: #1A1A1A; margin: 8px 0 4px; }
+  .header .sub { font-size: 13px; color: #888; }
+
+  /* ── Stage container ── */
+  .stage {
+    border: 1.5px dashed #D0D0D0;
+    border-radius: 16px;
+    padding: 20px 24px 24px;
+    margin-bottom: 0;
+    position: relative;
+    background: #fff;
+  }
+  .stage-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .stage-label .num {
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    background: #888;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+  }
+
+  /* Stage colors */
+  .stage-0 { border-color: #A0C4E8; background: #F7FAFD; }
+  .stage-0 .num { background: #4A90C4; }
+  .stage-0 .stage-label { color: #4A90C4; }
+
+  .stage-1 { border-color: #B8D4A8; background: #F8FBF6; }
+  .stage-1 .num { background: #5D8A3C; }
+  .stage-1 .stage-label { color: #5D8A3C; }
+
+  .stage-2 { border-color: #D4C4A0; background: #FDFBF6; }
+  .stage-2 .num { background: #8B7532; }
+  .stage-2 .stage-label { color: #8B7532; }
+
+  .stage-3 { border-color: #C4A0C4; background: #FBF6FB; }
+  .stage-3 .num { background: #7A4A7A; }
+  .stage-3 .stage-label { color: #7A4A7A; }
+
+  .stage-4 { border-color: #A0C4B8; background: #F6FBFA; }
+  .stage-4 .num { background: #3C7A6A; }
+  .stage-4 .stage-label { color: #3C7A6A; }
+
+  .stage-5 { border-color: #D4A0A0; background: #FDF6F6; }
+  .stage-5 .num { background: #8B3C3C; }
+  .stage-5 .stage-label { color: #8B3C3C; }
+
+  .stage-6 { border-color: #A0B8D4; background: #F6F8FD; }
+  .stage-6 .num { background: #3C5A8B; }
+  .stage-6 .stage-label { color: #3C5A8B; }
+
+  .stage-7 { border-color: #C4B8A0; background: #FBFAF6; }
+  .stage-7 .num { background: #6B5D32; }
+  .stage-7 .stage-label { color: #6B5D32; }
+
+  /* ── Step boxes ── */
+  .steps { display: flex; gap: 12px; }
+  .step {
+    flex: 1;
+    border: 1.5px solid #E0E0E0;
+    border-radius: 10px;
+    padding: 14px 12px;
+    text-align: center;
+    background: #fff;
+    transition: all 0.2s;
+  }
+  .step:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); transform: translateY(-1px); }
+  .step .s-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #2D2D2D;
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .step .s-desc {
+    font-size: 11px;
+    color: #888;
+    line-height: 1.5;
+  }
+  .step code {
+    font-family: "Menlo", "SF Mono", monospace;
+    font-size: 10px;
+    color: #666;
+    background: #F5F5F0;
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  /* Step accent colors */
+  .stage-0 .step { border-color: #C4D8EC; }
+  .stage-0 .step .s-title { color: #2D5A8A; }
+  .stage-1 .step { border-color: #C8DEB8; }
+  .stage-1 .step .s-title { color: #3C6B28; }
+  .stage-2 .step { border-color: #E0D4B0; }
+  .stage-2 .step .s-title { color: #6B5A1E; }
+  .stage-3 .step { border-color: #D8C0D8; }
+  .stage-3 .step .s-title { color: #5A2D5A; }
+  .stage-4 .step { border-color: #B8D8D0; }
+  .stage-4 .step .s-title { color: #2D5A50; }
+  .stage-5 .step { border-color: #E0C0C0; background: #FFFAF0; }
+  .stage-5 .step .s-title { color: #6B2828; }
+  .stage-6 .step { border-color: #B8C8E0; }
+  .stage-6 .step .s-title { color: #2D3C6B; }
+  .stage-7 .step { border-color: #D8D0B8; }
+  .stage-7 .step .s-title { color: #4A4020; }
+
+  /* ── Arrow connectors ── */
+  .arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    color: #CCC;
+  }
+  .arrow svg { width: 18px; height: 18px; fill: #B8860B; opacity: 0.5; }
+  .arrow-line {
+    width: 2px;
+    height: 20px;
+    background: linear-gradient(to bottom, #D0D0D0, #B8860B80);
+    margin: 0 auto;
+  }
+
+  /* ── Retrain loop ── */
+  .retrain-loop {
+    position: absolute;
+    right: -60px;
+    top: 50%;
+    transform: translateY(-50%);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: 13px;
+    color: #B8860B;
+    font-weight: 600;
+    letter-spacing: 3px;
+    padding: 20px 8px;
+    border: 2px solid #B8860B40;
+    border-left: none;
+    border-radius: 0 12px 12px 0;
+    background: #FFF8E8;
+  }
+  .retrain-arrow {
+    position: absolute;
+    right: -60px;
+    font-size: 16px;
+    color: #B8860B;
+  }
+  .retrain-arrow.top { top: 280px; }
+  .retrain-arrow.bottom { bottom: 320px; }
+
+  /* ── Pass criteria bar ── */
+  .criteria {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: #F0FAF0;
+    border: 1.5px solid #A0D0A0;
+    border-radius: 10px;
+    margin-top: 0;
+  }
+  .criteria .badge {
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    background: #4CAF50;
+    padding: 3px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .criteria .text {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.5;
+  }
+
+  /* ── File reference ── */
+  .file-ref {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    color: #999;
+    font-family: "Menlo", monospace;
+    margin-top: 4px;
+  }
+  .file-ref::before {
+    content: "📄";
+    font-size: 10px;
+  }
+
+  /* ── Highlight tag ── */
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-top: 4px;
+  }
+  .tag-green { background: #E8F5E9; color: #2E7D32; }
+  .tag-orange { background: #FFF3E0; color: #E65100; }
+  .tag-red { background: #FFEBEE; color: #C62828; }
+  .tag-blue { background: #E3F2FD; color: #1565C0; }
+  .tag-purple { background: #F3E5F5; color: #6A1B9A; }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #E8E8E8;
+    font-size: 12px;
+    color: #AAA;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Retrain loop on the right side -->
+  <div class="retrain-loop" style="height: 600px; top: 55%;">月度再训练</div>
+  <div class="retrain-arrow top">↑</div>
+  <div class="retrain-arrow bottom">↓</div>
+
+  <!-- ═══════════ HEADER ═══════════ -->
+  <div class="header">
+    <div class="logo">GOLD MONITOR</div>
+    <h1>量化交易全流程管道图</h1>
+    <div class="sub">从数据采集到信号生成的完整链路 · 7 因子 · XGBoost + SHAP · ATR 风控</div>
+  </div>
+
+  <!-- ═══════════ STAGE 0: DATA COLLECTION ═══════════ -->
+  <div class="stage stage-0">
+    <div class="stage-label"><span class="num">阶段 0</span> 数据采集层</div>
+    <div class="steps">
+      <div class="step">
+        <div class="s-title">FRED API</div>
+        <div class="s-desc">
+          美联储经济数据库<br>
+          <code>DTWEXBGS</code> 美元指数<br>
+          <code>DFII10</code> TIPS实际利率<br>
+          <code>T10YIE</code> 通胀预期<br>
+          <code>GEPUCURRENT</code> 地缘风险
+        </div>
+        <div class="tag tag-blue">宏观/利率</div>
+      </div>
+      <div class="step">
+        <div class="s-title">Yahoo Finance</div>
+        <div class="s-desc">
+          v8 Chart API (主力源)<br>
+          <code>GC=F</code> 黄金现货价<br>
+          <code>^GVZ</code> 黄金波动率<br>
+          <code>^OVX</code> 原油波动率<br>
+          无需 crumb 认证
+        </div>
+        <div class="tag tag-green">价格/波动率</div>
+      </div>
+      <div class="step">
+        <div class="s-title">Stooq</div>
+        <div class="s-desc">
+          ETF & 矿业股历史价<br>
+          <code>GLD</code> <code>IAU</code> 黄金ETF<br>
+          <code>GDX</code> <code>GDXJ</code> 矿业股<br>
+          CSV 格式，日频
+        </div>
+        <div class="tag tag-orange">ETF/矿业</div>
+      </div>
+    </div>
+    <div class="file-ref">fetch_data.py → merged DataFrame (2817×31)</div>
+  </div>
+
+  <div class="arrow"><div class="arrow-line"></div></div>
+
+  <!-- ═══════════ STAGE 1: DATA GOVERNANCE ═══════════ -->
+  <div class="stage stage-1">
+    <div class="stage-label"><span class="num">阶段 1</span> 数据治理</div>
+    <div class="steps">
+      <div class="step">
+        <div class="s-title">时序对齐</div>
+        <div class="s-desc">
+          统一到交易日历<br>
+          FRED 日频 → 前填充<br>
+          <code>ffill()</code> 处理节假日<br>
+          对齐起始: 2015-01-01
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">缺失值处理</div>
+        <div class="s-desc">
+          GPR 月频 → 日频插值<br>
+          GVZ 缺失 → <code>ffill</code><br>
+          金价缺失 → 整行丢弃<br>
+          保证因子完整性
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">极值处理</div>
+        <div class="s-desc">
+          Z-Score 裁剪 ±5σ<br>
+          <code>clip(-5, 5)</code><br>
+          NaN → 0.0 安全替换<br>
+          Inf → ±5.0 边界替换
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">数据质量检验</div>
+        <div class="s-desc">
+          因子存活率检查<br>
+          方差为零 → 死因子<br>
+          数据新鲜度 ≤ T-1<br>
+          <span class="tag tag-red">P0 告警</span>
+        </div>
+      </div>
+    </div>
+    <div class="file-ref">fetch_data.py · features.py</div>
+  </div>
+
+  <div class="arrow"><div class="arrow-line"></div></div>
+
+  <!-- ═══════════ STAGE 2: FACTOR ENGINEERING ═══════════ -->
+  <div class="stage stage-2">
+    <div class="stage-label"><span class="num">阶段 2</span> 因子工程</div>
+    <div class="steps">
+      <div class="step">
+        <div class="s-title">F1–F9 原始因子</div>
+        <div class="s-desc">
+          7 个独立因子<br>
+          美元 / 利率 / 通胀<br>
+          地缘 / 波动 / ETF / 矿业<br>
+          <span class="tag tag-orange">精简自 10→7</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">滚动 Z-Score</div>
+        <div class="s-desc">
+          252日滚动标准化<br>
+          Z = (x - μ) / σ<br>
+          消除量纲差异<br>
+          统一输入到 [-5, +5]
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">共线性管控</div>
+        <div class="s-desc">
+          Spearman 相关矩阵<br>
+          |r| > 0.7 → 合并/移除<br>
+          利率簇 F2/F2b/F2c 合并<br>
+          <span class="tag tag-green">11对→2对</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">因子有效性验证</div>
+        <div class="s-desc">
+          OOS Spearman IC<br>
+          负IC连续3月 → 移除<br>
+          SHAP 单因子 &lt;60%<br>
+          <span class="tag tag-purple">model_health.json</span>
+        </div>
+      </div>
+    </div>
+    <div class="file-ref">features.py → 7 列因子 + ATR + target</div>
+  </div>
+
+  <div class="arrow"><div class="arrow-line"></div></div>
+
+  <!-- ═══════════ STAGE 3: MODEL TRAINING ═══════════ -->
+  <div class="stage stage-3">
+    <div class="stage-label"><span class="num">阶段 3</span> 模型训练</div>
+    <div class="steps">
+      <div class="step">
+        <div class="s-title">Walk-forward 划分</div>
+        <div class="s-desc">
+          训练: 2015–2025.09<br>
+          测试: 2025.10+<br>
+          20日 forward return<br>
+          <code>target = Δ% gold_20d</code>
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">Purged TSCV</div>
+        <div class="s-desc">
+          时序交叉验证<br>
+          20日 purge gap<br>
+          防止前瞻性偏差<br>
+          <span class="tag tag-red">P0 关键</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">XGBoost 训练</div>
+        <div class="s-desc">
+          <code>max_depth=3</code><br>
+          <code>reg_lambda=5.0</code><br>
+          <code>n_estimators=300</code><br>
+          强正则化防过拟合
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">SHAP 归因分析</div>
+        <div class="s-desc">
+          TreeExplainer<br>
+          7因子贡献度分解<br>
+          单因子 &lt;60% 校验<br>
+          输出 <code>shap_values.json</code>
+        </div>
+      </div>
+    </div>
+    <div class="file-ref">train.py → model.json + ic_history.json + model_health.json</div>
+  </div>
+
+  <div class="arrow"><div class="arrow-line"></div></div>
+
+  <!-- ═══════════ STAGE 4: INFERENCE ═══════════ -->
+  <div class="stage stage-6">
+    <div class="stage-label"><span class="num">阶段 4</span> 每日推理 & 信号生成</div>
+    <div class="steps">
+      <div class="step">
+        <div class="s-title">最新因子计算</div>
+        <div class="s-desc">
+          T日 7因子 Z-Score<br>
+          实时 FRED + Yahoo<br>
+          <code>X_latest.shape=(1,7)</code><br>
+          NaN 安全处理
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">模型预测</div>
+        <div class="s-desc">
+          加载 <code>model.json</code><br>
+          预测 20日收益率<br>
+          置信度 = |pred|映射<br>
+          <code>predicted_return %</code>
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">信号分类</div>
+        <div class="s-desc">
+          Strong Buy: &gt;+0.8%<br>
+          Buy: +0.3%~+0.8%<br>
+          Sell: -0.3%~-0.8%<br>
+          Strong Sell: &lt;-0.8%
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">Regime 检测</div>
+        <div class="s-desc">
+          5因子加权评分<br>
+          Risk-Off / Cautious<br>
+          Neutral / Favorable<br>
+          Risk-On · 5级分类
+        </div>
+      </div>
+    </div>
+    <div class="file-ref">inference.py → signal.json + regime.json + correlation.json</div>
+  </div>
+
+  <div class="arrow"><div class="arrow-line"></div></div>
+
+  <!-- ═══════════ STAGE 5: BACKTESTING ═══════════ -->
+  <div class="stage stage-4">
+    <div class="stage-label"><span class="num">阶段 5</span> 回测 & 风险管理</div>
+    <div class="steps">
+      <div class="step">
+        <div class="s-title">回测引擎</div>
+        <div class="s-desc">
+          OOS 逐日模拟<br>
+          184个交易日<br>
+          多/空/平仓信号<br>
+          <code>$100k</code> 初始资金
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">ATR 仓位管理</div>
+        <div class="s-desc">
+          <code>ATR × 2.5</code> 止损<br>
+          <code>2%</code> 单笔风险预算<br>
+          size = risk / stop<br>
+          Regime 乘数调整
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">三层风控体系</div>
+        <div class="s-desc">
+          健康档: DD &lt;5%<br>
+          预警档: DD 5-15%<br>
+          熔断档: DD &gt;15%<br>
+          <span class="tag tag-red">自动缩仓/停仓</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">GLD 基准对比</div>
+        <div class="s-desc">
+          策略 vs 买入持有<br>
+          超额收益分析<br>
+          风险调整指标<br>
+          Sharpe / Calmar / 胜率
+        </div>
+      </div>
+    </div>
+    <div class="file-ref">backtest.py → equity_curve.json + account.json + positions.json</div>
+  </div>
+
+  <div class="arrow"><div class="arrow-line"></div></div>
+
+  <!-- ═══════════ STAGE 6: MODEL EVALUATION ═══════════ -->
+  <div class="stage stage-5">
+    <div class="stage-label"><span class="num">阶段 6</span> 模型评估与健康监控</div>
+    <div class="steps">
+      <div class="step">
+        <div class="s-title">样本外指标</div>
+        <div class="s-desc">
+          OOS IC = +0.031<br>
+          Sharpe = 0.46<br>
+          Max DD = 6.67%<br>
+          Win Rate = 53.3%
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">过拟合检验</div>
+        <div class="s-desc">
+          IS vs OOS IC 比值<br>
+          IC衰减趋势监控<br>
+          60日滚动IC追踪<br>
+          <span class="tag tag-red">IC &lt;0 连续 → 告警</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">SHAP 稳定性</div>
+        <div class="s-desc">
+          单因子 &lt;60% 校验<br>
+          因子排名波动监控<br>
+          共线性对数检查<br>
+          <span class="tag tag-green">当前最大 33%</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">上线 / 回炉决策</div>
+        <div class="s-desc">
+          通过 → 推送信号<br>
+          告警 → 人工审查<br>
+          降级 → 暂停信号<br>
+          <span class="tag tag-purple">model_health.json</span>
+        </div>
+      </div>
+    </div>
+    <div class="file-ref">train.py · compute_model_health() → 日/周/月三层监控</div>
+  </div>
+
+  <div class="arrow"><div class="arrow-line"></div></div>
+
+  <!-- ═══════════ STAGE 7: DASHBOARD ═══════════ -->
+  <div class="stage stage-7">
+    <div class="stage-label"><span class="num">阶段 7</span> 可视化展示 & 信号分发</div>
+    <div class="steps">
+      <div class="step">
+        <div class="s-title">Web 仪表板</div>
+        <div class="s-desc">
+          Next.js 14 + Recharts<br>
+          11个 SWR Hooks<br>
+          5图表 + 4卡片<br>
+          <code>localhost:3031</code>
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">API 网关</div>
+        <div class="s-desc">
+          11个 REST 端点<br>
+          Pipeline JSON 读取<br>
+          4层降级策略<br>
+          Vercel Edge 部署
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">微信小程序</div>
+        <div class="s-desc">
+          4 个页面<br>
+          首页/因子/账户/回测<br>
+          <code>wx.request</code> 调用<br>
+          Vercel API 远程
+        </div>
+      </div>
+      <div class="step">
+        <div class="s-title">状态栏监控</div>
+        <div class="s-desc">
+          模型健康状态灯<br>
+          OOS IC 实时显示<br>
+          告警计数 + 消息<br>
+          数据时间戳
+        </div>
+      </div>
+    </div>
+    <div class="file-ref">9 JSON → 11 API Routes → Web + WeChat → 用户</div>
+  </div>
+
+  <!-- ═══════════ PASS CRITERIA ═══════════ -->
+  <div style="margin-top: 24px;">
+    <div class="criteria">
+      <span class="badge">通过标准</span>
+      <span class="text">
+        OOS IC > 0 持续 &nbsp;|&nbsp;
+        最大回撤 &lt; 15% &nbsp;|&nbsp;
+        SHAP 单因子 &lt; 60% &nbsp;|&nbsp;
+        高相关对 &lt; 3 &nbsp;|&nbsp;
+        数据新鲜度 ≤ T-1 &nbsp;|&nbsp;
+        无死因子
+      </span>
+    </div>
+  </div>
+
+  <!-- ═══════════ CURRENT METRICS ═══════════ -->
+  <div style="margin-top: 16px; display: flex; gap: 12px;">
+    <div style="flex:1; background: #F8FBF6; border: 1.5px solid #C8DEB8; border-radius: 10px; padding: 14px; text-align: center;">
+      <div style="font-size: 11px; color: #888; margin-bottom: 4px;">OOS 收益</div>
+      <div style="font-size: 22px; font-weight: 700; color: #2E7D32; font-family: Menlo, monospace;">+3.43%</div>
+    </div>
+    <div style="flex:1; background: #F8FBF6; border: 1.5px solid #C8DEB8; border-radius: 10px; padding: 14px; text-align: center;">
+      <div style="font-size: 11px; color: #888; margin-bottom: 4px;">Sharpe</div>
+      <div style="font-size: 22px; font-weight: 700; color: #2E7D32; font-family: Menlo, monospace;">0.46</div>
+    </div>
+    <div style="flex:1; background: #F8FBF6; border: 1.5px solid #C8DEB8; border-radius: 10px; padding: 14px; text-align: center;">
+      <div style="font-size: 11px; color: #888; margin-bottom: 4px;">胜率</div>
+      <div style="font-size: 22px; font-weight: 700; color: #2E7D32; font-family: Menlo, monospace;">53.3%</div>
+    </div>
+    <div style="flex:1; background: #FFEBEE; border: 1.5px solid #E0C0C0; border-radius: 10px; padding: 14px; text-align: center;">
+      <div style="font-size: 11px; color: #888; margin-bottom: 4px;">最大回撤</div>
+      <div style="font-size: 22px; font-weight: 700; color: #C62828; font-family: Menlo, monospace;">6.67%</div>
+    </div>
+    <div style="flex:1; background: #F6F8FD; border: 1.5px solid #B8C8E0; border-radius: 10px; padding: 14px; text-align: center;">
+      <div style="font-size: 11px; color: #888; margin-bottom: 4px;">交易次数</div>
+      <div style="font-size: 22px; font-weight: 700; color: #1565C0; font-family: Menlo, monospace;">15</div>
+    </div>
+    <div style="flex:1; background: #FFF8E1; border: 1.5px solid #D4C4A0; border-radius: 10px; padding: 14px; text-align: center;">
+      <div style="font-size: 11px; color: #888; margin-bottom: 4px;">OOS IC</div>
+      <div style="font-size: 22px; font-weight: 700; color: #8B7532; font-family: Menlo, monospace;">+0.031</div>
+    </div>
+  </div>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <div class="footer">
+    Gold Monitor Quantitative Pipeline &nbsp;·&nbsp; v2.0 &nbsp;·&nbsp; 2026-03 &nbsp;·&nbsp; 7 Factors · XGBoost + SHAP · ATR Risk Management
+  </div>
+
+</div>
+</body>
+</html>
