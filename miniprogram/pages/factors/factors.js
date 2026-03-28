@@ -32,15 +32,34 @@ Page({
     icir: '--',
     icLatest: '--',
     icLatestColor: '#9CA3AF',
-    // Regime Heatmap
-    regimeCurrent: '--',
+    // Regime v2 (3-layer)
+    regimeName: '--',
     regimeClass: 'badge-neutral',
     regimeMultiplier: '--',
+    regimeConfidence: 0,
+    // L1
+    l1Quadrant: '--',
+    l1Growth: '--',
+    l1Inflation: '--',
+    l1Fed: '--',
+    l1Multiplier: '--',
+    // L2
+    l2HMM: '--',
+    l2HMMConfidence: '--',
+    l2Liquidity: '--',
+    l2MarketRegime: '--',
+    l2AdjFactor: '--',
+    // L3
+    l3DollarType: '--',
+    l3OverlayDelta: '--',
+    l3RateShock: false,
+    l3Changepoint: false,
+    // Heatmap
     heatmapRows: [],
     heatmapFactors: [],
-    // Stress Test
-    stressPeriods: [],
-    stressSummary: null,
+    // Correlation
+    corrMatrix: [],
+    corrFactorNames: [],
     // Granger
     grangerFactors: [],
     grangerSummary: null,
@@ -71,13 +90,13 @@ Page({
       api.fetchFactors().catch(function () { return null }),
       api.fetchICHistory().catch(function () { return null }),
       api.fetchRegime().catch(function () { return null }),
-      api.fetchStressTest().catch(function () { return null }),
+      api.fetchCorrelation().catch(function () { return null }),
       api.fetchGranger().catch(function () { return null })
     ]).then(function (results) {
       var factorsData = results[0]
       var icData = results[1]
       var regimeData = results[2]
-      var stressData = results[3]
+      var corrData = results[3]
       var grangerData = results[4]
 
       var updateObj = { loading: false, lastUpdate: util.formatDateTime(new Date().toISOString()) }
@@ -168,19 +187,63 @@ Page({
         updateObj.icData = sampled
       }
 
-      // ── Regime Heatmap ──
-      if (regimeData) {
-        var current = regimeData.current
-        if (current) {
-          var regime = current.regime || 'Unknown'
-          updateObj.regimeCurrent = regime
-          updateObj.regimeClass = (regime === 'Risk-On' || regime === 'Favorable') ? 'badge-buy' :
-                                  (regime === 'Risk-Off' || regime === 'Cautious') ? 'badge-sell' : 'badge-gold'
-          updateObj.regimeMultiplier = current.multiplier != null ? current.multiplier + 'x' : '--'
+      // ── Regime v2 (3-layer) ──
+      if (regimeData && regimeData.current) {
+        var cur = regimeData.current
+        var regime = cur.regime || 'Unknown'
+        updateObj.regimeName = regime
+        updateObj.regimeMultiplier = cur.multiplier != null ? cur.multiplier.toFixed(3) + 'x' : '--'
+        updateObj.regimeConfidence = cur.confidence != null ? Math.round(cur.confidence * 100) : 0
+
+        // Classify regime for badge color
+        var rLower = regime.toLowerCase()
+        if (rLower.indexOf('risk-on') !== -1 || rLower.indexOf('favorable') !== -1 || rLower.indexOf('扩张') !== -1) {
+          updateObj.regimeClass = 'badge-buy'
+        } else if (rLower.indexOf('risk-off') !== -1 || rLower.indexOf('cautious') !== -1 || rLower.indexOf('熊') !== -1 || rLower.indexOf('滞胀') !== -1 || rLower.indexOf('防御') !== -1) {
+          updateObj.regimeClass = 'badge-sell'
+        } else {
+          updateObj.regimeClass = 'badge-gold'
         }
 
+        // L1 · 宏观四象限
+        if (cur.layer1) {
+          var l1 = cur.layer1
+          updateObj.l1Quadrant = l1.quadrant_zh || l1.quadrant || '--'
+          updateObj.l1Growth = l1.growth_direction === 'up' ? '↑ 扩张' : '↓ 收缩'
+          updateObj.l1Inflation = l1.inflation_direction === 'up' ? '↑ 上行' : '↓ 下行'
+          updateObj.l1Fed = l1.fed_cycle_zh || l1.fed_cycle || '--'
+          updateObj.l1Multiplier = l1.multiplier != null ? l1.multiplier.toFixed(2) + 'x' : '--'
+        }
+
+        // L2 · 市场结构
+        if (cur.layer2) {
+          var l2 = cur.layer2
+          updateObj.l2HMM = (l2.hmm_label_zh || l2.hmm_label || '--') +
+            (l2.hmm_confidence != null ? ' ' + Math.round(l2.hmm_confidence * 100) + '%' : '')
+          updateObj.l2HMMConfidence = l2.hmm_confidence != null ? Math.round(l2.hmm_confidence * 100) : 0
+          updateObj.l2Liquidity = l2.market_regime_zh || l2.market_regime || '--'
+          updateObj.l2MarketRegime = l2.market_regime_zh || '--'
+          updateObj.l2AdjFactor = l2.adj_factor != null ? l2.adj_factor.toFixed(3) + 'x' : '--'
+        }
+
+        // L3 · 事件叠加
+        if (cur.layer3) {
+          var l3 = cur.layer3
+          updateObj.l3DollarType = l3.dollar_type_zh || l3.dollar_type || '--'
+          updateObj.l3OverlayDelta = l3.overlay_delta != null ?
+            (l3.overlay_delta >= 0 ? '+' : '') + l3.overlay_delta.toFixed(2) : '--'
+          updateObj.l3RateShock = l3.rate_shock_detected || false
+          updateObj.l3Changepoint = l3.changepoint_detected || false
+        }
+
+        // Heatmap (now with all 13 factors)
         if (regimeData.heatmap) {
-          var factorKeys = ['F1_DXY', 'F3_TIPS10Y', 'F4_BEI', 'F5_GPR', 'F6_GVZ', 'F8_ETFFlow', 'F9_GDXRatio']
+          var allFactorKeys = Object.keys(FACTOR_SHORT)
+          // Only include keys that exist in heatmap data
+          var firstRow = regimeData.heatmap[0]
+          var factorKeys = allFactorKeys.filter(function (k) {
+            return firstRow && firstRow.factors && firstRow.factors[k] !== undefined
+          })
           updateObj.heatmapFactors = factorKeys.map(function (k) { return FACTOR_SHORT[k] || k })
 
           updateObj.heatmapRows = regimeData.heatmap.map(function (row) {
@@ -199,52 +262,47 @@ Page({
         }
       }
 
-      // ── Stress Test ──
-      if (stressData && stressData.periods) {
-        var periods = []
-        var keys = Object.keys(stressData.periods)
-        keys.forEach(function (key) {
-          var p = stressData.periods[key]
-          if (p.status === 'insufficient_data') return
-          periods.push({
-            id: key,
-            name: p.name,
-            nameEn: p.name_en,
-            start: p.start,
-            end: p.end,
-            description: p.description,
-            samples: p.samples,
-            ic: p.ic != null ? util.formatNumber(p.ic, 4) : 'N/A',
-            icColor: p.ic > 0.3 ? '#10B981' : p.ic > 0 ? '#34D399' :
-                     p.ic < -0.3 ? '#EF4444' : p.ic < 0 ? '#F87171' : '#9CA3AF',
-            goldReturn: p.gold_return != null ? util.formatPercent(p.gold_return) : 'N/A',
-            goldReturnColor: (p.gold_return || 0) >= 0 ? '#10B981' : '#EF4444',
-            maxDrawdown: p.gold_max_drawdown != null ? util.formatNumber(p.gold_max_drawdown, 2) + '%' : 'N/A',
-            hitRate: p.direction_hit_rate != null ? util.formatNumber(p.direction_hit_rate, 1) + '%' : 'N/A',
-            breakCount: p.logic_break_count || 0,
-            severity: p.max_severity || 'none',
-            severityClass: p.max_severity === 'high' ? 'badge-sell' :
-                           p.max_severity === 'medium' ? 'badge-gold' : 'badge-neutral',
-            logicBreaks: (p.logic_breaks || []).map(function (lb) {
-              return {
-                detail: lb.detail,
-                severityClass: lb.severity === 'high' ? 'text-red' :
-                               lb.severity === 'medium' ? 'text-gold' : 'text-gray'
-              }
-            })
-          })
-        })
-        updateObj.stressPeriods = periods
+      // ── Correlation Matrix ──
+      if (corrData && corrData.matrix && corrData.factors) {
+        var fNames = corrData.factors.map(function (f) { return FACTOR_SHORT[f] || f })
+        updateObj.corrFactorNames = fNames
 
-        if (stressData.summary) {
-          updateObj.stressSummary = {
-            totalBreaks: stressData.summary.total_logic_breaks || 0,
-            highSeverity: stressData.summary.high_severity_periods || 0,
-            avgIC: stressData.summary.avg_crisis_ic != null ?
-              util.formatNumber(stressData.summary.avg_crisis_ic, 4) : 'N/A',
-            assessment: stressData.summary.overall_assessment || 'N/A'
+        // Build NxN grid
+        var n = corrData.factors.length
+        var grid = []
+        for (var r = 0; r < n; r++) {
+          grid.push([])
+          for (var c = 0; c < n; c++) {
+            grid[r].push(0)
           }
         }
+        corrData.matrix.forEach(function (cell) {
+          var ri = corrData.factors.indexOf(cell.x)
+          var ci = corrData.factors.indexOf(cell.y)
+          if (ri >= 0 && ci >= 0) {
+            grid[ri][ci] = cell.value
+          }
+        })
+
+        var corrRows = []
+        for (var row = 0; row < n; row++) {
+          var cells = []
+          for (var col = 0; col < n; col++) {
+            var v = grid[row][col]
+            cells.push({
+              value: v,
+              display: row === col ? '1.0' : v.toFixed(1),
+              bg: getCorrColor(v),
+              textColor: Math.abs(v) > 0.5 ? '#FFFFFF' : '#D1D5DB',
+              isDiag: row === col
+            })
+          }
+          corrRows.push({
+            name: fNames[row],
+            cells: cells
+          })
+        }
+        updateObj.corrMatrix = corrRows
       }
 
       // ── Granger ──
@@ -318,4 +376,15 @@ function getHeatColor(val) {
   if (val > -1) return 'rgba(239, 68, 68, 0.25)'
   if (val > -2) return 'rgba(239, 68, 68, 0.5)'
   return 'rgba(239, 68, 68, 0.8)'
+}
+
+function getCorrColor(val) {
+  var abs = Math.abs(val)
+  if (val >= 0.7) return 'rgba(16, 185, 129, 0.85)'
+  if (val >= 0.5) return 'rgba(16, 185, 129, 0.6)'
+  if (val >= 0.3) return 'rgba(16, 185, 129, 0.35)'
+  if (val > -0.3) return 'rgba(75, 85, 99, 0.25)'
+  if (val > -0.5) return 'rgba(239, 68, 68, 0.35)'
+  if (val > -0.7) return 'rgba(239, 68, 68, 0.6)'
+  return 'rgba(239, 68, 68, 0.85)'
 }

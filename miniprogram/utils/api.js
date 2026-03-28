@@ -57,12 +57,12 @@ function fetchICHistory() {
   return request('/ic-history')
 }
 
-function fetchStressTest() {
-  return request('/stress-test')
-}
-
 function fetchGranger() {
   return request('/granger')
+}
+
+function fetchCorrelation() {
+  return request('/correlation')
 }
 
 function fetchModelHealth() {
@@ -79,7 +79,7 @@ module.exports = {
   fetchPositions,
   fetchEquityCurve,
   fetchICHistory,
-  fetchStressTest,
   fetchGranger,
+  fetchCorrelation,
   fetchModelHealth
 }

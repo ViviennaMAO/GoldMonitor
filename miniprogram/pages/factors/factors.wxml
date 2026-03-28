@@ -1,4 +1,4 @@
-<!-- Factors, IC, Regime, Stress Test, Granger Page -->
+<!-- Factors, IC, Regime, Correlation, Granger Page -->
 <scroll-view scroll-y class="page-scroll">
   <view class="container">
 
@@ -13,8 +13,8 @@
       <view class="tab-item {{activeTab === 'regime' ? 'tab-active' : ''}}" bindtap="switchTab" data-tab="regime">
         <text>Regime</text>
       </view>
-      <view class="tab-item {{activeTab === 'stress' ? 'tab-active' : ''}}" bindtap="switchTab" data-tab="stress">
-        <text>压力</text>
+      <view class="tab-item {{activeTab === 'corr' ? 'tab-active' : ''}}" bindtap="switchTab" data-tab="corr">
+        <text>相关性</text>
       </view>
       <view class="tab-item {{activeTab === 'granger' ? 'tab-active' : ''}}" bindtap="switchTab" data-tab="granger">
         <text>因果</text>
@@ -73,7 +73,7 @@
       <view class="mt-20" wx:if="{{logicalFactors.length > 0}}">
         <view class="row-between mb-12">
           <text class="text-xs text-gray">逻辑因子 ({{logicalFactors.length}})</text>
-          <view class="badge badge-purple" style="background: rgba(168, 85, 247, 0.15); color: #A855F7; border: 1rpx solid rgba(168, 85, 247, 0.3);">
+          <view class="badge" style="background: rgba(168, 85, 247, 0.15); color: #A855F7; border: 1rpx solid rgba(168, 85, 247, 0.3);">
             <text>P1b</text>
           </view>
         </view>
@@ -169,17 +169,108 @@
     </view>
 
     <!-- ══════════════════════════════════════ -->
-    <!-- ── Regime Heatmap Tab ── -->
+    <!-- ── Regime Tab (3-Layer v2) ── -->
     <!-- ══════════════════════════════════════ -->
     <view wx:if="{{activeTab === 'regime'}}">
+      <!-- Regime Header -->
       <view class="row-between mb-16">
-        <text class="text-lg text-bold text-white">Regime 热力图</text>
+        <text class="text-lg text-bold text-white">Regime v2 · 三层检测</text>
         <view class="badge {{regimeClass}}">
-          <text>{{regimeCurrent}} {{regimeMultiplier}}</text>
+          <text>{{regimeMultiplier}}</text>
         </view>
       </view>
 
+      <!-- Current Regime Summary -->
+      <view class="card mb-16">
+        <view class="row-between mb-8">
+          <text class="card-title">综合判定</text>
+          <view class="badge {{regimeClass}}" style="font-size: 24rpx; padding: 6rpx 16rpx;">
+            <text>{{regimeName}}</text>
+          </view>
+        </view>
+        <view class="progress-bar mt-8">
+          <view class="progress-fill" style="width: {{regimeConfidence}}%; background: {{regimeClass === 'badge-buy' ? '#10B981' : regimeClass === 'badge-sell' ? '#EF4444' : '#F59E0B'}};"></view>
+        </view>
+        <text class="text-xs text-gray mt-4">置信度 {{regimeConfidence}}%</text>
+      </view>
+
+      <!-- L1 · 宏观四象限 -->
+      <view class="card mb-16">
+        <view class="row-between mb-12">
+          <text class="card-title">L1 · 宏观四象限</text>
+          <text class="text-xs text-gray">{{l1Multiplier}}</text>
+        </view>
+        <view class="regime-grid">
+          <view class="regime-item">
+            <text class="regime-label">象限</text>
+            <text class="regime-value text-gold">{{l1Quadrant}}</text>
+          </view>
+          <view class="regime-item">
+            <text class="regime-label">增长</text>
+            <text class="regime-value" style="color: {{l1Growth === '↑ 扩张' ? '#10B981' : '#EF4444'}}">{{l1Growth}}</text>
+          </view>
+          <view class="regime-item">
+            <text class="regime-label">通胀</text>
+            <text class="regime-value" style="color: {{l1Inflation === '↑ 上行' ? '#EF4444' : '#10B981'}}">{{l1Inflation}}</text>
+          </view>
+          <view class="regime-item">
+            <text class="regime-label">美联储</text>
+            <text class="regime-value text-gold">{{l1Fed}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- L2 · 市场结构 -->
+      <view class="card mb-16">
+        <view class="row-between mb-12">
+          <text class="card-title">L2 · 市场结构</text>
+          <text class="text-xs text-gray">{{l2AdjFactor}}</text>
+        </view>
+        <view class="regime-grid">
+          <view class="regime-item">
+            <text class="regime-label">HMM</text>
+            <text class="regime-value" style="color: {{l2HMMConfidence > 70 ? '#EF4444' : '#F59E0B'}}">{{l2HMM}}</text>
+          </view>
+          <view class="regime-item">
+            <text class="regime-label">流动性</text>
+            <text class="regime-value" style="color: {{l2Liquidity === '系统性危机' ? '#EF4444' : l2Liquidity === '正常' ? '#10B981' : '#F59E0B'}}">{{l2Liquidity}}</text>
+          </view>
+          <view class="regime-item" style="grid-column: span 2;">
+            <text class="regime-label">调整</text>
+            <text class="regime-value text-white">{{l2AdjFactor}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- L3 · 事件叠加 -->
+      <view class="card mb-16">
+        <view class="row-between mb-12">
+          <text class="card-title">L3 · 事件叠加</text>
+          <text class="text-xs text-gray">{{l3OverlayDelta}}</text>
+        </view>
+        <view class="regime-grid">
+          <view class="regime-item">
+            <text class="regime-label">美元形态</text>
+            <text class="regime-value text-gold">{{l3DollarType}}</text>
+          </view>
+          <view class="regime-item">
+            <text class="regime-label">叠加量</text>
+            <text class="regime-value" style="color: {{l3OverlayDelta.indexOf('+') !== -1 ? '#10B981' : '#EF4444'}}">{{l3OverlayDelta}}</text>
+          </view>
+          <view class="regime-item">
+            <text class="regime-label">利率冲击</text>
+            <text class="regime-value" style="color: {{l3RateShock ? '#EF4444' : '#10B981'}}">{{l3RateShock ? '检测到' : '无'}}</text>
+          </view>
+          <view class="regime-item">
+            <text class="regime-label">结构突变</text>
+            <text class="regime-value" style="color: {{l3Changepoint ? '#EF4444' : '#10B981'}}">{{l3Changepoint ? '检测到' : '无'}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- Heatmap -->
       <view class="card heatmap-card">
+        <text class="card-title mb-8">月末因子 Z-Score 热力图</text>
         <scroll-view scroll-x class="heatmap-scroll">
           <view class="heatmap-table">
             <view class="hm-row hm-header">
@@ -202,6 +293,7 @@
         </scroll-view>
       </view>
 
+      <!-- Color Legend -->
       <view class="card mt-16">
         <text class="card-title">色阶说明</text>
         <view class="legend-row mt-12">
@@ -230,70 +322,70 @@
     </view>
 
     <!-- ══════════════════════════════════════ -->
-    <!-- ── Stress Test Tab ── -->
+    <!-- ── Correlation Matrix Tab ── -->
     <!-- ══════════════════════════════════════ -->
-    <view wx:if="{{activeTab === 'stress'}}">
-      <text class="text-lg text-bold text-white mb-16">压力测试 · 逻辑断裂检测</text>
+    <view wx:if="{{activeTab === 'corr'}}">
+      <text class="text-lg text-bold text-white mb-8">因子相关性矩阵</text>
+      <text class="text-xs text-gray mb-16">Pearson 相关系数 · 高相关 (>0.7) 提示多重共线性风险</text>
 
-      <!-- Summary -->
-      <view class="ic-stats-grid" wx:if="{{stressSummary}}">
-        <view class="ic-stat-card">
-          <text class="ic-stat-label">逻辑断裂</text>
-          <text class="ic-stat-value text-red">{{stressSummary.totalBreaks}}</text>
-          <text class="ic-hint">所有危机期间</text>
-        </view>
-        <view class="ic-stat-card">
-          <text class="ic-stat-label">高危期间</text>
-          <text class="ic-stat-value text-gold">{{stressSummary.highSeverity}}</text>
-          <text class="ic-hint">严重逻辑失效</text>
-        </view>
-        <view class="ic-stat-card">
-          <text class="ic-stat-label">平均IC</text>
-          <text class="ic-stat-value text-white">{{stressSummary.avgIC}}</text>
-          <text class="ic-hint">危机期间预测力</text>
-        </view>
+      <view class="card heatmap-card">
+        <scroll-view scroll-x class="heatmap-scroll">
+          <view class="heatmap-table">
+            <!-- Header row -->
+            <view class="hm-row hm-header">
+              <view class="hm-cell hm-month-cell">
+                <text class="text-xs text-gray"></text>
+              </view>
+              <view class="hm-cell" wx:for="{{corrFactorNames}}" wx:key="*this">
+                <text class="hm-factor-label" style="font-size: 18rpx;">{{item}}</text>
+              </view>
+            </view>
+
+            <!-- Data rows -->
+            <view class="hm-row" wx:for="{{corrMatrix}}" wx:key="name">
+              <view class="hm-cell hm-month-cell">
+                <text class="text-xs text-white" style="font-size: 18rpx;">{{item.name}}</text>
+              </view>
+              <view class="hm-cell" wx:for="{{item.cells}}" wx:for-item="cell" wx:key="display"
+                style="background: {{cell.isDiag ? 'rgba(245, 158, 11, 0.3)' : cell.bg}};">
+                <text class="hm-value" style="color: {{cell.isDiag ? '#F59E0B' : cell.textColor}}; font-size: 18rpx;">{{cell.display}}</text>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
       </view>
 
-      <!-- Crisis Period Cards -->
-      <view class="factor-card" wx:for="{{stressPeriods}}" wx:key="id">
-        <view class="row-between mb-8">
-          <text class="text-base text-bold text-white">{{item.name}}</text>
-          <view class="badge {{item.severityClass}}">
-            <text>{{item.severity}}</text>
+      <!-- Legend -->
+      <view class="card mt-16">
+        <text class="card-title">相关性色阶</text>
+        <view class="legend-row mt-12">
+          <view class="legend-item">
+            <view class="legend-swatch" style="background: rgba(239, 68, 68, 0.85);"></view>
+            <text class="text-xs text-gray">强负相关</text>
           </view>
-        </view>
-        <text class="text-xs text-gray mb-8">{{item.start}} → {{item.end}} | {{item.samples}}天</text>
-        <text class="text-xs text-gray mb-12">{{item.description}}</text>
-
-        <view class="row-between">
-          <view class="col">
-            <text class="text-xs text-gray">IC</text>
-            <text class="text-sm text-bold" style="color: {{item.icColor}}">{{item.ic}}</text>
+          <view class="legend-item">
+            <view class="legend-swatch" style="background: rgba(239, 68, 68, 0.35);"></view>
+            <text class="text-xs text-gray">负相关</text>
           </view>
-          <view class="col" style="align-items: center;">
-            <text class="text-xs text-gray">金价收益</text>
-            <text class="text-sm text-bold" style="color: {{item.goldReturnColor}}">{{item.goldReturn}}</text>
+          <view class="legend-item">
+            <view class="legend-swatch" style="background: rgba(75, 85, 99, 0.25);"></view>
+            <text class="text-xs text-gray">弱/无</text>
           </view>
-          <view class="col" style="align-items: center;">
-            <text class="text-xs text-gray">方向胜率</text>
-            <text class="text-sm text-bold text-white">{{item.hitRate}}</text>
+          <view class="legend-item">
+            <view class="legend-swatch" style="background: rgba(16, 185, 129, 0.35);"></view>
+            <text class="text-xs text-gray">正相关</text>
           </view>
-          <view class="col" style="align-items: flex-end;">
-            <text class="text-xs text-gray">断裂</text>
-            <text class="text-sm text-bold text-red">{{item.breakCount}}</text>
+          <view class="legend-item">
+            <view class="legend-swatch" style="background: rgba(16, 185, 129, 0.85);"></view>
+            <text class="text-xs text-gray">强正相关</text>
           </view>
         </view>
 
-        <!-- Logic breaks -->
-        <view wx:if="{{item.logicBreaks.length > 0}}" class="mt-8" style="padding-top: 12rpx; border-top: 1rpx solid rgba(75, 85, 99, 0.3);">
-          <view wx:for="{{item.logicBreaks}}" wx:for-item="lb" wx:key="detail" class="mb-4">
-            <text class="text-xs {{lb.severityClass}}">⚠ {{lb.detail}}</text>
-          </view>
+        <view class="desc-list mt-12">
+          <text class="desc-item">|r| > 0.7: 高度共线性，需考虑因子去重</text>
+          <text class="desc-item">|r| 0.3~0.7: 中度相关，可共存</text>
+          <text class="desc-item">|r| < 0.3: 独立信号源，组合价值高</text>
         </view>
-      </view>
-
-      <view wx:if="{{stressPeriods.length === 0}}" class="text-center mt-20">
-        <text class="text-gray">暂无压力测试数据</text>
       </view>
     </view>
 
@@ -322,7 +414,7 @@
         </view>
       </view>
 
-      <!-- Factor Granger Results -->
+      <!-- Factor Granger Results Table -->
       <view class="card mt-16">
         <text class="card-title">因子因果检验明细</text>
         <view class="ic-table mt-12">
