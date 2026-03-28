@@ -130,7 +130,7 @@
         </view>
         <view class="info-row">
           <text class="text-sm text-gray">数据源</text>
-          <text class="text-sm text-white">FRED + Stooq</text>
+          <text class="text-sm text-white">FRED + Yahoo + Stooq</text>
         </view>
         <view class="info-row" bindtap="onCopyApi">
           <text class="text-sm text-gray">API 地址</text>

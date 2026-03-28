@@ -1,4 +1,4 @@
-<!-- Factors, IC, Regime Page -->
+<!-- Factors, IC, Regime, Stress Test, Granger Page -->
 <scroll-view scroll-y class="page-scroll">
   <view class="container">
 
@@ -8,10 +8,16 @@
         <text>因子</text>
       </view>
       <view class="tab-item {{activeTab === 'ic' ? 'tab-active' : ''}}" bindtap="switchTab" data-tab="ic">
-        <text>IC追踪</text>
+        <text>IC</text>
       </view>
       <view class="tab-item {{activeTab === 'regime' ? 'tab-active' : ''}}" bindtap="switchTab" data-tab="regime">
         <text>Regime</text>
+      </view>
+      <view class="tab-item {{activeTab === 'stress' ? 'tab-active' : ''}}" bindtap="switchTab" data-tab="stress">
+        <text>压力</text>
+      </view>
+      <view class="tab-item {{activeTab === 'granger' ? 'tab-active' : ''}}" bindtap="switchTab" data-tab="granger">
+        <text>因果</text>
       </view>
     </view>
 
@@ -20,13 +26,15 @@
     <!-- ══════════════════════════════════════ -->
     <view wx:if="{{activeTab === 'factors'}}">
       <view class="row-between mb-16">
-        <text class="text-lg text-bold text-white">黄金量化因子</text>
+        <text class="text-lg text-bold text-white">黄金量化因子 ({{factors.length}})</text>
         <view class="badge badge-gold">
           <text>{{dataSource}}</text>
         </view>
       </view>
 
-      <view class="factor-card" wx:for="{{factors}}" wx:key="id">
+      <!-- Base Factors -->
+      <text class="text-xs text-gray mb-8" wx:if="{{baseFactors.length > 0}}">基础因子 ({{baseFactors.length}})</text>
+      <view class="factor-card" wx:for="{{baseFactors}}" wx:key="id">
         <view class="row-between mb-12">
           <view class="row" style="gap: 12rpx; align-items: center;">
             <view class="factor-id-badge">
@@ -60,6 +68,42 @@
           <view class="zscore-fill {{item.zScoreDir}}" style="width: {{item.zScoreWidth}}%; background: {{item.zScoreColor}};"></view>
         </view>
       </view>
+
+      <!-- Logical Factors -->
+      <view class="mt-20" wx:if="{{logicalFactors.length > 0}}">
+        <view class="row-between mb-12">
+          <text class="text-xs text-gray">逻辑因子 ({{logicalFactors.length}})</text>
+          <view class="badge badge-purple" style="background: rgba(168, 85, 247, 0.15); color: #A855F7; border: 1rpx solid rgba(168, 85, 247, 0.3);">
+            <text>P1b</text>
+          </view>
+        </view>
+        <view class="factor-card" wx:for="{{logicalFactors}}" wx:key="id">
+          <view class="row-between mb-12">
+            <view class="row" style="gap: 12rpx; align-items: center;">
+              <view class="factor-id-badge" style="background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.3);">
+                <text style="color: #A855F7;">{{item.id}}</text>
+              </view>
+              <text class="text-base text-bold text-white">{{item.displayName}}</text>
+            </view>
+            <view class="badge {{item.signalClass}}">
+              <text>{{item.signal}}</text>
+            </view>
+          </view>
+          <text class="text-xs text-gray" wx:if="{{item.description}}">{{item.description}}</text>
+
+          <view class="row-between mt-12">
+            <view class="col">
+              <text class="text-xs text-gray">Z-Score</text>
+              <text class="text-lg text-bold" style="color: {{item.zScoreColor}}">{{item.zScore}}</text>
+            </view>
+          </view>
+
+          <view class="zscore-bar mt-12">
+            <view class="zscore-center-line"></view>
+            <view class="zscore-fill {{item.zScoreDir}}" style="width: {{item.zScoreWidth}}%; background: {{item.zScoreColor}};"></view>
+          </view>
+        </view>
+      </view>
     </view>
 
     <!-- ══════════════════════════════════════ -->
@@ -68,7 +112,6 @@
     <view wx:if="{{activeTab === 'ic'}}">
       <text class="text-lg text-bold text-white mb-16">IC 追踪 · 信息系数</text>
 
-      <!-- IC Summary Stats -->
       <view class="ic-stats-grid">
         <view class="ic-stat-card">
           <text class="ic-stat-label">Rolling IC</text>
@@ -87,12 +130,10 @@
         </view>
       </view>
 
-      <!-- IC Bar Chart -->
       <view class="card mt-16">
         <text class="card-title">Rolling IC 时序</text>
         <text class="text-xs text-gray mt-4">绿色=因子预测方向正确，红色=预测方向错误</text>
         <view class="ic-chart mt-12">
-          <!-- Zero line -->
           <view class="ic-chart-area">
             <view class="ic-bar-wrapper" wx:for="{{icData}}" wx:key="date">
               <view class="ic-bar-pos" wx:if="{{item.icRaw >= 0}}" style="height: {{item.barHeight}}rpx; background: {{item.color}};"></view>
@@ -100,14 +141,12 @@
               <view class="ic-bar-neg" wx:if="{{item.icRaw < 0}}" style="height: {{item.barHeight}}rpx; background: {{item.color}};"></view>
             </view>
           </view>
-          <!-- X axis labels -->
           <view class="ic-x-labels">
             <text class="ic-x-label" wx:for="{{icData}}" wx:key="date" wx:if="{{index % 5 === 0}}">{{item.date}}</text>
           </view>
         </view>
       </view>
 
-      <!-- IC Data Table -->
       <view class="card mt-16">
         <text class="card-title">IC 数据明细</text>
         <view class="ic-table mt-12">
@@ -127,17 +166,6 @@
           </view>
         </view>
       </view>
-
-      <!-- IC Explanation -->
-      <view class="card mt-16">
-        <text class="card-title">IC 指标说明</text>
-        <view class="desc-list mt-8">
-          <text class="desc-item">IC (Information Coefficient) 衡量因子预测能力</text>
-          <text class="desc-item">IC 均值越高，因子预测方向越准确</text>
-          <text class="desc-item">ICIR = IC均值/IC标准差，衡量预测稳定性</text>
-          <text class="desc-item">ICIR 大于 2 视为优秀因子</text>
-        </view>
-      </view>
     </view>
 
     <!-- ══════════════════════════════════════ -->
@@ -151,11 +179,9 @@
         </view>
       </view>
 
-      <!-- Heatmap Table -->
       <view class="card heatmap-card">
         <scroll-view scroll-x class="heatmap-scroll">
           <view class="heatmap-table">
-            <!-- Header row (factor names) -->
             <view class="hm-row hm-header">
               <view class="hm-cell hm-month-cell">
                 <text class="text-xs text-gray">月份</text>
@@ -164,8 +190,6 @@
                 <text class="hm-factor-label">{{item}}</text>
               </view>
             </view>
-
-            <!-- Data rows -->
             <view class="hm-row" wx:for="{{heatmapRows}}" wx:key="month">
               <view class="hm-cell hm-month-cell">
                 <text class="text-xs text-white">{{item.month}}</text>
@@ -178,7 +202,6 @@
         </scroll-view>
       </view>
 
-      <!-- Color Legend -->
       <view class="card mt-16">
         <text class="card-title">色阶说明</text>
         <view class="legend-row mt-12">
@@ -204,15 +227,141 @@
           </view>
         </view>
       </view>
+    </view>
 
-      <!-- Regime Explanation -->
-      <view class="card mt-16">
-        <text class="card-title">Regime 状态说明</text>
-        <view class="desc-list mt-8">
-          <text class="desc-item">Risk-On: 全部因子利多，仓位 1.0x</text>
-          <text class="desc-item">Transition: 多空分歧，仓位 0.5x</text>
-          <text class="desc-item">Risk-Off: 全面利空，仓位 0x (熔断)</text>
+    <!-- ══════════════════════════════════════ -->
+    <!-- ── Stress Test Tab ── -->
+    <!-- ══════════════════════════════════════ -->
+    <view wx:if="{{activeTab === 'stress'}}">
+      <text class="text-lg text-bold text-white mb-16">压力测试 · 逻辑断裂检测</text>
+
+      <!-- Summary -->
+      <view class="ic-stats-grid" wx:if="{{stressSummary}}">
+        <view class="ic-stat-card">
+          <text class="ic-stat-label">逻辑断裂</text>
+          <text class="ic-stat-value text-red">{{stressSummary.totalBreaks}}</text>
+          <text class="ic-hint">所有危机期间</text>
         </view>
+        <view class="ic-stat-card">
+          <text class="ic-stat-label">高危期间</text>
+          <text class="ic-stat-value text-gold">{{stressSummary.highSeverity}}</text>
+          <text class="ic-hint">严重逻辑失效</text>
+        </view>
+        <view class="ic-stat-card">
+          <text class="ic-stat-label">平均IC</text>
+          <text class="ic-stat-value text-white">{{stressSummary.avgIC}}</text>
+          <text class="ic-hint">危机期间预测力</text>
+        </view>
+      </view>
+
+      <!-- Crisis Period Cards -->
+      <view class="factor-card" wx:for="{{stressPeriods}}" wx:key="id">
+        <view class="row-between mb-8">
+          <text class="text-base text-bold text-white">{{item.name}}</text>
+          <view class="badge {{item.severityClass}}">
+            <text>{{item.severity}}</text>
+          </view>
+        </view>
+        <text class="text-xs text-gray mb-8">{{item.start}} → {{item.end}} | {{item.samples}}天</text>
+        <text class="text-xs text-gray mb-12">{{item.description}}</text>
+
+        <view class="row-between">
+          <view class="col">
+            <text class="text-xs text-gray">IC</text>
+            <text class="text-sm text-bold" style="color: {{item.icColor}}">{{item.ic}}</text>
+          </view>
+          <view class="col" style="align-items: center;">
+            <text class="text-xs text-gray">金价收益</text>
+            <text class="text-sm text-bold" style="color: {{item.goldReturnColor}}">{{item.goldReturn}}</text>
+          </view>
+          <view class="col" style="align-items: center;">
+            <text class="text-xs text-gray">方向胜率</text>
+            <text class="text-sm text-bold text-white">{{item.hitRate}}</text>
+          </view>
+          <view class="col" style="align-items: flex-end;">
+            <text class="text-xs text-gray">断裂</text>
+            <text class="text-sm text-bold text-red">{{item.breakCount}}</text>
+          </view>
+        </view>
+
+        <!-- Logic breaks -->
+        <view wx:if="{{item.logicBreaks.length > 0}}" class="mt-8" style="padding-top: 12rpx; border-top: 1rpx solid rgba(75, 85, 99, 0.3);">
+          <view wx:for="{{item.logicBreaks}}" wx:for-item="lb" wx:key="detail" class="mb-4">
+            <text class="text-xs {{lb.severityClass}}">⚠ {{lb.detail}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view wx:if="{{stressPeriods.length === 0}}" class="text-center mt-20">
+        <text class="text-gray">暂无压力测试数据</text>
+      </view>
+    </view>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- ── Granger Causality Tab ── -->
+    <!-- ══════════════════════════════════════ -->
+    <view wx:if="{{activeTab === 'granger'}}">
+      <text class="text-lg text-bold text-white mb-16">Granger 因果检验</text>
+
+      <!-- Summary -->
+      <view class="ic-stats-grid" wx:if="{{grangerSummary}}">
+        <view class="ic-stat-card">
+          <text class="ic-stat-label">通过率</text>
+          <text class="ic-stat-value text-green">{{grangerSummary.passRate}}</text>
+          <text class="ic-hint">{{grangerSummary.pass}}/{{grangerSummary.total}} 因子</text>
+        </view>
+        <view class="ic-stat-card">
+          <text class="ic-stat-label">通过</text>
+          <text class="ic-stat-value text-green">{{grangerSummary.pass}}</text>
+          <text class="ic-hint">因果显著</text>
+        </view>
+        <view class="ic-stat-card">
+          <text class="ic-stat-label">未通过</text>
+          <text class="ic-stat-value text-red">{{grangerSummary.fail}}</text>
+          <text class="ic-hint">需关注</text>
+        </view>
+      </view>
+
+      <!-- Factor Granger Results -->
+      <view class="card mt-16">
+        <text class="card-title">因子因果检验明细</text>
+        <view class="ic-table mt-12">
+          <view class="ic-table-header">
+            <text class="ic-col" style="flex: 2;">因子</text>
+            <text class="ic-col">Granger</text>
+            <text class="ic-col">最优滞后</text>
+            <text class="ic-col">OOS IC</text>
+          </view>
+          <view class="ic-table-row" wx:for="{{grangerFactors}}" wx:key="id">
+            <text class="ic-col text-white" style="flex: 2; font-size: 22rpx;">{{item.name}}</text>
+            <text class="ic-col">
+              <text class="badge {{item.passClass}}" style="font-size: 20rpx; padding: 2rpx 10rpx;">{{item.passLabel}}</text>
+            </text>
+            <text class="ic-col text-white">{{item.optimalLag}}</text>
+            <text class="ic-col" style="color: {{item.oosICColor}}">{{item.oosIC}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- Verdict Cards -->
+      <view class="factor-card" wx:for="{{grangerFactors}}" wx:key="id">
+        <view class="row-between mb-8">
+          <text class="text-sm text-bold text-white">{{item.name}}</text>
+          <view class="badge {{item.passClass}}">
+            <text>{{item.verdictShort}}</text>
+          </view>
+        </view>
+        <text class="text-xs text-gray">{{item.verdict}}</text>
+      </view>
+
+      <!-- Recommendation -->
+      <view class="card mt-16" wx:if="{{grangerSummary}}">
+        <text class="card-title">综合建议</text>
+        <text class="text-xs text-gray mt-8">{{grangerSummary.recommendation}}</text>
+      </view>
+
+      <view wx:if="{{grangerFactors.length === 0}}" class="text-center mt-20">
+        <text class="text-gray">暂无因果检验数据</text>
       </view>
     </view>
 

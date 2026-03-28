@@ -8,7 +8,13 @@ var FACTOR_SHORT = {
   'F5_GPR': 'GPR',
   'F6_GVZ': 'GVZ',
   'F8_ETFFlow': 'ETF',
-  'F9_GDXRatio': 'GDX'
+  'F9_GDXRatio': 'GDX',
+  'F10_TIPSBEISpread': 'T-B',
+  'F11_DXYMomentum': 'DXYm',
+  'F12_DXYDownGPRUp': 'D×G',
+  'F13_GoldGDXDivergence': 'G-M',
+  'F14_GVZMomentum': 'GVZm',
+  'F15_ETFFlowAccel': 'ETFa'
 }
 
 Page({
@@ -17,6 +23,8 @@ Page({
     activeTab: 'factors',
     // Factors
     factors: [],
+    baseFactors: [],
+    logicalFactors: [],
     dataSource: '',
     // IC Tracking
     icData: [],
@@ -30,6 +38,12 @@ Page({
     regimeMultiplier: '--',
     heatmapRows: [],
     heatmapFactors: [],
+    // Stress Test
+    stressPeriods: [],
+    stressSummary: null,
+    // Granger
+    grangerFactors: [],
+    grangerSummary: null,
     // Last update
     lastUpdate: '--'
   },
@@ -56,11 +70,15 @@ Page({
     return Promise.all([
       api.fetchFactors().catch(function () { return null }),
       api.fetchICHistory().catch(function () { return null }),
-      api.fetchRegime().catch(function () { return null })
+      api.fetchRegime().catch(function () { return null }),
+      api.fetchStressTest().catch(function () { return null }),
+      api.fetchGranger().catch(function () { return null })
     ]).then(function (results) {
       var factorsData = results[0]
       var icData = results[1]
       var regimeData = results[2]
+      var stressData = results[3]
+      var grangerData = results[4]
 
       var updateObj = { loading: false, lastUpdate: util.formatDateTime(new Date().toISOString()) }
 
@@ -73,14 +91,14 @@ Page({
           if (factorsData.dataSource.stooq) sources.push('Stooq')
           if (factorsData.dataSource.pipeline) sources.push('Pipeline')
         }
-        // Check if any factor has GPR unit (pipeline fallback active)
         var hasPipeline = factorsData.factors.some(function (f) { return f.rawUnit === 'GPR' })
         if (hasPipeline && sources.indexOf('Pipeline') === -1) sources.push('Pipeline')
         updateObj.dataSource = sources.join('+') || 'API'
 
-        updateObj.factors = factorsData.factors.map(function (f) {
+        var allFactors = factorsData.factors.map(function (f) {
           var zs = f.zScore != null ? f.zScore : 0
           var val = f.rawValue != null ? f.rawValue : f.value
+          var fNum = parseInt((f.id || '').replace('F', ''))
           return {
             id: f.id,
             name: f.name,
@@ -96,9 +114,14 @@ Page({
             signalClass: (f.signal || '').indexOf('支撑') !== -1 || (f.signal || '').indexOf('利好') !== -1 || (f.signal || '').indexOf('升温') !== -1 ? 'badge-buy' :
                          (f.signal || '').indexOf('利空') !== -1 || (f.signal || '').indexOf('压制') !== -1 ? 'badge-sell' : 'badge-neutral',
             percentile: f.percentile52w != null ? Math.round(f.percentile52w) : null,
-            description: getFactorDescription(f.id)
+            description: getFactorDescription(f.id),
+            isLogical: fNum >= 10
           }
         })
+
+        updateObj.factors = allFactors
+        updateObj.baseFactors = allFactors.filter(function (f) { return !f.isLogical })
+        updateObj.logicalFactors = allFactors.filter(function (f) { return f.isLogical })
       }
 
       // ── IC Tracking ──
@@ -109,7 +132,6 @@ Page({
         var mean = icArr.length > 0 ? sum / icArr.length : 0
         var latest = icArr.length > 0 ? icArr[icArr.length - 1].ic : 0
 
-        // Calculate ICIR (mean / std)
         var variance = 0
         icArr.forEach(function (d) { variance += Math.pow(d.ic - mean, 2) })
         var std = icArr.length > 1 ? Math.sqrt(variance / (icArr.length - 1)) : 1
@@ -121,7 +143,6 @@ Page({
         updateObj.icLatestColor = latest > 0.3 ? '#10B981' : latest > 0 ? '#34D399' :
                                   latest < -0.3 ? '#EF4444' : '#F87171'
 
-        // Sample IC data for display (every 3rd point)
         var step = Math.max(1, Math.floor(icArr.length / 25))
         var sampled = []
         for (var i = 0; i < icArr.length; i += step) {
@@ -134,7 +155,6 @@ Page({
             color: d.ic >= 0 ? '#10B981' : '#EF4444'
           })
         }
-        // Always include last
         var lastIC = icArr[icArr.length - 1]
         if (sampled[sampled.length - 1].date !== util.formatDate(lastIC.date)) {
           sampled.push({
@@ -164,7 +184,7 @@ Page({
           updateObj.heatmapFactors = factorKeys.map(function (k) { return FACTOR_SHORT[k] || k })
 
           updateObj.heatmapRows = regimeData.heatmap.map(function (row) {
-            var month = row.month.substring(5) // "2026-03" → "03"
+            var month = row.month.substring(5)
             var cells = factorKeys.map(function (k) {
               var val = row.factors[k] || 0
               return {
@@ -176,6 +196,87 @@ Page({
             })
             return { month: month, cells: cells }
           })
+        }
+      }
+
+      // ── Stress Test ──
+      if (stressData && stressData.periods) {
+        var periods = []
+        var keys = Object.keys(stressData.periods)
+        keys.forEach(function (key) {
+          var p = stressData.periods[key]
+          if (p.status === 'insufficient_data') return
+          periods.push({
+            id: key,
+            name: p.name,
+            nameEn: p.name_en,
+            start: p.start,
+            end: p.end,
+            description: p.description,
+            samples: p.samples,
+            ic: p.ic != null ? util.formatNumber(p.ic, 4) : 'N/A',
+            icColor: p.ic > 0.3 ? '#10B981' : p.ic > 0 ? '#34D399' :
+                     p.ic < -0.3 ? '#EF4444' : p.ic < 0 ? '#F87171' : '#9CA3AF',
+            goldReturn: p.gold_return != null ? util.formatPercent(p.gold_return) : 'N/A',
+            goldReturnColor: (p.gold_return || 0) >= 0 ? '#10B981' : '#EF4444',
+            maxDrawdown: p.gold_max_drawdown != null ? util.formatNumber(p.gold_max_drawdown, 2) + '%' : 'N/A',
+            hitRate: p.direction_hit_rate != null ? util.formatNumber(p.direction_hit_rate, 1) + '%' : 'N/A',
+            breakCount: p.logic_break_count || 0,
+            severity: p.max_severity || 'none',
+            severityClass: p.max_severity === 'high' ? 'badge-sell' :
+                           p.max_severity === 'medium' ? 'badge-gold' : 'badge-neutral',
+            logicBreaks: (p.logic_breaks || []).map(function (lb) {
+              return {
+                detail: lb.detail,
+                severityClass: lb.severity === 'high' ? 'text-red' :
+                               lb.severity === 'medium' ? 'text-gold' : 'text-gray'
+              }
+            })
+          })
+        })
+        updateObj.stressPeriods = periods
+
+        if (stressData.summary) {
+          updateObj.stressSummary = {
+            totalBreaks: stressData.summary.total_logic_breaks || 0,
+            highSeverity: stressData.summary.high_severity_periods || 0,
+            avgIC: stressData.summary.avg_crisis_ic != null ?
+              util.formatNumber(stressData.summary.avg_crisis_ic, 4) : 'N/A',
+            assessment: stressData.summary.overall_assessment || 'N/A'
+          }
+        }
+      }
+
+      // ── Granger ──
+      if (grangerData && grangerData.factors) {
+        var gFactors = []
+        var fKeys = Object.keys(grangerData.factors)
+        fKeys.forEach(function (key) {
+          var f = grangerData.factors[key]
+          gFactors.push({
+            id: key,
+            name: f.display_name,
+            passes: f.granger_causes_gold,
+            passClass: f.granger_causes_gold ? 'badge-buy' : 'badge-sell',
+            passLabel: f.granger_causes_gold ? 'PASS' : 'FAIL',
+            optimalLag: f.optimal_lag_days != null ? f.optimal_lag_days + 'd' : 'N/A',
+            ic: util.formatNumber(f.contemporaneous_ic, 3),
+            oosIC: f.oos_ic != null ? util.formatNumber(f.oos_ic, 3) : 'N/A',
+            oosICColor: f.oos_ic > 0.1 ? '#10B981' : f.oos_ic < -0.1 ? '#EF4444' : '#9CA3AF',
+            verdict: f.verdict || '',
+            verdictShort: (f.verdict || '').split('—')[0].trim()
+          })
+        })
+        updateObj.grangerFactors = gFactors
+
+        if (grangerData.summary) {
+          updateObj.grangerSummary = {
+            passRate: util.formatNumber(grangerData.summary.pass_rate, 0) + '%',
+            pass: grangerData.summary.granger_pass,
+            fail: grangerData.summary.granger_fail,
+            total: grangerData.summary.total_factors,
+            recommendation: grangerData.summary.recommendation || 'N/A'
+          }
         }
       }
 
@@ -198,7 +299,13 @@ function getFactorDescription(id) {
     'F5': '地缘政治风险 GPR — 经济政策不确定性',
     'F6': '黄金波动率 GVZ — 市场恐慌指标',
     'F8': 'ETF 资金流 — 投资者情绪',
-    'F9': '矿业股/金价比 — 板块相对强弱'
+    'F9': '矿业股/金价比 — 板块相对强弱',
+    'F10': '实际利率-通胀利差 — 货币政策紧缩信号',
+    'F11': '美元动量 20D — USD趋势加速度',
+    'F12': '弱美元×高风险 — 金价最强顺风组合',
+    'F13': '金价-矿业股背离 — 均值回归信号',
+    'F14': '波动率动量 — 恐慌情绪变化率',
+    'F15': 'ETF资金加速度 — 资金流趋势突变'
   }
   return descriptions[id] || ''
 }

@@ -59,6 +59,7 @@ function getSignalLabel(signal) {
     'Strong Buy': '强烈买入',
     'Buy': '买入',
     'Hold': '持有',
+    'Neutral': '中性',
     'Sell': '卖出',
     'Strong Sell': '强烈卖出'
   }
