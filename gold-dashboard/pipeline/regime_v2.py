@@ -147,7 +147,7 @@ def _detect_layer1(df: pd.DataFrame, latest) -> dict:
         else:
             fed_cycle = "Neutral"
     else:
-        tips_z = _safe_float(latest, "F3_TIPS10Y")
+        tips_z = _safe_float(latest, "F10_TIPSBEISpread", _safe_float(latest, "F3_TIPS10Y"))
         fed_cycle = "Tightening" if tips_z > 0.8 else ("Easing" if tips_z < -0.8 else "Neutral")
 
     # ── Quadrant ──────────────────────────────────────────────────────────────
@@ -263,11 +263,11 @@ def _fit_hmm(df: pd.DataFrame) -> dict:
 def _hmm_rule_fallback(latest) -> dict:
     """Rule-based fallback when hmmlearn is unavailable."""
     gvz_z = _safe_float(latest, "F6_GVZ")
-    etf_z = _safe_float(latest, "F8_ETFFlow")
+    gdx_mom = _safe_float(latest, "F9_GDXMomentum", _safe_float(latest, "F9_GDXRatio"))
 
-    if gvz_z > 1.0 and etf_z < 0:
+    if gvz_z > 1.0 and gdx_mom < 0:
         label = "Bear"
-    elif gvz_z < -0.3 and etf_z > 0:
+    elif gvz_z < -0.3 and gdx_mom > 0:
         label = "Bull"
     else:
         label = "Neutral"
@@ -307,11 +307,13 @@ def _liqvol_matrix(latest) -> dict:
     """
     gvz_z = _safe_float(latest, "F6_GVZ")
     gvz_mom_z = _safe_float(latest, "F14_GVZMomentum")
-    etf_z = _safe_float(latest, "F8_ETFFlow")
-    etf_accel = _safe_float(latest, "F15_ETFFlowAccel")
+    gdx_mom = _safe_float(latest, "F9_GDXMomentum", _safe_float(latest, "F9_GDXRatio"))
+    # P2: Use GDX momentum as liquidity proxy (miners up = risk appetite = good liquidity)
+    # Replaces removed F8_ETFFlow / F15_ETFFlowAccel
+    etf_z = _safe_float(latest, "F8_ETFFlow")  # fallback if still in features
 
     vol_high = gvz_z > 1.0 or (gvz_z > 0.5 and gvz_mom_z > 0.5)
-    liq_good = etf_z > 0 or etf_accel > 0.5
+    liq_good = gdx_mom > 0 or etf_z > 0
 
     if vol_high and not liq_good:
         regime, regime_zh = "Systemic Risk", "系统性危机"

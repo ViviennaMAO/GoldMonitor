@@ -68,7 +68,7 @@ def detect_regime(features_row: dict) -> dict:
 
     gvz_z = features_row.get("F6_GVZ", 0)
     gpr_z = features_row.get("F5_GPR", 0)
-    tips_z = features_row.get("F3_TIPS10Y", 0)
+    tips_z = features_row.get("F10_TIPSBEISpread", features_row.get("F3_TIPS10Y", 0))
     dxy_z = features_row.get("F1_DXY", 0)
     bei_z = features_row.get("F4_BEI", 0)
 
@@ -304,7 +304,6 @@ def run_inference(features_df: pd.DataFrame) -> dict:
     for fname in factor_cols:
         raw_map = {
             "F1_DXY": "raw_DXY",
-            "F3_TIPS10Y": "raw_TIPS10Y",
             "F4_BEI": "raw_BEI",
             "F5_GPR": "raw_GPR",
             "F6_GVZ": "raw_GVZ",

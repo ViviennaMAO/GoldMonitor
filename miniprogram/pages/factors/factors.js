@@ -3,18 +3,15 @@ var util = require('../../utils/util')
 
 var FACTOR_SHORT = {
   'F1_DXY': 'DXY',
-  'F3_TIPS10Y': 'TIPS',
   'F4_BEI': 'BEI',
   'F5_GPR': 'GPR',
   'F6_GVZ': 'GVZ',
-  'F8_ETFFlow': 'ETF',
-  'F9_GDXRatio': 'GDX',
+  'F9_GDXMomentum': 'GDXm',
   'F10_TIPSBEISpread': 'T-B',
   'F11_DXYMomentum': 'DXYm',
   'F12_DXYDownGPRUp': 'D×G',
   'F13_GoldGDXDivergence': 'G-M',
-  'F14_GVZMomentum': 'GVZm',
-  'F15_ETFFlowAccel': 'ETFa'
+  'F14_GVZMomentum': 'GVZm'
 }
 
 Page({
@@ -352,18 +349,15 @@ Page({
 function getFactorDescription(id) {
   var descriptions = {
     'F1': '美元指数 — 与金价负相关',
-    'F3': 'TIPS 10Y 实际利率 — 金价核心驱动',
     'F4': '通胀预期 BEI — 通胀利好黄金',
     'F5': '地缘政治风险 GPR — 经济政策不确定性',
-    'F6': '黄金波动率 GVZ — 市场恐慌指标',
-    'F8': 'ETF 资金流 — 投资者情绪',
-    'F9': '矿业股/金价比 — 板块相对强弱',
-    'F10': '实际利率-通胀利差 — 货币政策紧缩信号',
+    'F6': '黄金波动率 GVZ — 市场恐慌指标 (观察中)',
+    'F9': '矿业股动量 — GDX/金价比20日变化率',
+    'F10': '实际利率-通胀利差 — 替代F3, IC最高(0.73)',
     'F11': '美元动量 20D — USD趋势加速度',
     'F12': '弱美元×高风险 — 金价最强顺风组合',
     'F13': '金价-矿业股背离 — 均值回归信号',
-    'F14': '波动率动量 — 恐慌情绪变化率',
-    'F15': 'ETF资金加速度 — 资金流趋势突变'
+    'F14': '波动率动量 — 恐慌情绪变化率'
   }
   return descriptions[id] || ''
 }

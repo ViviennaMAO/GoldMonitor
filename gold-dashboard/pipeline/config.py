@@ -63,41 +63,44 @@ SIGNAL_THRESHOLDS = {
 
 # ── Factor Names (display order) ─────────────────────────────────────────────
 # P1: Consolidated from 10 → 7 base factors. Removed F2/F2b/F2c (rate cluster)
-# P1b: Added 6 logical factors (spreads, momentum, cross, divergence)
-# Total: 13 factors = 7 base + 6 logical
+# P1b: Added logical factors (spreads, momentum, cross, divergence)
+# P2: Pruned 13 → 10 factors based on IC/Granger/correlation analysis:
+#   Removed F3 (redundant with F10, r=0.84), F8 (IC≈0, Granger fail),
+#   F15 (IC≈0). Replaced F9 ratio → momentum.
+# Total: 10 factors = 5 base + 5 logical
 FACTOR_NAMES = [
-    # Base factors (7)
+    # Base factors (5)
     "F1_DXY",
-    "F3_TIPS10Y",
     "F4_BEI",
     "F5_GPR",
-    "F6_GVZ",
-    "F8_ETFFlow",
-    "F9_GDXRatio",
-    # Logical factors (6) — P1b
-    "F10_TIPSBEISpread",   # Real yield - inflation spread
+    "F6_GVZ",              # Granger fail but high OOS IC — under observation
+    "F9_GDXMomentum",      # P2: replaced ratio→momentum (ratio had IC≈0, Granger fail)
+    # Logical factors (5)
+    "F10_TIPSBEISpread",   # Real yield - inflation spread (replaces F3, IC 0.73)
     "F11_DXYMomentum",     # USD trend acceleration
     "F12_DXYDownGPRUp",    # Weak USD × high risk cross-factor
     "F13_GoldGDXDivergence", # Gold vs miners divergence
     "F14_GVZMomentum",     # Volatility regime change
-    "F15_ETFFlowAccel",    # ETF flow acceleration
 ]
 
 FACTOR_DISPLAY = {
     "F1_DXY": "美元指数 DXY",
-    "F3_TIPS10Y": "TIPS 10Y 实际利率",
     "F4_BEI": "通胀预期 BEI",
     "F5_GPR": "地缘政治风险 GPR",
     "F6_GVZ": "黄金波动率 GVZ",
-    "F8_ETFFlow": "ETF 资金流",
-    "F9_GDXRatio": "矿业股/金价比",
+    "F9_GDXMomentum": "矿业股动量",
     "F10_TIPSBEISpread": "实际利率-通胀利差",
     "F11_DXYMomentum": "美元动量 20D",
     "F12_DXYDownGPRUp": "弱美元×高风险",
     "F13_GoldGDXDivergence": "金价-矿业股背离",
     "F14_GVZMomentum": "波动率动量",
-    "F15_ETFFlowAccel": "ETF资金加速度",
 }
+
+# ── Removed factors (kept in features.py for display/regime, not in model) ──
+# F3_TIPS10Y: redundant with F10 (r=0.84), F10 has higher OOS IC (0.73 vs 0.58)
+# F8_ETFFlow: OOS IC=-0.026, Granger fail — noise factor
+# F9_GDXRatio: replaced by F9_GDXMomentum (momentum > level)
+# F15_ETFFlowAccel: OOS IC=0.046, near zero — removed with F8
 
 # ── Risk Regime Thresholds (v1 — kept for backward compat) ───────────────────
 REGIME_HEALTHY = 1.0
@@ -116,9 +119,9 @@ REGIME_Z_LOW = -0.3       # Factor Z < this → risk-on signal
 # ── Layer 2: HMM parameters ───────────────────────────────────────────────────
 HMM_N_STATES = 3                     # Bull / Neutral / Bear
 HMM_LOOKBACK = 504                   # ~2 trading years for fitting window
-HMM_BASE_FACTORS = [                 # Features used for HMM (7 base factors only)
-    "F1_DXY", "F3_TIPS10Y", "F4_BEI", "F5_GPR",
-    "F6_GVZ", "F8_ETFFlow", "F9_GDXRatio",
+HMM_BASE_FACTORS = [                 # Features used for HMM (5 base factors)
+    "F1_DXY", "F4_BEI", "F5_GPR",
+    "F6_GVZ", "F9_GDXMomentum",
 ]
 
 # ── Layer 3: Event detection parameters ──────────────────────────────────────

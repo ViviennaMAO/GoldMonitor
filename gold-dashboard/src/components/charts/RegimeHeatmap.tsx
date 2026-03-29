@@ -5,22 +5,28 @@ import clsx from 'clsx'
 
 const FACTOR_SHORT: Record<string, string> = {
   F1_DXY: 'DXY',
-  F3_TIPS10Y: 'TIPS',
   F4_BEI: 'BEI',
   F5_GPR: 'GPR',
   F6_GVZ: 'GVZ',
-  F8_ETFFlow: 'ETF',
-  F9_GDXRatio: 'GDX',
+  F9_GDXMomentum: 'GDXm',
+  F10_TIPSBEISpread: 'T-B',
+  F11_DXYMomentum: 'DXYm',
+  F12_DXYDownGPRUp: 'D×G',
+  F13_GoldGDXDivergence: 'G-M',
+  F14_GVZMomentum: 'GVZm',
 }
 
 const FACTOR_LABEL: Record<string, string> = {
   F1_DXY: '美元',
-  F3_TIPS10Y: '实际利率',
   F4_BEI: '通胀',
   F5_GPR: '地缘',
   F6_GVZ: '波动',
-  F8_ETFFlow: 'ETF',
-  F9_GDXRatio: '矿业',
+  F9_GDXMomentum: '矿业动量',
+  F10_TIPSBEISpread: '利差',
+  F11_DXYMomentum: '美元动量',
+  F12_DXYDownGPRUp: '交叉',
+  F13_GoldGDXDivergence: '背离',
+  F14_GVZMomentum: '波动动量',
 }
 
 // ── Three-Layer Regime Panel ────────────────────────────────────────────────

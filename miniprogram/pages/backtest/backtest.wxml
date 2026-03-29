@@ -83,13 +83,14 @@
       <view class="card mt-20">
         <text class="card-title">策略说明</text>
         <view class="desc-list mt-12">
-          <text class="desc-item">模型: XGBoost Regressor (13因子, max_depth=3)</text>
+          <text class="desc-item">模型: XGBoost Regressor (10因子, max_depth=3)</text>
           <text class="desc-item">目标: 20日远期 XAU/USD 收益率</text>
-          <text class="desc-item">因子: 7基础因子 + 6逻辑因子 (利差/动量/交叉/背离)</text>
+          <text class="desc-item">因子: 5基础 + 5逻辑 (利差/动量/交叉/背离)</text>
+          <text class="desc-item">优化: 移除F3/F8/F15, F9改为动量</text>
           <text class="desc-item">信号: 预测收益 +0.8%以上强买, -0.8%以下强卖</text>
           <text class="desc-item">止损: 2.5x ATR (14日)</text>
           <text class="desc-item">仓位: ATR 风险预算 2%, Regime动态调仓</text>
-          <text class="desc-item">验证: Granger因果检验 + 压力测试</text>
+          <text class="desc-item">验证: Granger因果检验 + 相关性矩阵</text>
           <text class="desc-item">训练期: 2015-2025.09, OOS: 2025.10+</text>
         </view>
       </view>

@@ -2,6 +2,8 @@
 Feature engineering module — computes gold factors with Z-Score normalization.
 P1: Consolidated rate cluster (F2/F2b/F2c) → F3_TIPS10Y only.
 P1b: Added logical factors — spreads, momentum, cross-factors, divergence.
+P2: Pruned 13→10 factors: removed F3 (redundant with F10), F8 (noise),
+    F15 (noise), replaced F9 ratio→momentum.
 """
 import pandas as pd
 import numpy as np
@@ -30,9 +32,9 @@ def compute_atr(high: pd.Series, low: pd.Series, close: pd.Series, period: int =
 
 def build_features(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Build 7 factor features from raw data DataFrame.
-    P1: Removed F2_FedFunds, F2b_RateMomentum, F2c_RateExpect (rate cluster).
-    F3_TIPS10Y kept as sole rate representative (best OOS IC=+0.32).
+    Build 10 factor features from raw data DataFrame.
+    P2: 5 base (F1,F4,F5,F6,F9m) + 5 logical (F10-F14).
+    F3/F8/F15 still computed for display/regime but excluded from model.
     Returns DataFrame with factor columns + target variable.
     """
     features = pd.DataFrame(index=df.index)
@@ -81,12 +83,17 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     else:
         features["F8_ETFFlow"] = 0.0
 
-    # F9: GDX/Gold Ratio — Miners vs Gold
+    # F9: GDX/Gold Momentum — 20-day change rate of miners-to-gold ratio
+    # P2: Replaced level-based ratio (IC=-0.088, Granger fail) with momentum.
+    # Momentum captures trend acceleration; ratio was too static.
     if "GDX_close" in df.columns and "XAUUSD_close" in df.columns:
         ratio = df["GDX_close"] / df["XAUUSD_close"]
-        features["F9_GDXRatio"] = rolling_zscore(ratio)
+        ratio_mom = ratio.pct_change(20) * 100  # 20-day % change
+        features["F9_GDXMomentum"] = rolling_zscore(ratio_mom)
+        # Keep old ratio for display/regime (not in model)
+        features["F9_GDXRatio_display"] = rolling_zscore(ratio)
     else:
-        features["F9_GDXRatio"] = 0.0
+        features["F9_GDXMomentum"] = 0.0
 
     # ══════════════════════════════════════════════════════════════════════════
     # P1b: Logical Factors — spread, momentum, cross, divergence

@@ -8,12 +8,15 @@ import { useICHistory } from '@/lib/useGoldData'
 
 const FACTOR_SHORT: Record<string, string> = {
   F1_DXY: 'DXY 美元',
-  F3_TIPS10Y: 'TIPS 实际利率',
   F4_BEI: 'BEI 通胀',
   F5_GPR: 'GPR 地缘',
   F6_GVZ: 'GVZ 波动',
-  F8_ETFFlow: 'ETF 资金流',
-  F9_GDXRatio: 'GDX 矿业比',
+  F9_GDXMomentum: 'GDX 矿业动量',
+  F10_TIPSBEISpread: 'TIPS-BEI 利差',
+  F11_DXYMomentum: 'DXY 美元动量',
+  F12_DXYDownGPRUp: '弱美元×高风险',
+  F13_GoldGDXDivergence: '金矿背离',
+  F14_GVZMomentum: 'GVZ 波动动量',
 }
 
 function CustomTooltip({ active, payload, label }: any) {
