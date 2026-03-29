@@ -108,13 +108,19 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     else:
         features["F11_DXYMomentum"] = 0.0
 
-    # F12: DXY-Down × GPR-Up Cross Factor
-    # When USD weakens AND geopolitical risk rises → strongest gold tailwind
+    # F12: DXY-Down × GPR-Up Cross Factor (binary regime frequency)
+    # Measures how often "weak USD + elevated risk" occurs simultaneously.
+    # Uses binary indicators → rolling 20-day frequency → Z-score.
+    # This avoids collinearity with F5_GPR (continuous z-score product was ~r=1.0).
     if "DXY" in df.columns and ("GPR" in df.columns or "OVX_close" in df.columns):
         dxy_z = features["F1_DXY"]
         gpr_z = features["F5_GPR"]
-        # Interaction: negative DXY (weak USD) × positive GPR (high risk)
-        features["F12_DXYDownGPRUp"] = rolling_zscore((-dxy_z) * gpr_z.clip(lower=0))
+        # Binary: USD weakening (z < -0.5) AND risk elevated (z > 0.5)
+        dxy_weak = (dxy_z < -0.5).astype(float)
+        gpr_high = (gpr_z > 0.5).astype(float)
+        # Rolling 20-day frequency of joint occurrence
+        joint_freq = (dxy_weak * gpr_high).rolling(20, min_periods=5).mean()
+        features["F12_DXYDownGPRUp"] = rolling_zscore(joint_freq)
     else:
         features["F12_DXYDownGPRUp"] = 0.0
 
