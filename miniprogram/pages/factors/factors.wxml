@@ -126,7 +126,7 @@
         <view class="ic-stat-card">
           <text class="ic-stat-label">ICIR</text>
           <text class="ic-stat-value text-gold">{{icir}}</text>
-          <text class="ic-hint">预测稳定性 (>2优)</text>
+          <text class="ic-hint">预测稳定性 (&gt;2优)</text>
         </view>
       </view>
 
@@ -326,7 +326,7 @@
     <!-- ══════════════════════════════════════ -->
     <view wx:if="{{activeTab === 'corr'}}">
       <text class="text-lg text-bold text-white mb-8">因子相关性矩阵</text>
-      <text class="text-xs text-gray mb-16">Pearson 相关系数 · 高相关 (>0.7) 提示多重共线性风险</text>
+      <text class="text-xs text-gray mb-16">Pearson 相关系数 · 高相关 (&gt;0.7) 提示多重共线性风险</text>
 
       <view class="card heatmap-card">
         <scroll-view scroll-x class="heatmap-scroll">
@@ -382,9 +382,9 @@
         </view>
 
         <view class="desc-list mt-12">
-          <text class="desc-item">|r| > 0.7: 高度共线性，需考虑因子去重</text>
+          <text class="desc-item">|r| &gt; 0.7: 高度共线性，需考虑因子去重</text>
           <text class="desc-item">|r| 0.3~0.7: 中度相关，可共存</text>
-          <text class="desc-item">|r| < 0.3: 独立信号源，组合价值高</text>
+          <text class="desc-item">|r| &lt; 0.3: 独立信号源，组合价值高</text>
         </view>
       </view>
     </view>
