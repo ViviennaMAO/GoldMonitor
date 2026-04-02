@@ -1,100 +1,73 @@
 /**
  * GET /api/factors
- * Aggregates 7 gold factor readings from:
- *   - FRED API (F1 DXY, F3 TIPS 10Y, F4 BEI)
- *   - Yahoo Finance (F5 GPR proxy, F6 GVZ, F8 ETF flow, F9 GDX ratio)
- *   - Pipeline signal.json fallback
+ * Aggregates 8 gold factor readings (P3: 4 base + 4 logical) from:
+ *   - FRED API (F1 DXY, F4 BEI)
+ *   - Yahoo Finance (F5 GPR/OVX proxy, F6 GVZ)
+ *   - Pipeline signal.json (F10 TIPSBEISpread, F11 DXYMomentum, F13 GoldGDXDivergence, F14 GVZMomentum)
  * Falls back to mock data for any factor that fails.
  */
 import { NextResponse } from 'next/server'
 import { fetchFredSeries, percentileRank } from '@/lib/fred'
-import { fetchYFQuotes, fetchYFHistory, computeZScore, roc, percentile52W } from '@/lib/yahoo'
-import { fetchStooqHistory } from '@/lib/stooq'
+import { fetchYFQuotes, fetchYFHistory, computeZScore, percentile52W } from '@/lib/yahoo'
 import { readPipelineJson } from '@/lib/readPipelineJson'
 import { factors as MOCK_FACTORS } from '@/data/mockData'
 
 export const revalidate = 3600 // ISR: revalidate once per hour max
 
-/** Fetch ETF history: try Yahoo Finance first, fall back to Stooq */
-async function fetchEtfHistory(symbol: string, days: number) {
-  const yf = await fetchYFHistory(symbol, days)
-  if (yf && yf.length > 10) return yf
-  const stooq = await fetchStooqHistory(symbol, days)
-  if (!stooq) return null
-  return stooq.map(b => ({ date: b.date, close: b.close }))
-}
+// Map mock factor array index by factor id for easy lookup
+const MOCK_BY_ID: Record<string, typeof MOCK_FACTORS[0]> = {}
+for (const f of MOCK_FACTORS) MOCK_BY_ID[f.id] = f
 
 export async function GET() {
   // ── Parallel data fetches ──────────────────────────────────────────
   const [
     fredDXY,          // F1: DTWEXBGS — Broad USD index
-    fredTIPS10Y,      // F3: DFII10 — 10Y TIPS real yield
     fredBEI,          // F4: T10YIE — 10Y breakeven inflation
     yfQuotes,         // F5/F6 volatility quotes (Yahoo only)
-    gldHistory,       // F8: GLD daily history
-    iauHistory,       // F8: IAU daily history
-    gdxHistory,       // F9: GDX daily history
-    gcHistory,        // F9: Gold futures history for ratio
     gvzHistory,       // F6: GVZ history (Yahoo only)
     ovxHistory,       // F5: OVX history (Yahoo only)
+    pipelineSignal,   // F10/F11/F13/F14 derived factors
   ] = await Promise.all([
     fetchFredSeries('DTWEXBGS', 260),
-    fetchFredSeries('DFII10', 260),
     fetchFredSeries('T10YIE', 260),
     fetchYFQuotes(['^GVZ', '^OVX']),
-    fetchEtfHistory('GLD', 260),
-    fetchEtfHistory('IAU', 260),
-    fetchEtfHistory('GDX', 260),
-    fetchEtfHistory('GC=F', 260),
     fetchYFHistory('^GVZ', 260),
     fetchYFHistory('^OVX', 260),
+    readPipelineJson<{
+      factors?: { name: string; label: string; zscore: number; raw_value: number | null }[]
+    }>('signal.json', {}),
   ])
 
   const now = new Date().toISOString()
 
+  // Pipeline factor map for derived factors and fallback
+  const pipelineFactorMap: Record<string, { zscore: number; raw_value: number | null; label: string }> = {}
+  if (pipelineSignal.factors) {
+    for (const f of pipelineSignal.factors) {
+      pipelineFactorMap[f.name] = { zscore: f.zscore, raw_value: f.raw_value, label: f.label }
+    }
+  }
+
   // ── F1: 美元强弱 (DXY) ──────────────────────────────────────────────
-  const f1 = buildFactor('F1', fredDXY, {
-    mockFactor: MOCK_FACTORS[0],
+  const f1 = buildFredFactor('F1', fredDXY, {
+    mockFactor: MOCK_BY_ID['F1'],
     invertDirection: true, // DXY up = bearish for gold
     label: 'DTWEXBGS',
     unit: 'idx',
     signalFn: (z) => z < -1 ? 'DXY走弱，金价看多支撑' : z > 1 ? 'DXY强势，金价承压' : 'DXY中性，方向不明',
-    icValue: -0.087,
-  })
-
-  // ── F3: 实际利率 (TIPS 10Y) — P1: sole rate representative ─────────
-  const f3 = buildFactor('F3', fredTIPS10Y, {
-    mockFactor: MOCK_FACTORS[2],
-    invertDirection: true, // higher real rates = bearish gold
-    label: 'TIPS 10Y',
-    unit: '%',
-    signalFn: (z) => z < -1.5 ? '实际利率极低，看多压力强' : z < -0.5 ? '实际利率偏低，金价获支撑' : z > 1 ? '实际利率偏高，看空压力' : '实际利率中性',
-    icValue: -0.142,
   })
 
   // ── F4: 通胀预期 (BEI) ──────────────────────────────────────────────
-  const f4 = buildFactor('F4', fredBEI, {
-    mockFactor: MOCK_FACTORS[3],
+  const f4 = buildFredFactor('F4', fredBEI, {
+    mockFactor: MOCK_BY_ID['F4'],
     invertDirection: false, // higher BEI = bullish gold
     label: '5Y5Y BEI',
     unit: '%',
     signalFn: (z) => z > 1 ? '通胀预期升温，黄金抗缩水需求↑' : z < -1 ? '通胀预期降温，需求减弱' : '通胀预期温和',
-    icValue: 0.093,
   })
 
-  // ── Pipeline fallback: read signal.json for F5/F6 raw values if Yahoo quotes fail ──
-  const pipelineSignal = await readPipelineJson<{
-    factors?: { name: string; zscore: number; raw_value: number | null }[]
-  }>('signal.json', {})
-  const pipelineFactorMap: Record<string, { zscore: number; raw_value: number | null }> = {}
-  if (pipelineSignal.factors) {
-    for (const f of pipelineSignal.factors) {
-      pipelineFactorMap[f.name] = { zscore: f.zscore, raw_value: f.raw_value }
-    }
-  }
-
   // ── F5: 地缘政治风险 (GPR / OVX proxy) ────────────────────────────
-  let f5 = MOCK_FACTORS[4]
+  let f5 = MOCK_BY_ID['F5']
   if (ovxHistory && yfQuotes?.['^OVX']) {
     const ovxVal = yfQuotes['^OVX'].regularMarketPrice
     const ovxHist = ovxHistory.map(b => b.close)
@@ -125,7 +98,7 @@ export async function GET() {
   }
 
   // ── F6: 市场情绪 (GVZ) ─────────────────────────────────────────────
-  let f6 = MOCK_FACTORS[5]
+  let f6 = MOCK_BY_ID['F6']
   if (gvzHistory && yfQuotes?.['^GVZ']) {
     const gvzVal = yfQuotes['^GVZ'].regularMarketPrice
     const gvzHist = gvzHistory.map(b => b.close)
@@ -156,65 +129,40 @@ export async function GET() {
     }
   }
 
-  // ── F8: ETF资金流 (GLD + IAU 5日变化率) ────────────────────────────
-  let f8 = MOCK_FACTORS[6]
-  if (gldHistory && iauHistory && gldHistory.length >= 6 && iauHistory.length >= 6) {
-    const gldFlow5d = (gldHistory.slice(-1)[0].close - gldHistory.slice(-6)[0].close)
-    const iauFlow5d = (iauHistory.slice(-1)[0].close - iauHistory.slice(-6)[0].close)
-    const totalFlow = parseFloat((gldFlow5d + iauFlow5d).toFixed(2))
+  // ── F10: 实际利率-通胀利差 (TIPS-BEI Spread) ─────────────────────────
+  const f10 = buildPipelineFactor('F10', 'F10_TIPSBEISpread', pipelineFactorMap, {
+    mockFactor: MOCK_BY_ID['F10'],
+    unit: '%',
+    signalFn: (z) => z > 1 ? '利差大幅走阔，持有成本上升' : z < -1 ? '利差收窄，黄金吸引力增加' : '利差偏高，持有成本上升',
+  })
 
-    const gldHist = gldHistory.map(b => b.close)
-    const flows = gldHist.slice(5).map((v, i) => v - gldHist[i])
-    const z = computeZScore(flows, totalFlow)
-    const p52 = percentile52W(flows, totalFlow)
+  // ── F11: 美元动量 (DXY 20D Momentum) ────────────────────────────────
+  const f11 = buildPipelineFactor('F11', 'F11_DXYMomentum', pipelineFactorMap, {
+    mockFactor: MOCK_BY_ID['F11'],
+    unit: '%',
+    signalFn: (z) => z > 1 ? '美元加速走强，金价承压' : z < -1 ? '美元加速走弱，金价获支撑' : '美元动量中性',
+  })
 
-    f8 = {
-      ...f8,
-      rawValue: totalFlow,
-      rawUnit: 'pts/5d',
-      zScore: z,
-      percentile52w: p52,
-      dayChange: parseFloat((gldFlow5d - (gldHistory.slice(-2)[0].close - gldHistory.slice(-7)[0].close)).toFixed(2)),
-      direction: totalFlow > 0 ? 'bullish' : totalFlow < 0 ? 'bearish' : 'neutral',
-      signal: totalFlow > 2 ? 'ETF持续流入，资金追多金价' : totalFlow < -2 ? 'ETF流出，短期情绪承压' : 'ETF资金流中性',
-    }
-  }
+  // ── F13: 金价-矿业股背离 (Gold-GDX Divergence) ──────────────────────
+  const f13 = buildPipelineFactor('F13', 'F13_GoldGDXDivergence', pipelineFactorMap, {
+    mockFactor: MOCK_BY_ID['F13'],
+    unit: 'z',
+    signalFn: (z) => z > 1 ? '金价大幅跑赢矿业股，背离扩大' : z < -1 ? '矿业股领涨金价，背离收窄' : '金矿背离微弱，无明显信号',
+  })
 
-  // ── F9: 金矿产能 (GDX vs Gold 相对强弱) ─────────────────────────────
-  let f9 = MOCK_FACTORS[7]
-  if (gdxHistory && gcHistory && gdxHistory.length >= 6 && gcHistory.length >= 6) {
-    const gdxNow = gdxHistory.slice(-1)[0].close
-    const gcNow = gcHistory.slice(-1)[0].close
-    const ratio = gcNow > 0 ? parseFloat((gdxNow / gcNow).toFixed(4)) : 0
+  // ── F14: 波动率动量 (GVZ Momentum) ──────────────────────────────────
+  const f14 = buildPipelineFactor('F14', 'F14_GVZMomentum', pipelineFactorMap, {
+    mockFactor: MOCK_BY_ID['F14'],
+    unit: '%',
+    signalFn: (z) => z > 1 ? '波动率急升，恐慌情绪蔓延' : z < -1 ? '波动率回落，市场趋于平静' : '波动率动量中性',
+  })
 
-    const ratios = gdxHistory.slice(-gcHistory.length).map((b, i) => {
-      const gc = gcHistory[i + (gcHistory.length - gdxHistory.length + gdxHistory.length - gcHistory.length)]
-      return gc?.close > 0 ? b.close / gc.close : 0
-    }).filter(r => r > 0)
-
-    const z = computeZScore(ratios, ratio)
-    const p52 = percentile52W(ratios, ratio)
-    const prevRatio = gdxHistory.slice(-2)[0].close / gcHistory.slice(-2)[0].close
-
-    f9 = {
-      ...f9,
-      rawValue: ratio,
-      rawUnit: 'ratio',
-      zScore: z,
-      percentile52w: p52,
-      dayChange: parseFloat((ratio - prevRatio).toFixed(4)),
-      direction: z < -0.5 ? 'bearish' : z > 0.5 ? 'bullish' : 'neutral',
-      signal: z < -1 ? 'GDX相对弱势，矿商折价偏大' : z > 1 ? 'GDX强势领涨，产能扩张信号' : 'GDX表现平稳，无明显信号',
-    }
-  }
-
-  const etfSource = gldHistory ? 'live' : null
   const result = {
-    factors: [f1, f3, f4, f5, f6, f8, f9],
+    factors: [f1, f4, f5, f6, f10, f11, f13, f14],
     dataSource: {
-      fred: !!(fredTIPS10Y || fredBEI || fredDXY),
+      fred: !!(fredDXY || fredBEI),
       yahoo: !!(yfQuotes),
-      stooq: !!(etfSource),
+      pipeline: !!(pipelineSignal.factors),
       timestamp: now,
     },
   }
@@ -223,7 +171,7 @@ export async function GET() {
 }
 
 // ── Helper: build factor from FRED result or fall back to mock ────────
-function buildFactor(
+function buildFredFactor(
   id: string,
   fredResult: Awaited<ReturnType<typeof fetchFredSeries>>,
   opts: {
@@ -232,10 +180,9 @@ function buildFactor(
     label: string
     unit: string
     signalFn: (z: number) => string
-    icValue: number
   },
 ) {
-  const { mockFactor, invertDirection, label, unit, signalFn, icValue } = opts
+  const { mockFactor, invertDirection, label, unit, signalFn } = opts
 
   if (!fredResult) return mockFactor
 
@@ -262,8 +209,38 @@ function buildFactor(
     percentile52w: invertDirection ? 100 - p52 : p52,
     direction: direction as 'bullish' | 'bearish' | 'neutral',
     signal: signalFn(effectiveZ),
-    icValue,
     shapValue: mockFactor.shapValue, // SHAP requires model — keep mock
+    icir: mockFactor.icir,
+  }
+}
+
+// ── Helper: build factor from pipeline signal.json or fall back to mock ──
+function buildPipelineFactor(
+  id: string,
+  pipelineName: string,
+  pipelineFactorMap: Record<string, { zscore: number; raw_value: number | null; label: string }>,
+  opts: {
+    mockFactor: typeof MOCK_FACTORS[0]
+    unit: string
+    signalFn: (z: number) => string
+  },
+) {
+  const { mockFactor, unit, signalFn } = opts
+  const pf = pipelineFactorMap[pipelineName]
+
+  if (!pf) return mockFactor
+
+  const z = pf.zscore
+  const direction = z > 0.3 ? 'bullish' : z < -0.3 ? 'bearish' : 'neutral'
+
+  return {
+    ...mockFactor,
+    rawValue: pf.raw_value != null ? parseFloat(pf.raw_value.toFixed(2)) : mockFactor.rawValue,
+    rawUnit: unit,
+    zScore: parseFloat(z.toFixed(2)),
+    direction: direction as 'bullish' | 'bearish' | 'neutral',
+    signal: signalFn(z),
+    shapValue: mockFactor.shapValue,
     icir: mockFactor.icir,
   }
 }

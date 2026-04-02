@@ -6,15 +6,14 @@ import {
 } from 'recharts'
 import { useICHistory } from '@/lib/useGoldData'
 
+// P3: 8 factors = 4 base + 4 logical (removed F9, F12)
 const FACTOR_SHORT: Record<string, string> = {
   F1_DXY: 'DXY 美元',
   F4_BEI: 'BEI 通胀',
   F5_GPR: 'GPR 地缘',
   F6_GVZ: 'GVZ 波动',
-  F9_GDXMomentum: 'GDX 矿业动量',
   F10_TIPSBEISpread: 'TIPS-BEI 利差',
   F11_DXYMomentum: 'DXY 美元动量',
-  F12_DXYDownGPRUp: '弱美元×高风险',
   F13_GoldGDXDivergence: '金矿背离',
   F14_GVZMomentum: 'GVZ 波动动量',
 }

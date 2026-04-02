@@ -1,54 +1,54 @@
 import { Factor, ShapBar, ICDataPoint, RegimeCell, Position, AlertItem, AccountStats, DailySignal } from '@/types'
 
-// ─── Nine Gold Factors ────────────────────────────────────────────────
+// ─── Eight Gold Factors (P3: 4 base + 4 logical) ─────────────────────
 export const factors: Factor[] = [
   {
-    id: 'F1', name: '美元强弱', nameEn: 'DXY Index', zScore: -1.42,
-    rawValue: 101.32, rawUnit: 'pts', dayChange: -0.38, percentile52w: 22,
-    icValue: -0.087, icir: -1.24, direction: 'bullish',
-    signal: 'DXY走弱，金价看多支撑', shapValue: 0.042,
+    id: 'F1', name: '美元指数', nameEn: 'DXY Index', zScore: -0.22,
+    rawValue: 120.89, rawUnit: 'idx', dayChange: 0.50, percentile52w: 36,
+    icValue: 0.329, icir: 1.48, direction: 'neutral',
+    signal: 'DXY中性，方向不明', shapValue: 0.15,
   },
   {
-    id: 'F2', name: '货币政策预期', nameEn: 'Fed Funds Futures', zScore: 0.31,
-    rawValue: 4.82, rawUnit: '%', dayChange: 0.02, percentile52w: 55,
-    icValue: -0.041, icir: -0.68, direction: 'neutral',
-    signal: '降息预期中性，方向不明', shapValue: 0.008,
+    id: 'F4', name: '通胀预期', nameEn: 'BEI 10Y', zScore: -0.05,
+    rawValue: 2.31, rawUnit: '%', dayChange: 0.01, percentile52w: 48,
+    icValue: -0.387, icir: -1.82, direction: 'neutral',
+    signal: '通胀预期期限温和', shapValue: -0.01,
   },
   {
-    id: 'F3', name: '实际利率', nameEn: 'TIPS 10Y', zScore: -1.89,
-    rawValue: 1.72, rawUnit: '%', dayChange: -0.05, percentile52w: 15,
-    icValue: -0.142, icir: -2.31, direction: 'bullish',
-    signal: '实际利率极低，看多压力强', shapValue: 0.281,
+    id: 'F5', name: '地缘政治风险', nameEn: 'GPR Index', zScore: -0.39,
+    rawValue: 371.1, rawUnit: 'GPR', dayChange: 3.20, percentile52w: 64,
+    icValue: 0.048, icir: 0.82, direction: 'neutral',
+    signal: '地缘风险中性', shapValue: -0.06,
   },
   {
-    id: 'F4', name: '通胀预期', nameEn: '5Y5Y BEI', zScore: 1.23,
-    rawValue: 2.61, rawUnit: '%', dayChange: 0.04, percentile52w: 78,
-    icValue: 0.093, icir: 1.42, direction: 'bullish',
-    signal: '通胀预期升温，黄金抗缩水需求↑', shapValue: 0.192,
+    id: 'F6', name: '市场情绪', nameEn: 'GVZ', zScore: 2.88,
+    rawValue: 42.7, rawUnit: 'GVZ', dayChange: 0.90, percentile52w: 72,
+    icValue: -0.527, icir: -2.45, direction: 'bearish',
+    signal: 'GVZ极高，黄金恐慌溢价↑↑', shapValue: 0.15,
   },
   {
-    id: 'F5', name: '地缘政治风险', nameEn: 'GPR Index', zScore: 0.67,
-    rawValue: 142, rawUnit: 'idx', dayChange: 3.2, percentile52w: 64,
-    icValue: 0.054, icir: 0.82, direction: 'bullish',
-    signal: '地缘风险偏高，避险需求支撑', shapValue: -0.041,
+    id: 'F10', name: '实际利率-通胀利差', nameEn: 'TIPS-BEI Spread', zScore: 0.53,
+    rawValue: -0.30, rawUnit: '%', dayChange: -0.04, percentile52w: 55,
+    icValue: 0.728, icir: 3.21, direction: 'bearish',
+    signal: '利差偏高，持有成本上升', shapValue: -0.11,
   },
   {
-    id: 'F6', name: '市场情绪', nameEn: 'GVZ + P/C Ratio', zScore: 1.14,
-    rawValue: 18.4, rawUnit: 'GVZ', dayChange: 0.9, percentile52w: 72,
-    icValue: 0.071, icir: 1.05, direction: 'bullish',
-    signal: 'GVZ升温，黄金恐慌溢价↑', shapValue: 0.152,
+    id: 'F11', name: '美元动量', nameEn: 'DXY 20D Momentum', zScore: 1.32,
+    rawValue: 1.07, rawUnit: '%', dayChange: 0.12, percentile52w: 68,
+    icValue: -0.270, icir: -1.35, direction: 'bearish',
+    signal: '美元加速走强', shapValue: -0.07,
   },
   {
-    id: 'F8', name: 'ETF资金流', nameEn: 'GLD+IAU Flow', zScore: -0.44,
-    rawValue: -2.3, rawUnit: 't/5d', dayChange: -1.1, percentile52w: 38,
-    icValue: 0.048, icir: 0.71, direction: 'bearish',
-    signal: 'ETF小幅流出，短期情绪承压', shapValue: -0.082,
+    id: 'F13', name: '金价-矿业股背离', nameEn: 'Gold-GDX Divergence', zScore: 0.09,
+    rawValue: 0.09, rawUnit: 'z', dayChange: 0.01, percentile52w: 52,
+    icValue: -0.268, icir: -1.28, direction: 'neutral',
+    signal: '金矿背离微弱，无明显信号', shapValue: 0.02,
   },
   {
-    id: 'F9', name: '金矿产能', nameEn: 'GDX vs Gold RS', zScore: -0.28,
-    rawValue: 0.97, rawUnit: 'ratio', dayChange: 0.01, percentile52w: 45,
-    icValue: -0.031, icir: -0.44, direction: 'neutral',
-    signal: 'GDX表现平稳，无明显信号', shapValue: 0.067,
+    id: 'F14', name: '波动率动量', nameEn: 'GVZ Momentum', zScore: 1.51,
+    rawValue: 15.2, rawUnit: '%', dayChange: 0.50, percentile52w: 65,
+    icValue: -0.174, icir: -0.92, direction: 'bearish',
+    signal: '波动率上升加速', shapValue: 0.02,
   },
 ]
 
@@ -60,14 +60,14 @@ export const dailySignal: DailySignal = {
   generatedAt: '2026-03-19 21:00 UTC',
   regime: 'R1: 实际利率主导',
   shapBars: [
-    { factor: 'F3 实际利率', factorId: 'F3', value: 0.281, zScore: -1.89, rawValue: 'TIPS 10Y: 1.72%', economic: '实际利率下行驱动金价上涨' },
-    { factor: 'F4 通胀预期', factorId: 'F4', value: 0.192, zScore: 1.23, rawValue: '5Y5Y BEI: 2.61%', economic: '通胀预期上升，抗缩水需求增加' },
-    { factor: 'F6 市场情绪', factorId: 'F6', value: 0.152, zScore: 1.14, rawValue: 'GVZ: 18.4', economic: '恐慌指数偏高，避险情绪支撑金价' },
-{ factor: 'F9 金矿产能', factorId: 'F9', value: 0.067, zScore: -0.28, rawValue: 'GDX/Gold: 0.97', economic: '矿商相对弱势，产量无扩张压力' },
-    { factor: 'F1 美元强弱', factorId: 'F1', value: 0.042, zScore: -1.42, rawValue: 'DXY: 101.32', economic: 'DXY走弱，以美元计价的黄金获支撑' },
-    { factor: 'F2 货币政策', factorId: 'F2', value: 0.008, zScore: 0.31, rawValue: 'FF Futures: 4.82%', economic: '货币政策预期中性，信号较弱' },
-    { factor: 'F5 地缘风险', factorId: 'F5', value: -0.041, zScore: 0.67, rawValue: 'GPR: 142', economic: '地缘压力相对可控，避险需求边际减弱' },
-    { factor: 'F8 ETF资金流', factorId: 'F8', value: -0.082, zScore: -0.44, rawValue: '-2.3t (5日净流出)', economic: 'ETF持仓减少，短期资金情绪偏弱' },
+    { factor: 'F6 市场情绪', factorId: 'F6', value: 0.341, zScore: 2.88, rawValue: 'GVZ: 42.7', economic: 'GVZ极高，黄金恐慌溢价显著' },
+    { factor: 'F14 波动率动量', factorId: 'F14', value: 0.182, zScore: 1.51, rawValue: 'GVZ Mom: 15.2%', economic: '波动率上升加速，恐慌蔓延' },
+    { factor: 'F10 利率通胀利差', factorId: 'F10', value: 0.139, zScore: 0.53, rawValue: 'Spread: -0.30%', economic: '利差偏高，持有成本上升' },
+    { factor: 'F4 通胀预期', factorId: 'F4', value: 0.108, zScore: -0.05, rawValue: '5Y5Y BEI: 2.31%', economic: '通胀预期温和' },
+    { factor: 'F11 美元动量', factorId: 'F11', value: 0.095, zScore: 1.32, rawValue: 'DXY Mom: 1.07%', economic: '美元加速走强' },
+    { factor: 'F1 美元强弱', factorId: 'F1', value: 0.062, zScore: -0.22, rawValue: 'DXY: 120.89', economic: 'DXY中性，方向不明' },
+    { factor: 'F13 金矿背离', factorId: 'F13', value: 0.042, zScore: 0.09, rawValue: 'Divergence: 0.09z', economic: '金矿背离微弱，无明显信号' },
+    { factor: 'F5 地缘风险', factorId: 'F5', value: 0.031, zScore: -0.39, rawValue: 'GPR: 371', economic: '地缘风险中性' },
   ],
 }
 
@@ -95,15 +95,16 @@ function generateICData(baseIC: number, volatility: number): ICDataPoint[] {
   return data
 }
 
+// P3: 8 factors (removed F2, F3, F8, F9, F12)
 export const icDataByFactor: Record<string, ICDataPoint[]> = {
-  F1: generateICData(-0.08, 0.04),
-  F2: generateICData(-0.04, 0.06),
-  F3: generateICData(-0.14, 0.03),
-  F4: generateICData(0.09, 0.04),
-  F5: generateICData(0.05, 0.07),
-  F6: generateICData(0.07, 0.05),
-  F8: generateICData(0.05, 0.06),
-  F9: generateICData(-0.03, 0.05),
+  F1: generateICData(0.329, 0.04),
+  F4: generateICData(-0.387, 0.05),
+  F5: generateICData(0.048, 0.07),
+  F6: generateICData(-0.527, 0.04),
+  F10: generateICData(0.728, 0.03),
+  F11: generateICData(-0.270, 0.05),
+  F13: generateICData(-0.268, 0.06),
+  F14: generateICData(-0.174, 0.05),
 }
 
 // ─── Regime Heatmap ──────────────────────────────────────────────────
@@ -111,9 +112,9 @@ function generateRegimeData(): RegimeCell[] {
   const cells: RegimeCell[] = []
   const months = ['2025-04', '2025-05', '2025-06', '2025-07', '2025-08',
     '2025-09', '2025-10', '2025-11', '2025-12', '2026-01', '2026-02', '2026-03']
-  const factorIds = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F8', 'F9']
+  const factorIds = ['F1', 'F4', 'F5', 'F6', 'F10', 'F11', 'F13', 'F14']
   const baseSHAPs: Record<string, number> = {
-    F1: 0.05, F2: 0.03, F3: 0.28, F4: 0.19, F5: 0.04, F6: 0.15, F8: -0.08, F9: 0.07,
+    F1: 0.15, F4: -0.01, F5: -0.06, F6: 0.15, F10: -0.11, F11: -0.07, F13: 0.02, F14: 0.02,
   }
   months.forEach((month, mi) => {
     factorIds.forEach(fid => {
@@ -130,15 +131,16 @@ function generateRegimeData(): RegimeCell[] {
 export const regimeData: RegimeCell[] = generateRegimeData()
 
 // ─── Correlation Matrix ───────────────────────────────────────────────
+// P3: 8-factor correlation matrix
 export const correlationMatrix: Record<string, Record<string, number>> = {
-  F1: { F1: 1.00, F2: 0.61, F3: 0.72, F4: -0.43, F5: -0.18, F6: -0.22, F8: -0.31, F9: 0.28 },
-  F2: { F1: 0.61, F2: 1.00, F3: 0.58, F4: -0.38, F5: -0.12, F6: -0.17, F8: -0.25, F9: 0.19 },
-  F3: { F1: 0.72, F2: 0.58, F3: 1.00, F4: -0.55, F5: -0.21, F6: -0.29, F8: -0.38, F9: 0.33 },
-  F4: { F1: -0.43, F2: -0.38, F3: -0.55, F4: 1.00, F5: 0.34, F6: 0.41, F8: 0.52, F9: -0.24 },
-  F5: { F1: -0.18, F2: -0.12, F3: -0.21, F4: 0.34, F5: 1.00, F6: 0.67, F8: 0.18, F9: -0.09 },
-  F6: { F1: -0.22, F2: -0.17, F3: -0.29, F4: 0.41, F5: 0.67, F6: 1.00, F8: 0.29, F9: -0.13 },
-  F8: { F1: -0.31, F2: -0.25, F3: -0.38, F4: 0.52, F5: 0.18, F6: 0.29, F8: 1.00, F9: -0.19 },
-  F9: { F1: 0.28, F2: 0.19, F3: 0.33, F4: -0.24, F5: -0.09, F6: -0.13, F8: -0.19, F9: 1.00 },
+  F1:  { F1: 1.00, F4: -0.43, F5: -0.18, F6: -0.22, F10: 0.35, F11: 0.72, F13: -0.15, F14: -0.18 },
+  F4:  { F1: -0.43, F4: 1.00, F5: 0.34, F6: 0.41, F10: -0.68, F11: -0.38, F13: 0.22, F14: 0.35 },
+  F5:  { F1: -0.18, F4: 0.34, F5: 1.00, F6: 0.67, F10: -0.21, F11: -0.12, F13: 0.08, F14: 0.55 },
+  F6:  { F1: -0.22, F4: 0.41, F5: 0.67, F6: 1.00, F10: -0.29, F11: -0.17, F13: 0.11, F14: 0.74 },
+  F10: { F1: 0.35, F4: -0.68, F5: -0.21, F6: -0.29, F10: 1.00, F11: 0.28, F13: -0.19, F14: -0.25 },
+  F11: { F1: 0.72, F4: -0.38, F5: -0.12, F6: -0.17, F10: 0.28, F11: 1.00, F13: -0.10, F14: -0.14 },
+  F13: { F1: -0.15, F4: 0.22, F5: 0.08, F6: 0.11, F10: -0.19, F11: -0.10, F13: 1.00, F14: 0.09 },
+  F14: { F1: -0.18, F4: 0.35, F5: 0.55, F6: 0.74, F10: -0.25, F11: -0.14, F13: 0.09, F14: 1.00 },
 }
 
 // ─── Current Positions ───────────────────────────────────────────────

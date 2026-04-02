@@ -220,11 +220,11 @@
   "factor_ic": [
     {
       "factor": "F1_DXY",
-      "ic": 0.3285
+      "ic": 0.3278
     },
     {
       "factor": "F4_BEI",
-      "ic": -0.387
+      "ic": -0.3871
     },
     {
       "factor": "F5_GPR",
@@ -236,19 +236,19 @@
     },
     {
       "factor": "F10_TIPSBEISpread",
-      "ic": 0.728
+      "ic": 0.7279
     },
     {
       "factor": "F11_DXYMomentum",
-      "ic": -0.2696
+      "ic": -0.2702
     },
     {
       "factor": "F13_GoldGDXDivergence",
-      "ic": -0.2683
+      "ic": -0.2687
     },
     {
       "factor": "F14_GVZMomentum",
-      "ic": -0.1742
+      "ic": -0.1745
     }
   ],
   "cv_mean_ic": -0.1409,

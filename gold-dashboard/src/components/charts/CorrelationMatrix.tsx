@@ -6,15 +6,14 @@ import clsx from 'clsx'
 const HIGH_CORR_THRESHOLD = 0.7
 
 // Display name mapping
+// P3: 8 factors = 4 base + 4 logical (removed F9, F12)
 const FACTOR_SHORT: Record<string, string> = {
   F1_DXY: 'DXY',
   F4_BEI: 'BEI',
   F5_GPR: 'GPR',
   F6_GVZ: 'GVZ',
-  F9_GDXMomentum: 'GDXm',
   F10_TIPSBEISpread: 'T-B',
   F11_DXYMomentum: 'DXYm',
-  F12_DXYDownGPRUp: 'D×G',
   F13_GoldGDXDivergence: 'G-M',
   F14_GVZMomentum: 'GVZm',
 }

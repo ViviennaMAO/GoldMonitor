@@ -133,7 +133,7 @@ def build_regime_heatmap(features_df: pd.DataFrame, months: int = 6) -> list:
     recent = features_df.dropna(subset=factor_cols).tail(months * 22)  # ~22 trading days/month
 
     # Group by month
-    monthly = recent.resample("M").last()
+    monthly = recent.resample("ME").last()
     heatmap = []
 
     for date, row in monthly.iterrows():
