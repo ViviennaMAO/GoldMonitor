@@ -1,0 +1,707 @@
+{
+  "timestamp": "2026-04-02T11:23:41.394905",
+  "oos_start": "2025-09-30",
+  "oos_samples": 127,
+  "factors": [
+    "F1_DXY",
+    "F4_BEI",
+    "F5_GPR",
+    "F6_GVZ",
+    "F9_GDXMomentum",
+    "F10_TIPSBEISpread",
+    "F11_DXYMomentum",
+    "F13_GoldGDXDivergence",
+    "F14_GVZMomentum"
+  ],
+  "experiment_a_multi_target": {
+    "ret_5d": {
+      "F1_DXY": {
+        "ic": 0.0181,
+        "ci_lo": -0.1479,
+        "ci_hi": 0.1634,
+        "n": 122,
+        "significant": false
+      },
+      "F4_BEI": {
+        "ic": -0.0738,
+        "ci_lo": -0.2414,
+        "ci_hi": 0.0962,
+        "n": 122,
+        "significant": false
+      },
+      "F5_GPR": {
+        "ic": 0.1218,
+        "ci_lo": -0.0327,
+        "ci_hi": 0.2708,
+        "n": 122,
+        "significant": false
+      },
+      "F6_GVZ": {
+        "ic": -0.2692,
+        "ci_lo": -0.4112,
+        "ci_hi": -0.1133,
+        "n": 122,
+        "significant": true
+      },
+      "F9_GDXMomentum": {
+        "ic": 0.1557,
+        "ci_lo": -0.0024,
+        "ci_hi": 0.2921,
+        "n": 122,
+        "significant": false
+      },
+      "F10_TIPSBEISpread": {
+        "ic": 0.2753,
+        "ci_lo": 0.117,
+        "ci_hi": 0.4187,
+        "n": 122,
+        "significant": true
+      },
+      "F11_DXYMomentum": {
+        "ic": -0.1315,
+        "ci_lo": -0.289,
+        "ci_hi": 0.0271,
+        "n": 122,
+        "significant": false
+      },
+      "F13_GoldGDXDivergence": {
+        "ic": -0.4384,
+        "ci_lo": -0.5532,
+        "ci_hi": -0.3027,
+        "n": 122,
+        "significant": true
+      },
+      "F14_GVZMomentum": {
+        "ic": -0.0527,
+        "ci_lo": -0.2237,
+        "ci_hi": 0.103,
+        "n": 122,
+        "significant": false
+      }
+    },
+    "ret_10d": {
+      "F1_DXY": {
+        "ic": -0.0525,
+        "ci_lo": -0.1913,
+        "ci_hi": 0.0907,
+        "n": 117,
+        "significant": false
+      },
+      "F4_BEI": {
+        "ic": -0.2135,
+        "ci_lo": -0.36,
+        "ci_hi": -0.052,
+        "n": 117,
+        "significant": true
+      },
+      "F5_GPR": {
+        "ic": 0.2041,
+        "ci_lo": 0.0338,
+        "ci_hi": 0.3665,
+        "n": 117,
+        "significant": true
+      },
+      "F6_GVZ": {
+        "ic": -0.4245,
+        "ci_lo": -0.5381,
+        "ci_hi": -0.3015,
+        "n": 117,
+        "significant": true
+      },
+      "F9_GDXMomentum": {
+        "ic": 0.2288,
+        "ci_lo": 0.0788,
+        "ci_hi": 0.364,
+        "n": 117,
+        "significant": true
+      },
+      "F10_TIPSBEISpread": {
+        "ic": 0.3332,
+        "ci_lo": 0.1765,
+        "ci_hi": 0.4709,
+        "n": 117,
+        "significant": true
+      },
+      "F11_DXYMomentum": {
+        "ic": -0.4031,
+        "ci_lo": -0.5352,
+        "ci_hi": -0.2594,
+        "n": 117,
+        "significant": true
+      },
+      "F13_GoldGDXDivergence": {
+        "ic": -0.4637,
+        "ci_lo": -0.5841,
+        "ci_hi": -0.3118,
+        "n": 117,
+        "significant": true
+      },
+      "F14_GVZMomentum": {
+        "ic": -0.1552,
+        "ci_lo": -0.3152,
+        "ci_hi": 0.0006,
+        "n": 117,
+        "significant": false
+      }
+    },
+    "ret_20d": {
+      "F1_DXY": {
+        "ic": 0.3285,
+        "ci_lo": 0.1825,
+        "ci_hi": 0.4593,
+        "n": 107,
+        "significant": true
+      },
+      "F4_BEI": {
+        "ic": -0.387,
+        "ci_lo": -0.5198,
+        "ci_hi": -0.2301,
+        "n": 107,
+        "significant": true
+      },
+      "F5_GPR": {
+        "ic": 0.0484,
+        "ci_lo": -0.1516,
+        "ci_hi": 0.2394,
+        "n": 107,
+        "significant": false
+      },
+      "F6_GVZ": {
+        "ic": -0.5273,
+        "ci_lo": -0.6361,
+        "ci_hi": -0.3839,
+        "n": 107,
+        "significant": true
+      },
+      "F9_GDXMomentum": {
+        "ic": 0.2846,
+        "ci_lo": 0.1449,
+        "ci_hi": 0.4085,
+        "n": 107,
+        "significant": true
+      },
+      "F10_TIPSBEISpread": {
+        "ic": 0.728,
+        "ci_lo": 0.6512,
+        "ci_hi": 0.7805,
+        "n": 107,
+        "significant": true
+      },
+      "F11_DXYMomentum": {
+        "ic": -0.2696,
+        "ci_lo": -0.4316,
+        "ci_hi": -0.1067,
+        "n": 107,
+        "significant": true
+      },
+      "F13_GoldGDXDivergence": {
+        "ic": -0.2683,
+        "ci_lo": -0.3982,
+        "ci_hi": -0.1141,
+        "n": 107,
+        "significant": true
+      },
+      "F14_GVZMomentum": {
+        "ic": -0.1742,
+        "ci_lo": -0.3293,
+        "ci_hi": -0.0113,
+        "n": 107,
+        "significant": true
+      }
+    },
+    "dir_5d": {
+      "F1_DXY": {
+        "ic": 0.0625,
+        "ci_lo": -0.085,
+        "ci_hi": 0.2036,
+        "n": 122,
+        "significant": false
+      },
+      "F4_BEI": {
+        "ic": -0.1036,
+        "ci_lo": -0.256,
+        "ci_hi": 0.0487,
+        "n": 122,
+        "significant": false
+      },
+      "F5_GPR": {
+        "ic": 0.0592,
+        "ci_lo": -0.0977,
+        "ci_hi": 0.2164,
+        "n": 122,
+        "significant": false
+      },
+      "F6_GVZ": {
+        "ic": -0.322,
+        "ci_lo": -0.4545,
+        "ci_hi": -0.1809,
+        "n": 122,
+        "significant": true
+      },
+      "F9_GDXMomentum": {
+        "ic": 0.1945,
+        "ci_lo": 0.0362,
+        "ci_hi": 0.3311,
+        "n": 122,
+        "significant": true
+      },
+      "F10_TIPSBEISpread": {
+        "ic": 0.3128,
+        "ci_lo": 0.1652,
+        "ci_hi": 0.4495,
+        "n": 122,
+        "significant": true
+      },
+      "F11_DXYMomentum": {
+        "ic": -0.1387,
+        "ci_lo": -0.2892,
+        "ci_hi": 0.0158,
+        "n": 122,
+        "significant": false
+      },
+      "F13_GoldGDXDivergence": {
+        "ic": -0.3715,
+        "ci_lo": -0.4982,
+        "ci_hi": -0.2262,
+        "n": 122,
+        "significant": true
+      },
+      "F14_GVZMomentum": {
+        "ic": -0.0838,
+        "ci_lo": -0.242,
+        "ci_hi": 0.0647,
+        "n": 122,
+        "significant": false
+      }
+    },
+    "vol_20d": {
+      "F1_DXY": {
+        "ic": -0.5517,
+        "ci_lo": -0.6681,
+        "ci_hi": -0.4131,
+        "n": 107,
+        "significant": true
+      },
+      "F4_BEI": {
+        "ic": 0.5621,
+        "ci_lo": 0.4596,
+        "ci_hi": 0.6469,
+        "n": 107,
+        "significant": true
+      },
+      "F5_GPR": {
+        "ic": -0.4535,
+        "ci_lo": -0.5839,
+        "ci_hi": -0.2963,
+        "n": 107,
+        "significant": true
+      },
+      "F6_GVZ": {
+        "ic": 0.2683,
+        "ci_lo": 0.1284,
+        "ci_hi": 0.4064,
+        "n": 107,
+        "significant": true
+      },
+      "F9_GDXMomentum": {
+        "ic": 0.2817,
+        "ci_lo": 0.1216,
+        "ci_hi": 0.4262,
+        "n": 107,
+        "significant": true
+      },
+      "F10_TIPSBEISpread": {
+        "ic": 0.0873,
+        "ci_lo": -0.0663,
+        "ci_hi": 0.225,
+        "n": 107,
+        "significant": false
+      },
+      "F11_DXYMomentum": {
+        "ic": -0.1362,
+        "ci_lo": -0.2913,
+        "ci_hi": 0.0147,
+        "n": 107,
+        "significant": false
+      },
+      "F13_GoldGDXDivergence": {
+        "ic": -0.3335,
+        "ci_lo": -0.4651,
+        "ci_hi": -0.198,
+        "n": 107,
+        "significant": true
+      },
+      "F14_GVZMomentum": {
+        "ic": 0.3583,
+        "ci_lo": 0.2352,
+        "ci_hi": 0.4774,
+        "n": 107,
+        "significant": true
+      }
+    }
+  },
+  "experiment_b_multi_window": {
+    "63": {
+      "ret_5d": {
+        "F1_DXY": {
+          "ic": -0.0123,
+          "n": 122
+        },
+        "F4_BEI": {
+          "ic": -0.0097,
+          "n": 122
+        },
+        "F5_GPR": {
+          "ic": -0.2463,
+          "n": 85
+        },
+        "F6_GVZ": {
+          "ic": -0.1142,
+          "n": 122
+        },
+        "F9_GDXMomentum": {
+          "ic": 0.1923,
+          "n": 122
+        },
+        "F10_TIPSBEISpread": {
+          "ic": 0.2556,
+          "n": 122
+        },
+        "F11_DXYMomentum": {
+          "ic": -0.1372,
+          "n": 122
+        },
+        "F13_GoldGDXDivergence": {
+          "ic": -0.2877,
+          "n": 122
+        },
+        "F14_GVZMomentum": {
+          "ic": 0.0044,
+          "n": 122
+        }
+      },
+      "ret_20d": {
+        "F1_DXY": {
+          "ic": -0.1591,
+          "n": 107
+        },
+        "F4_BEI": {
+          "ic": 0.0365,
+          "n": 107
+        },
+        "F5_GPR": {
+          "ic": -0.6938,
+          "n": 85
+        },
+        "F6_GVZ": {
+          "ic": -0.6251,
+          "n": 107
+        },
+        "F9_GDXMomentum": {
+          "ic": 0.4374,
+          "n": 107
+        },
+        "F10_TIPSBEISpread": {
+          "ic": 0.6534,
+          "n": 107
+        },
+        "F11_DXYMomentum": {
+          "ic": -0.4163,
+          "n": 107
+        },
+        "F13_GoldGDXDivergence": {
+          "ic": -0.3429,
+          "n": 107
+        },
+        "F14_GVZMomentum": {
+          "ic": -0.1652,
+          "n": 107
+        }
+      }
+    },
+    "126": {
+      "ret_5d": {
+        "F1_DXY": {
+          "ic": -0.0144,
+          "n": 122
+        },
+        "F4_BEI": {
+          "ic": -0.0487,
+          "n": 122
+        },
+        "F5_GPR": {
+          "ic": -0.0295,
+          "n": 122
+        },
+        "F6_GVZ": {
+          "ic": -0.2401,
+          "n": 122
+        },
+        "F9_GDXMomentum": {
+          "ic": 0.1459,
+          "n": 122
+        },
+        "F10_TIPSBEISpread": {
+          "ic": 0.2886,
+          "n": 122
+        },
+        "F11_DXYMomentum": {
+          "ic": -0.1352,
+          "n": 122
+        },
+        "F13_GoldGDXDivergence": {
+          "ic": -0.3003,
+          "n": 122
+        },
+        "F14_GVZMomentum": {
+          "ic": -0.0592,
+          "n": 122
+        }
+      },
+      "ret_20d": {
+        "F1_DXY": {
+          "ic": 0.1175,
+          "n": 107
+        },
+        "F4_BEI": {
+          "ic": -0.3718,
+          "n": 107
+        },
+        "F5_GPR": {
+          "ic": -0.0926,
+          "n": 107
+        },
+        "F6_GVZ": {
+          "ic": -0.4788,
+          "n": 107
+        },
+        "F9_GDXMomentum": {
+          "ic": 0.298,
+          "n": 107
+        },
+        "F10_TIPSBEISpread": {
+          "ic": 0.7228,
+          "n": 107
+        },
+        "F11_DXYMomentum": {
+          "ic": -0.358,
+          "n": 107
+        },
+        "F13_GoldGDXDivergence": {
+          "ic": -0.3024,
+          "n": 107
+        },
+        "F14_GVZMomentum": {
+          "ic": -0.1569,
+          "n": 107
+        }
+      }
+    },
+    "252": {
+      "ret_5d": {
+        "F1_DXY": {
+          "ic": 0.0181,
+          "n": 122
+        },
+        "F4_BEI": {
+          "ic": -0.0738,
+          "n": 122
+        },
+        "F5_GPR": {
+          "ic": 0.1218,
+          "n": 122
+        },
+        "F6_GVZ": {
+          "ic": -0.2692,
+          "n": 122
+        },
+        "F9_GDXMomentum": {
+          "ic": 0.1557,
+          "n": 122
+        },
+        "F10_TIPSBEISpread": {
+          "ic": 0.2753,
+          "n": 122
+        },
+        "F11_DXYMomentum": {
+          "ic": -0.1315,
+          "n": 122
+        },
+        "F13_GoldGDXDivergence": {
+          "ic": -0.4384,
+          "n": 122
+        },
+        "F14_GVZMomentum": {
+          "ic": -0.0527,
+          "n": 122
+        }
+      },
+      "ret_20d": {
+        "F1_DXY": {
+          "ic": 0.3285,
+          "n": 107
+        },
+        "F4_BEI": {
+          "ic": -0.387,
+          "n": 107
+        },
+        "F5_GPR": {
+          "ic": 0.0484,
+          "n": 107
+        },
+        "F6_GVZ": {
+          "ic": -0.5273,
+          "n": 107
+        },
+        "F9_GDXMomentum": {
+          "ic": 0.2846,
+          "n": 107
+        },
+        "F10_TIPSBEISpread": {
+          "ic": 0.728,
+          "n": 107
+        },
+        "F11_DXYMomentum": {
+          "ic": -0.2696,
+          "n": 107
+        },
+        "F13_GoldGDXDivergence": {
+          "ic": -0.2683,
+          "n": 107
+        },
+        "F14_GVZMomentum": {
+          "ic": -0.1742,
+          "n": 107
+        }
+      }
+    },
+    "504": {
+      "ret_5d": {
+        "F1_DXY": {
+          "ic": 0.0423,
+          "n": 122
+        },
+        "F4_BEI": {
+          "ic": -0.0938,
+          "n": 122
+        },
+        "F5_GPR": {
+          "ic": 0.122,
+          "n": 122
+        },
+        "F6_GVZ": {
+          "ic": -0.2963,
+          "n": 122
+        },
+        "F9_GDXMomentum": {
+          "ic": 0.1575,
+          "n": 122
+        },
+        "F10_TIPSBEISpread": {
+          "ic": 0.2908,
+          "n": 122
+        },
+        "F11_DXYMomentum": {
+          "ic": -0.1438,
+          "n": 122
+        },
+        "F13_GoldGDXDivergence": {
+          "ic": -0.2779,
+          "n": 122
+        },
+        "F14_GVZMomentum": {
+          "ic": -0.0557,
+          "n": 122
+        }
+      },
+      "ret_20d": {
+        "F1_DXY": {
+          "ic": 0.168,
+          "n": 107
+        },
+        "F4_BEI": {
+          "ic": -0.3588,
+          "n": 107
+        },
+        "F5_GPR": {
+          "ic": 0.0477,
+          "n": 107
+        },
+        "F6_GVZ": {
+          "ic": -0.5264,
+          "n": 107
+        },
+        "F9_GDXMomentum": {
+          "ic": 0.3014,
+          "n": 107
+        },
+        "F10_TIPSBEISpread": {
+          "ic": 0.7591,
+          "n": 107
+        },
+        "F11_DXYMomentum": {
+          "ic": -0.2914,
+          "n": 107
+        },
+        "F13_GoldGDXDivergence": {
+          "ic": -0.1645,
+          "n": 107
+        },
+        "F14_GVZMomentum": {
+          "ic": -0.1628,
+          "n": 107
+        }
+      }
+    }
+  },
+  "experiment_c_ablation": {
+    "baseline_ic": -0.2118,
+    "ablations": {
+      "F1_DXY": {
+        "ic_without": -0.0688,
+        "delta_ic": 0.1431,
+        "impact": "HURTS"
+      },
+      "F4_BEI": {
+        "ic_without": -0.1574,
+        "delta_ic": 0.0544,
+        "impact": "HURTS"
+      },
+      "F5_GPR": {
+        "ic_without": -0.0331,
+        "delta_ic": 0.1787,
+        "impact": "HURTS"
+      },
+      "F6_GVZ": {
+        "ic_without": -0.1847,
+        "delta_ic": 0.0272,
+        "impact": "HURTS"
+      },
+      "F9_GDXMomentum": {
+        "ic_without": 0.0429,
+        "delta_ic": 0.2547,
+        "impact": "HURTS"
+      },
+      "F10_TIPSBEISpread": {
+        "ic_without": -0.1937,
+        "delta_ic": 0.0181,
+        "impact": "HURTS"
+      },
+      "F11_DXYMomentum": {
+        "ic_without": -0.1981,
+        "delta_ic": 0.0137,
+        "impact": "HURTS"
+      },
+      "F13_GoldGDXDivergence": {
+        "ic_without": -0.4181,
+        "delta_ic": -0.2062,
+        "impact": "HELPS"
+      },
+      "F14_GVZMomentum": {
+        "ic_without": -0.2472,
+        "delta_ic": -0.0354,
+        "impact": "HELPS"
+      }
+    }
+  }
+}

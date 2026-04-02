@@ -1,11 +1,11 @@
 {
   "current": {
-    "regime": "滞胀·防御·避险",
-    "regime_en": "Stagflation Defensive SafeHaven",
-    "multiplier": 0.643,
+    "regime": "债市脆弱",
+    "regime_en": "Fragility",
+    "multiplier": 0.924,
     "risk_off_score": 0,
     "risk_on_score": 0,
-    "confidence": 0.77,
+    "confidence": 0.67,
     "layer1": {
       "quadrant": "Stagflation",
       "quadrant_zh": "滞胀",
@@ -16,30 +16,31 @@
       "multiplier": 0.95
     },
     "layer2": {
-      "hmm_state": 2,
-      "hmm_label": "Bear",
-      "hmm_label_zh": "熊市",
-      "hmm_confidence": 1.0,
-      "hmm_available": true,
-      "vol_level": "high",
+      "hmm_state": -1,
+      "hmm_label": "Neutral",
+      "hmm_label_zh": "震荡",
+      "hmm_confidence": 0.6,
+      "hmm_available": false,
+      "vol_level": "low",
       "liq_level": "poor",
-      "market_regime": "Systemic Risk",
-      "market_regime_zh": "系统性危机",
-      "adj_factor": 0.572
+      "market_regime": "Grinding",
+      "market_regime_zh": "震荡磨损",
+      "adj_factor": 0.92
     },
     "layer3": {
-      "rate_shock_detected": false,
-      "shock_source": null,
-      "shock_source_zh": null,
-      "dgs2_zscore": 0.955,
-      "shock_direction": null,
+      "rate_shock_detected": true,
+      "shock_source": "fragility",
+      "shock_source_zh": "债市脆弱",
+      "dgs2_zscore": 1.615,
+      "shock_direction": "up",
       "changepoint_detected": false,
       "days_since_changepoint": null,
       "n_breakpoints": 0,
-      "cp_available": true,
-      "dollar_type": "risk_off",
-      "dollar_type_zh": "避险美元",
-      "overlay_delta": 0.1
+      "cp_available": false,
+      "cp_error": "",
+      "dollar_type": "growth",
+      "dollar_type_zh": "增长美元",
+      "overlay_delta": 0.05
     },
     "version": "v2"
   },
@@ -48,126 +49,105 @@
       "month": "2025-09",
       "factors": {
         "F1_DXY": -1.18,
-        "F3_TIPS10Y": -1.28,
         "F4_BEI": 0.36,
         "F5_GPR": -0.59,
         "F6_GVZ": 0.76,
-        "F8_ETFFlow": -0.66,
-        "F9_GDXRatio": 2.95,
+        "F9_GDXMomentum": 1.21,
         "F10_TIPSBEISpread": -1.35,
         "F11_DXYMomentum": -0.23,
-        "F12_DXYDownGPRUp": 0.55,
+        "F12_DXYDownGPRUp": -0.53,
         "F13_GoldGDXDivergence": -0.69,
-        "F14_GVZMomentum": 0.57,
-        "F15_ETFFlowAccel": 0.19
+        "F14_GVZMomentum": 0.58
       }
     },
     {
       "month": "2025-10",
       "factors": {
         "F1_DXY": -0.69,
-        "F3_TIPS10Y": -1.16,
         "F4_BEI": -0.66,
         "F5_GPR": 0.14,
         "F6_GVZ": 1.18,
-        "F8_ETFFlow": -0.48,
-        "F9_GDXRatio": 1.33,
+        "F9_GDXMomentum": -1.71,
         "F10_TIPSBEISpread": -0.86,
         "F11_DXYMomentum": 0.94,
-        "F12_DXYDownGPRUp": 0.56,
+        "F12_DXYDownGPRUp": -0.53,
         "F13_GoldGDXDivergence": 0.18,
-        "F14_GVZMomentum": -1.79,
-        "F15_ETFFlowAccel": 0.14
+        "F14_GVZMomentum": -1.79
       }
     },
     {
       "month": "2025-11",
       "factors": {
         "F1_DXY": -0.69,
-        "F3_TIPS10Y": -1.15,
         "F4_BEI": -1.68,
         "F5_GPR": -0.3,
         "F6_GVZ": 1.08,
-        "F8_ETFFlow": -0.67,
-        "F9_GDXRatio": 1.91,
+        "F9_GDXMomentum": 1.01,
         "F10_TIPSBEISpread": -0.5,
         "F11_DXYMomentum": 0.09,
-        "F12_DXYDownGPRUp": 0.41,
+        "F12_DXYDownGPRUp": -0.53,
         "F13_GoldGDXDivergence": -0.13,
-        "F14_GVZMomentum": -0.6,
-        "F15_ETFFlowAccel": 0.34
+        "F14_GVZMomentum": -0.6
       }
     },
     {
       "month": "2025-12",
       "factors": {
         "F1_DXY": -0.94,
-        "F3_TIPS10Y": -0.21,
         "F4_BEI": -1.2,
         "F5_GPR": -0.35,
         "F6_GVZ": 1.21,
-        "F8_ETFFlow": -0.33,
-        "F9_GDXRatio": 1.59,
+        "F9_GDXMomentum": -0.25,
         "F10_TIPSBEISpread": 0.3,
         "F11_DXYMomentum": -0.59,
-        "F12_DXYDownGPRUp": 0.25,
+        "F12_DXYDownGPRUp": -0.53,
         "F13_GoldGDXDivergence": -0.02,
-        "F14_GVZMomentum": 0.89,
-        "F15_ETFFlowAccel": -0.21
+        "F14_GVZMomentum": 0.9
       }
     },
     {
       "month": "2026-01",
       "factors": {
         "F1_DXY": -1.5,
-        "F3_TIPS10Y": -0.27,
         "F4_BEI": 0.59,
         "F5_GPR": -0.42,
         "F6_GVZ": 5.0,
-        "F8_ETFFlow": 4.21,
-        "F9_GDXRatio": 1.31,
+        "F9_GDXMomentum": -0.52,
         "F10_TIPSBEISpread": -0.51,
         "F11_DXYMomentum": -0.9,
-        "F12_DXYDownGPRUp": 0.08,
+        "F12_DXYDownGPRUp": -0.53,
         "F13_GoldGDXDivergence": 0.23,
-        "F14_GVZMomentum": 4.78,
-        "F15_ETFFlowAccel": -5.0
+        "F14_GVZMomentum": 4.79
       }
     },
     {
       "month": "2026-02",
       "factors": {
         "F1_DXY": -1.47,
-        "F3_TIPS10Y": -1.52,
         "F4_BEI": -1.12,
         "F5_GPR": -0.48,
         "F6_GVZ": 1.97,
-        "F8_ETFFlow": -0.12,
-        "F9_GDXRatio": 2.01,
+        "F9_GDXMomentum": 1.04,
         "F10_TIPSBEISpread": -0.93,
         "F11_DXYMomentum": 0.91,
-        "F12_DXYDownGPRUp": -0.09,
+        "F12_DXYDownGPRUp": -0.53,
         "F13_GoldGDXDivergence": -0.12,
-        "F14_GVZMomentum": 0.24,
-        "F15_ETFFlowAccel": 1.22
+        "F14_GVZMomentum": 0.25
       }
     },
     {
       "month": "2026-03",
       "factors": {
         "F1_DXY": -0.22,
-        "F3_TIPS10Y": 0.79,
-        "F4_BEI": 0.46,
+        "F4_BEI": -0.06,
         "F5_GPR": -0.39,
-        "F6_GVZ": 2.88,
-        "F8_ETFFlow": -1.35,
-        "F9_GDXRatio": 0.5,
-        "F10_TIPSBEISpread": 0.53,
+        "F6_GVZ": 3.29,
+        "F9_GDXMomentum": -2.52,
+        "F10_TIPSBEISpread": 1.12,
         "F11_DXYMomentum": 2.07,
-        "F12_DXYDownGPRUp": -0.35,
-        "F13_GoldGDXDivergence": 0.21,
-        "F14_GVZMomentum": 1.23,
-        "F15_ETFFlowAccel": -0.07
+        "F12_DXYDownGPRUp": -0.53,
+        "F13_GoldGDXDivergence": 0.15,
+        "F14_GVZMomentum": 1.63
       }
     }
   ]

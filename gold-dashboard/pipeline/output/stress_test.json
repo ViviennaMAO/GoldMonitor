@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-27T23:18:38.667458",
+  "generated_at": "2026-03-30T10:19:56.278899",
   "model_path": "/Users/vivienna/Desktop/VibeCoding/GoldMonitor/gold-dashboard/pipeline/model.json",
   "train_end": "2025-09-30",
   "periods": {
@@ -12,28 +12,22 @@
       "expected_logic_break": "DXY↑ + Gold↓ (normally inverse), all-asset liquidation",
       "samples": 39,
       "is_oos": false,
-      "pred_mean": 3.9966,
-      "pred_std": 3.3937,
-      "pred_min": -0.76,
-      "pred_max": 10.1161,
+      "pred_mean": 3.7371,
+      "pred_std": 5.2857,
+      "pred_min": -4.3616,
+      "pred_max": 14.0667,
       "gold_return": 6.84,
       "gold_start": 1616.6,
       "gold_end": 1727.2,
       "gold_max_drawdown": -11.78,
-      "ic": 0.9314,
-      "direction_hit_rate": 87.2,
+      "ic": 0.9534,
+      "direction_hit_rate": 94.9,
       "factor_analysis": [
         {
           "factor": "F1_DXY",
           "mean_zscore": 2.822,
           "max_abs_zscore": 5.0,
           "pct_extreme": 64.1
-        },
-        {
-          "factor": "F3_TIPS10Y",
-          "mean_zscore": -1.729,
-          "max_abs_zscore": 3.192,
-          "pct_extreme": 43.6
         },
         {
           "factor": "F4_BEI",
@@ -54,14 +48,8 @@
           "pct_extreme": 79.5
         },
         {
-          "factor": "F8_ETFFlow",
-          "mean_zscore": 0.163,
-          "max_abs_zscore": 5.0,
-          "pct_extreme": 12.8
-        },
-        {
-          "factor": "F9_GDXRatio",
-          "mean_zscore": -1.555,
+          "factor": "F9_GDXMomentum",
+          "mean_zscore": -1.282,
           "max_abs_zscore": 5.0,
           "pct_extreme": 33.3
         },
@@ -79,9 +67,9 @@
         },
         {
           "factor": "F12_DXYDownGPRUp",
-          "mean_zscore": -2.148,
-          "max_abs_zscore": 5.0,
-          "pct_extreme": 51.3
+          "mean_zscore": 0.0,
+          "max_abs_zscore": 0.0,
+          "pct_extreme": 0.0
         },
         {
           "factor": "F13_GoldGDXDivergence",
@@ -94,12 +82,6 @@
           "mean_zscore": 1.636,
           "max_abs_zscore": 5.0,
           "pct_extreme": 51.3
-        },
-        {
-          "factor": "F15_ETFFlowAccel",
-          "mean_zscore": -0.638,
-          "max_abs_zscore": 4.802,
-          "pct_extreme": 28.2
         }
       ],
       "logic_breaks": [
@@ -107,11 +89,6 @@
           "type": "extreme_factor",
           "severity": "high",
           "detail": "F1_DXY reached 5.0σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
-          "detail": "F3_TIPS10Y reached 3.2σ — outside training distribution"
         },
         {
           "type": "extreme_factor",
@@ -126,12 +103,7 @@
         {
           "type": "extreme_factor",
           "severity": "high",
-          "detail": "F8_ETFFlow reached 5.0σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
-          "detail": "F9_GDXRatio reached 5.0σ — outside training distribution"
+          "detail": "F9_GDXMomentum reached 5.0σ — outside training distribution"
         },
         {
           "type": "extreme_factor",
@@ -146,25 +118,15 @@
         {
           "type": "extreme_factor",
           "severity": "high",
-          "detail": "F12_DXYDownGPRUp reached 5.0σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
           "detail": "F13_GoldGDXDivergence reached 3.0σ — outside training distribution"
         },
         {
           "type": "extreme_factor",
           "severity": "high",
           "detail": "F14_GVZMomentum reached 5.0σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
-          "detail": "F15_ETFFlowAccel reached 4.8σ — outside training distribution"
         }
       ],
-      "logic_break_count": 12,
+      "logic_break_count": 8,
       "max_severity": "high"
     },
     "fed_hiking": {
@@ -176,28 +138,22 @@
       "expected_logic_break": "TIPS↑↑ but Gold sideways (rate-gold link broken)",
       "samples": 342,
       "is_oos": false,
-      "pred_mean": 0.1493,
-      "pred_std": 2.4262,
-      "pred_min": -4.9476,
-      "pred_max": 6.5828,
+      "pred_mean": 0.259,
+      "pred_std": 2.897,
+      "pred_min": -5.2212,
+      "pred_max": 8.9096,
       "gold_return": 3.19,
       "gold_start": 1908.0,
       "gold_end": 1968.9,
       "gold_max_drawdown": -18.14,
-      "ic": 0.8025,
-      "direction_hit_rate": 86.3,
+      "ic": 0.9228,
+      "direction_hit_rate": 89.2,
       "factor_analysis": [
         {
           "factor": "F1_DXY",
           "mean_zscore": 0.773,
           "max_abs_zscore": 3.208,
           "pct_extreme": 27.2
-        },
-        {
-          "factor": "F3_TIPS10Y",
-          "mean_zscore": 1.545,
-          "max_abs_zscore": 3.582,
-          "pct_extreme": 30.7
         },
         {
           "factor": "F4_BEI",
@@ -218,16 +174,10 @@
           "pct_extreme": 7.9
         },
         {
-          "factor": "F8_ETFFlow",
-          "mean_zscore": -0.026,
-          "max_abs_zscore": 5.0,
-          "pct_extreme": 4.7
-        },
-        {
-          "factor": "F9_GDXRatio",
-          "mean_zscore": -0.477,
-          "max_abs_zscore": 2.841,
-          "pct_extreme": 12.6
+          "factor": "F9_GDXMomentum",
+          "mean_zscore": 0.008,
+          "max_abs_zscore": 3.238,
+          "pct_extreme": 5.8
         },
         {
           "factor": "F10_TIPSBEISpread",
@@ -243,9 +193,9 @@
         },
         {
           "factor": "F12_DXYDownGPRUp",
-          "mean_zscore": 0.246,
-          "max_abs_zscore": 3.044,
-          "pct_extreme": 0.9
+          "mean_zscore": 0.259,
+          "max_abs_zscore": 5.0,
+          "pct_extreme": 6.7
         },
         {
           "factor": "F13_GoldGDXDivergence",
@@ -258,12 +208,6 @@
           "mean_zscore": -0.17,
           "max_abs_zscore": 5.0,
           "pct_extreme": 4.4
-        },
-        {
-          "factor": "F15_ETFFlowAccel",
-          "mean_zscore": 0.102,
-          "max_abs_zscore": 4.414,
-          "pct_extreme": 4.1
         }
       ],
       "logic_breaks": [
@@ -271,11 +215,6 @@
           "type": "extreme_factor",
           "severity": "high",
           "detail": "F1_DXY reached 3.2σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
-          "detail": "F3_TIPS10Y reached 3.6σ — outside training distribution"
         },
         {
           "type": "extreme_factor",
@@ -290,166 +229,7 @@
         {
           "type": "extreme_factor",
           "severity": "high",
-          "detail": "F8_ETFFlow reached 5.0σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
-          "detail": "F10_TIPSBEISpread reached 3.9σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
-          "detail": "F11_DXYMomentum reached 3.7σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
-          "detail": "F12_DXYDownGPRUp reached 3.0σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
-          "detail": "F14_GVZMomentum reached 5.0σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
-          "detail": "F15_ETFFlowAccel reached 4.4σ — outside training distribution"
-        }
-      ],
-      "logic_break_count": 10,
-      "max_severity": "high"
-    },
-    "russia_ukraine": {
-      "name": "俄乌冲突",
-      "name_en": "Russia-Ukraine War",
-      "start": "2022-02-24",
-      "end": "2022-06-30",
-      "description": "地缘冲击推高金价后快速回落，GPR因子过拟合风险",
-      "expected_logic_break": "GPR spike → Gold spike → rapid mean reversion",
-      "samples": 88,
-      "is_oos": false,
-      "pred_mean": -1.8009,
-      "pred_std": 1.4941,
-      "pred_min": -4.9476,
-      "pred_max": 2.7488,
-      "gold_return": -6.29,
-      "gold_start": 1925.1,
-      "gold_end": 1804.1,
-      "gold_max_drawdown": -11.57,
-      "ic": 0.3433,
-      "direction_hit_rate": 86.4,
-      "factor_analysis": [
-        {
-          "factor": "F1_DXY",
-          "mean_zscore": 1.964,
-          "max_abs_zscore": 3.208,
-          "pct_extreme": 45.5
-        },
-        {
-          "factor": "F3_TIPS10Y",
-          "mean_zscore": 2.293,
-          "max_abs_zscore": 3.582,
-          "pct_extreme": 73.9
-        },
-        {
-          "factor": "F4_BEI",
-          "mean_zscore": 1.64,
-          "max_abs_zscore": 4.013,
-          "pct_extreme": 43.2
-        },
-        {
-          "factor": "F5_GPR",
-          "mean_zscore": 1.488,
-          "max_abs_zscore": 3.697,
-          "pct_extreme": 26.1
-        },
-        {
-          "factor": "F6_GVZ",
-          "mean_zscore": 1.409,
-          "max_abs_zscore": 5.0,
-          "pct_extreme": 22.7
-        },
-        {
-          "factor": "F8_ETFFlow",
-          "mean_zscore": -0.087,
-          "max_abs_zscore": 4.708,
-          "pct_extreme": 6.8
-        },
-        {
-          "factor": "F9_GDXRatio",
-          "mean_zscore": -0.109,
-          "max_abs_zscore": 2.721,
-          "pct_extreme": 4.5
-        },
-        {
-          "factor": "F10_TIPSBEISpread",
-          "mean_zscore": 1.383,
-          "max_abs_zscore": 3.934,
-          "pct_extreme": 50.0
-        },
-        {
-          "factor": "F11_DXYMomentum",
-          "mean_zscore": 0.554,
-          "max_abs_zscore": 3.727,
-          "pct_extreme": 19.3
-        },
-        {
-          "factor": "F12_DXYDownGPRUp",
-          "mean_zscore": -1.26,
-          "max_abs_zscore": 5.0,
-          "pct_extreme": 15.9
-        },
-        {
-          "factor": "F13_GoldGDXDivergence",
-          "mean_zscore": 0.757,
-          "max_abs_zscore": 2.412,
-          "pct_extreme": 2.3
-        },
-        {
-          "factor": "F14_GVZMomentum",
-          "mean_zscore": 0.119,
-          "max_abs_zscore": 5.0,
-          "pct_extreme": 17.0
-        },
-        {
-          "factor": "F15_ETFFlowAccel",
-          "mean_zscore": 0.098,
-          "max_abs_zscore": 5.0,
-          "pct_extreme": 9.1
-        }
-      ],
-      "logic_breaks": [
-        {
-          "type": "extreme_factor",
-          "severity": "high",
-          "detail": "F1_DXY reached 3.2σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
-          "detail": "F3_TIPS10Y reached 3.6σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
-          "detail": "F4_BEI reached 4.0σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
-          "detail": "F5_GPR reached 3.7σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
-          "detail": "F6_GVZ reached 5.0σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
-          "detail": "F8_ETFFlow reached 4.7σ — outside training distribution"
+          "detail": "F9_GDXMomentum reached 3.2σ — outside training distribution"
         },
         {
           "type": "extreme_factor",
@@ -470,14 +250,135 @@
           "type": "extreme_factor",
           "severity": "high",
           "detail": "F14_GVZMomentum reached 5.0σ — outside training distribution"
+        }
+      ],
+      "logic_break_count": 8,
+      "max_severity": "high"
+    },
+    "russia_ukraine": {
+      "name": "俄乌冲突",
+      "name_en": "Russia-Ukraine War",
+      "start": "2022-02-24",
+      "end": "2022-06-30",
+      "description": "地缘冲击推高金价后快速回落，GPR因子过拟合风险",
+      "expected_logic_break": "GPR spike → Gold spike → rapid mean reversion",
+      "samples": 88,
+      "is_oos": false,
+      "pred_mean": -1.8296,
+      "pred_std": 1.8699,
+      "pred_min": -5.2212,
+      "pred_max": 4.9853,
+      "gold_return": -6.29,
+      "gold_start": 1925.1,
+      "gold_end": 1804.1,
+      "gold_max_drawdown": -11.57,
+      "ic": 0.8611,
+      "direction_hit_rate": 89.8,
+      "factor_analysis": [
+        {
+          "factor": "F1_DXY",
+          "mean_zscore": 1.964,
+          "max_abs_zscore": 3.208,
+          "pct_extreme": 45.5
+        },
+        {
+          "factor": "F4_BEI",
+          "mean_zscore": 1.64,
+          "max_abs_zscore": 4.013,
+          "pct_extreme": 43.2
+        },
+        {
+          "factor": "F5_GPR",
+          "mean_zscore": 1.488,
+          "max_abs_zscore": 3.697,
+          "pct_extreme": 26.1
+        },
+        {
+          "factor": "F6_GVZ",
+          "mean_zscore": 1.409,
+          "max_abs_zscore": 5.0,
+          "pct_extreme": 22.7
+        },
+        {
+          "factor": "F9_GDXMomentum",
+          "mean_zscore": 0.087,
+          "max_abs_zscore": 3.238,
+          "pct_extreme": 23.9
+        },
+        {
+          "factor": "F10_TIPSBEISpread",
+          "mean_zscore": 1.383,
+          "max_abs_zscore": 3.934,
+          "pct_extreme": 50.0
+        },
+        {
+          "factor": "F11_DXYMomentum",
+          "mean_zscore": 0.554,
+          "max_abs_zscore": 3.727,
+          "pct_extreme": 19.3
+        },
+        {
+          "factor": "F12_DXYDownGPRUp",
+          "mean_zscore": 0.0,
+          "max_abs_zscore": 0.0,
+          "pct_extreme": 0.0
+        },
+        {
+          "factor": "F13_GoldGDXDivergence",
+          "mean_zscore": 0.757,
+          "max_abs_zscore": 2.412,
+          "pct_extreme": 2.3
+        },
+        {
+          "factor": "F14_GVZMomentum",
+          "mean_zscore": 0.119,
+          "max_abs_zscore": 5.0,
+          "pct_extreme": 17.0
+        }
+      ],
+      "logic_breaks": [
+        {
+          "type": "extreme_factor",
+          "severity": "high",
+          "detail": "F1_DXY reached 3.2σ — outside training distribution"
         },
         {
           "type": "extreme_factor",
           "severity": "high",
-          "detail": "F15_ETFFlowAccel reached 5.0σ — outside training distribution"
+          "detail": "F4_BEI reached 4.0σ — outside training distribution"
+        },
+        {
+          "type": "extreme_factor",
+          "severity": "high",
+          "detail": "F5_GPR reached 3.7σ — outside training distribution"
+        },
+        {
+          "type": "extreme_factor",
+          "severity": "high",
+          "detail": "F6_GVZ reached 5.0σ — outside training distribution"
+        },
+        {
+          "type": "extreme_factor",
+          "severity": "high",
+          "detail": "F9_GDXMomentum reached 3.2σ — outside training distribution"
+        },
+        {
+          "type": "extreme_factor",
+          "severity": "high",
+          "detail": "F10_TIPSBEISpread reached 3.9σ — outside training distribution"
+        },
+        {
+          "type": "extreme_factor",
+          "severity": "high",
+          "detail": "F11_DXYMomentum reached 3.7σ — outside training distribution"
+        },
+        {
+          "type": "extreme_factor",
+          "severity": "high",
+          "detail": "F14_GVZMomentum reached 5.0σ — outside training distribution"
         }
       ],
-      "logic_break_count": 11,
+      "logic_break_count": 8,
       "max_severity": "high"
     },
     "svb_crisis": {
@@ -489,27 +390,21 @@
       "expected_logic_break": "GVZ↑ + Gold↑ but ETF flows lagged",
       "samples": 48,
       "is_oos": false,
-      "pred_mean": 0.1498,
-      "pred_std": 2.2609,
-      "pred_min": -2.484,
-      "pred_max": 5.9772,
+      "pred_mean": 0.4991,
+      "pred_std": 2.7956,
+      "pred_min": -3.4848,
+      "pred_max": 8.8083,
       "gold_return": 11.33,
       "gold_start": 1812.7,
       "gold_end": 2018.0,
       "gold_max_drawdown": -3.03,
-      "ic": 0.7401,
-      "direction_hit_rate": 79.2,
+      "ic": 0.9079,
+      "direction_hit_rate": 83.3,
       "factor_analysis": [
         {
           "factor": "F1_DXY",
           "mean_zscore": -0.782,
           "max_abs_zscore": 1.296,
-          "pct_extreme": 0.0
-        },
-        {
-          "factor": "F3_TIPS10Y",
-          "mean_zscore": 0.511,
-          "max_abs_zscore": 1.23,
           "pct_extreme": 0.0
         },
         {
@@ -531,16 +426,10 @@
           "pct_extreme": 2.1
         },
         {
-          "factor": "F8_ETFFlow",
-          "mean_zscore": 0.094,
-          "max_abs_zscore": 5.0,
-          "pct_extreme": 8.3
-        },
-        {
-          "factor": "F9_GDXRatio",
-          "mean_zscore": 0.514,
-          "max_abs_zscore": 1.605,
-          "pct_extreme": 0.0
+          "factor": "F9_GDXMomentum",
+          "mean_zscore": 0.762,
+          "max_abs_zscore": 2.612,
+          "pct_extreme": 12.5
         },
         {
           "factor": "F10_TIPSBEISpread",
@@ -556,9 +445,9 @@
         },
         {
           "factor": "F12_DXYDownGPRUp",
-          "mean_zscore": 0.876,
-          "max_abs_zscore": 1.731,
-          "pct_extreme": 0.0
+          "mean_zscore": 2.164,
+          "max_abs_zscore": 5.0,
+          "pct_extreme": 47.9
         },
         {
           "factor": "F13_GoldGDXDivergence",
@@ -571,32 +460,21 @@
           "mean_zscore": 0.607,
           "max_abs_zscore": 5.0,
           "pct_extreme": 18.8
-        },
-        {
-          "factor": "F15_ETFFlowAccel",
-          "mean_zscore": -0.357,
-          "max_abs_zscore": 4.414,
-          "pct_extreme": 8.3
         }
       ],
       "logic_breaks": [
         {
           "type": "extreme_factor",
           "severity": "high",
-          "detail": "F8_ETFFlow reached 5.0σ — outside training distribution"
+          "detail": "F12_DXYDownGPRUp reached 5.0σ — outside training distribution"
         },
         {
           "type": "extreme_factor",
           "severity": "high",
           "detail": "F14_GVZMomentum reached 5.0σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
-          "detail": "F15_ETFFlowAccel reached 4.4σ — outside training distribution"
         }
       ],
-      "logic_break_count": 3,
+      "logic_break_count": 2,
       "max_severity": "high"
     },
     "gold_breakout_2024": {
@@ -608,28 +486,22 @@
       "expected_logic_break": "DXY↑ + TIPS↑ + Gold↑↑ (breaks both DXY and rate logic)",
       "samples": 83,
       "is_oos": false,
-      "pred_mean": 2.371,
-      "pred_std": 2.2403,
-      "pred_min": -0.1106,
-      "pred_max": 7.7125,
+      "pred_mean": 2.2698,
+      "pred_std": 3.0474,
+      "pred_min": -1.9325,
+      "pred_max": 8.8319,
       "gold_return": 11.54,
       "gold_start": 2086.9,
       "gold_end": 2327.7,
       "gold_max_drawdown": -5.53,
-      "ic": 0.7523,
-      "direction_hit_rate": 69.9,
+      "ic": 0.9167,
+      "direction_hit_rate": 85.5,
       "factor_analysis": [
         {
           "factor": "F1_DXY",
           "mean_zscore": 0.923,
           "max_abs_zscore": 2.025,
           "pct_extreme": 2.4
-        },
-        {
-          "factor": "F3_TIPS10Y",
-          "mean_zscore": 0.621,
-          "max_abs_zscore": 1.33,
-          "pct_extreme": 0.0
         },
         {
           "factor": "F4_BEI",
@@ -650,16 +522,10 @@
           "pct_extreme": 7.2
         },
         {
-          "factor": "F8_ETFFlow",
-          "mean_zscore": 0.002,
-          "max_abs_zscore": 3.272,
-          "pct_extreme": 7.2
-        },
-        {
-          "factor": "F9_GDXRatio",
-          "mean_zscore": -0.404,
-          "max_abs_zscore": 1.99,
-          "pct_extreme": 0.0
+          "factor": "F9_GDXMomentum",
+          "mean_zscore": 0.638,
+          "max_abs_zscore": 2.123,
+          "pct_extreme": 3.6
         },
         {
           "factor": "F10_TIPSBEISpread",
@@ -675,8 +541,8 @@
         },
         {
           "factor": "F12_DXYDownGPRUp",
-          "mean_zscore": -0.089,
-          "max_abs_zscore": 0.237,
+          "mean_zscore": -0.352,
+          "max_abs_zscore": 0.435,
           "pct_extreme": 0.0
         },
         {
@@ -690,12 +556,6 @@
           "mean_zscore": 0.289,
           "max_abs_zscore": 3.418,
           "pct_extreme": 12.0
-        },
-        {
-          "factor": "F15_ETFFlowAccel",
-          "mean_zscore": -0.027,
-          "max_abs_zscore": 3.132,
-          "pct_extreme": 10.8
         }
       ],
       "logic_breaks": [
@@ -707,35 +567,25 @@
         {
           "type": "extreme_factor",
           "severity": "high",
-          "detail": "F8_ETFFlow reached 3.3σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
           "detail": "F13_GoldGDXDivergence reached 3.6σ — outside training distribution"
         },
         {
           "type": "extreme_factor",
           "severity": "high",
           "detail": "F14_GVZMomentum reached 3.4σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
-          "detail": "F15_ETFFlowAccel reached 3.1σ — outside training distribution"
         }
       ],
-      "logic_break_count": 5,
+      "logic_break_count": 3,
       "max_severity": "high"
     }
   },
   "summary": {
     "total_periods_tested": 5,
     "periods_with_data": 5,
-    "total_logic_breaks": 41,
+    "total_logic_breaks": 29,
     "high_severity_periods": 5,
-    "avg_crisis_ic": 0.7139,
-    "avg_direction_hit_rate": 81.8,
+    "avg_crisis_ic": 0.9124,
+    "avg_direction_hit_rate": 88.5,
     "overall_assessment": "CRITICAL — Model has significant logic breaks across multiple crisis types. Consider adding regime-aware features."
   }
 }

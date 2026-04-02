@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 import requests
 from datetime import datetime, timedelta
+from pathlib import Path
 from config import FRED_API_KEY, FRED_SERIES, STOOQ_SYMBOLS, DATA_START
 
 # ── FRED API ──────────────────────────────────────────────────────────────────
@@ -237,7 +238,31 @@ def fetch_yahoo_volatility() -> pd.DataFrame:
 
 # ── Master Data Assembly ──────────────────────────────────────────────────────
 
-def fetch_all_data() -> pd.DataFrame:
+CACHE_PATH = Path(__file__).parent / "data_cache.pkl"
+
+
+def fetch_all_data(use_cache: bool = True) -> pd.DataFrame:
+    """
+    Fetch all data sources and merge into a single DataFrame.
+    With data caching: saves to .pkl on success, loads from cache on failure.
+    """
+    # Try fetching fresh data
+    try:
+        merged = _fetch_all_data_impl()
+        # Cache on success
+        merged.to_pickle(str(CACHE_PATH))
+        print(f"  Data cached to {CACHE_PATH}")
+        return merged
+    except Exception as e:
+        if use_cache and CACHE_PATH.exists():
+            print(f"\n⚠️  Live fetch failed ({e}), loading cached data...")
+            merged = pd.read_pickle(str(CACHE_PATH))
+            print(f"  Loaded cache: {len(merged)} rows, {merged.index.min()} → {merged.index.max()}")
+            return merged
+        raise
+
+
+def _fetch_all_data_impl() -> pd.DataFrame:
     """
     Fetch all data sources and merge into a single DataFrame.
     Columns: DXY, FED_FUNDS, TIPS_10Y, BEI, GVZ_close, OVX_close,
@@ -279,6 +304,10 @@ def fetch_all_data() -> pd.DataFrame:
     # Drop rows where gold price is missing
     if "XAUUSD_close" in merged.columns:
         merged = merged.dropna(subset=["XAUUSD_close"])
+
+    # Require gold price data — if missing, data is incomplete
+    if "XAUUSD_close" not in merged.columns or merged.empty:
+        raise RuntimeError("No gold price data — cannot proceed without XAUUSD")
 
     print(f"\nMerged dataset: {len(merged)} rows, {len(merged.columns)} columns")
     print(f"Date range: {merged.index.min()} → {merged.index.max()}")

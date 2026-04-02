@@ -1,5 +1,6 @@
 """
 XGBoost training module with Purged Cross-Validation.
+P2-opt: Added CPCV validation (Step 0) and multi-scale ensemble (Step 1B).
 """
 import json
 import numpy as np
@@ -107,6 +108,25 @@ def train_model(features_df: pd.DataFrame) -> xgb.XGBRegressor:
 
     # ── Model health check (P1) ───────────────────────────────────────────────
     compute_model_health(features_df, model)
+
+    # ── Step 0: CPCV Validation ─────────────────────────────────────────────
+    try:
+        from cpcv import run_cpcv_validation
+        cpcv_report = run_cpcv_validation(features_df)
+        if not cpcv_report["conclusion"]["alpha_confirmed"]:
+            print("\n⚠️  CPCV: Alpha not confirmed at p<0.05 — proceed with caution")
+        else:
+            print(f"\n✅ CPCV: Alpha confirmed (p={cpcv_report['results']['p_value']:.4f})")
+    except Exception as e:
+        print(f"\n⚠️  CPCV validation skipped: {e}")
+
+    # ── Step 1B: Multi-Scale Ensemble Training ───────────────────────────────
+    try:
+        from multiscale import train_multiscale_models
+        ms_result = train_multiscale_models(features_df)
+        print(f"\n✅ Multi-scale ensemble trained: {list(ms_result['weights'].keys())}")
+    except Exception as e:
+        print(f"\n⚠️  Multi-scale training skipped: {e}")
 
     # ── Run backtest on OOS data ──────────────────────────────────────────────
     from backtest import run_backtest as _run_backtest

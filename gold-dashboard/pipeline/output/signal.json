@@ -1,96 +1,78 @@
 {
-  "date": "2026-03-27",
-  "timestamp": "2026-03-27T23:18:38.585713",
-  "signal": "Strong Sell",
-  "predicted_return": -1.6547,
+  "date": "2026-03-30",
+  "timestamp": "2026-03-30T10:19:56.193881",
+  "signal": "Strong Buy",
+  "predicted_return": 2.7562,
   "confidence": 100,
-  "gold_price": 4537.6,
-  "gold_open": 4371.8,
-  "gold_high": 4547.2,
-  "gold_low": 4400.6,
-  "atr": 151.46,
-  "stop_loss": 4158.94,
-  "take_profit": 5105.59,
-  "position_size": 3.3962,
-  "regime": "滞胀·防御·避险",
-  "regime_multiplier": 0.643,
+  "gold_price": 4498.6,
+  "gold_open": 4520.0,
+  "gold_high": 4539.6,
+  "gold_low": 4444.7,
+  "atr": 144.43,
+  "stop_loss": 3993.1,
+  "take_profit": 5256.85,
+  "position_size": 2.7418,
+  "regime": "债市脆弱",
+  "regime_multiplier": 0.924,
   "factors": [
     {
       "name": "F1_DXY",
       "label": "美元指数 DXY",
-      "zscore": -0.2229,
+      "zscore": -0.2136,
       "raw_value": 120.2757
-    },
-    {
-      "name": "F3_TIPS10Y",
-      "label": "TIPS 10Y 实际利率",
-      "zscore": 0.7877,
-      "raw_value": 2.02
     },
     {
       "name": "F4_BEI",
       "label": "通胀预期 BEI",
-      "zscore": 0.462,
-      "raw_value": 2.34
+      "zscore": -0.0595,
+      "raw_value": 2.31
     },
     {
       "name": "F5_GPR",
       "label": "地缘政治风险 GPR",
-      "zscore": -0.3946,
+      "zscore": -0.3902,
       "raw_value": 371.0954
     },
     {
       "name": "F6_GVZ",
       "label": "黄金波动率 GVZ",
-      "zscore": 2.8811,
-      "raw_value": 42.67
-    },
-    {
-      "name": "F8_ETFFlow",
-      "label": "ETF 资金流",
-      "zscore": -1.3477,
+      "zscore": 0.0,
       "raw_value": null
     },
     {
-      "name": "F9_GDXRatio",
-      "label": "矿业股/金价比",
-      "zscore": 0.4992,
+      "name": "F9_GDXMomentum",
+      "label": "矿业股动量",
+      "zscore": -2.2608,
       "raw_value": null
     },
     {
       "name": "F10_TIPSBEISpread",
       "label": "实际利率-通胀利差",
-      "zscore": 0.5269,
+      "zscore": 1.1134,
       "raw_value": null
     },
     {
       "name": "F11_DXYMomentum",
       "label": "美元动量 20D",
-      "zscore": 2.0724,
+      "zscore": 1.4555,
       "raw_value": null
     },
     {
       "name": "F12_DXYDownGPRUp",
       "label": "弱美元×高风险",
-      "zscore": -0.3462,
+      "zscore": -0.5338,
       "raw_value": null
     },
     {
       "name": "F13_GoldGDXDivergence",
       "label": "金价-矿业股背离",
-      "zscore": 0.2072,
+      "zscore": 0.0,
       "raw_value": null
     },
     {
       "name": "F14_GVZMomentum",
       "label": "波动率动量",
-      "zscore": 1.2262,
-      "raw_value": null
-    },
-    {
-      "name": "F15_ETFFlowAccel",
-      "label": "ETF资金加速度",
-      "zscore": -0.0661,
+      "zscore": 1.9744,
       "raw_value": null
     }
   ]

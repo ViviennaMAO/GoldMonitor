@@ -18,8 +18,8 @@ TRAIN_END = "2025-09-30"
 FORWARD_DAYS = 20          # 20-day forward return target
 ZSCORE_WINDOW = 252        # Rolling Z-Score window
 ATR_PERIOD = 14            # ATR calculation period
-ATR_STOP_MULT = 2.5        # ATR stop-loss multiplier
-RISK_BUDGET = 0.02         # 2% risk per trade
+ATR_STOP_MULT = 3.5        # ATR stop-loss multiplier (widened from 2.5 to reduce noise stops)
+RISK_BUDGET = 0.015        # 1.5% risk per trade (reduced to compensate wider stops)
 
 # ── FRED Series IDs ──────────────────────────────────────────────────────────
 FRED_SERIES = {
@@ -41,24 +41,24 @@ STOOQ_SYMBOLS = {
 
 # ── XGBoost Parameters ───────────────────────────────────────────────────────
 XGB_PARAMS = {
-    "max_depth": 3,
-    "min_child_weight": 30,
+    "max_depth": 4,
+    "min_child_weight": 15,
     "learning_rate": 0.03,
-    "n_estimators": 300,
+    "n_estimators": 500,
     "subsample": 0.7,
     "colsample_bytree": 0.7,
-    "reg_alpha": 1.0,           # L1 regularization to suppress single-factor dominance
-    "reg_lambda": 5.0,          # L2 regularization for smoother predictions
+    "reg_alpha": 0.3,           # L1 regularization (relaxed from 1.0 to release signal)
+    "reg_lambda": 2.0,          # L2 regularization (relaxed from 5.0 to release signal)
     "objective": "reg:squarederror",
     "random_state": 42,
 }
 
 # ── Signal Thresholds (predicted 20d return %) ────────────────────────────────
 SIGNAL_THRESHOLDS = {
-    "strong_buy": 0.8,
-    "buy": 0.3,
-    "sell": -0.3,
-    "strong_sell": -0.8,
+    "strong_buy": 1.2,
+    "buy": 0.5,
+    "sell": -0.5,
+    "strong_sell": -1.2,
 }
 
 # ── Factor Names (display order) ─────────────────────────────────────────────
@@ -67,19 +67,19 @@ SIGNAL_THRESHOLDS = {
 # P2: Pruned 13 → 10 factors based on IC/Granger/correlation analysis:
 #   Removed F3 (redundant with F10, r=0.84), F8 (IC≈0, Granger fail),
 #   F15 (IC≈0). Replaced F9 ratio → momentum.
-# Total: 10 factors = 5 base + 5 logical
+# P3: Removed F12 (IC=0.00, dead factor), F9 (ablation: model IC -0.21→+0.04
+#     without it; r=-0.79 collinearity with F13 caused XGBoost overfitting).
+# Total: 8 factors = 4 base + 4 logical
 FACTOR_NAMES = [
-    # Base factors (5)
+    # Base factors (4)
     "F1_DXY",
     "F4_BEI",
     "F5_GPR",
-    "F6_GVZ",              # Granger fail but high OOS IC — under observation
-    "F9_GDXMomentum",      # P2: replaced ratio→momentum (ratio had IC≈0, Granger fail)
-    # Logical factors (5)
-    "F10_TIPSBEISpread",   # Real yield - inflation spread (replaces F3, IC 0.73)
+    "F6_GVZ",              # All-target IC negative, but XGBoost handles reversal
+    # Logical factors (4)
+    "F10_TIPSBEISpread",   # Real yield - inflation spread (IC +0.73, top factor)
     "F11_DXYMomentum",     # USD trend acceleration
-    "F12_DXYDownGPRUp",    # Weak USD × high risk cross-factor
-    "F13_GoldGDXDivergence", # Gold vs miners divergence
+    "F13_GoldGDXDivergence", # Gold vs miners divergence (ablation: most valuable factor)
     "F14_GVZMomentum",     # Volatility regime change
 ]
 
@@ -88,10 +88,8 @@ FACTOR_DISPLAY = {
     "F4_BEI": "通胀预期 BEI",
     "F5_GPR": "地缘政治风险 GPR",
     "F6_GVZ": "黄金波动率 GVZ",
-    "F9_GDXMomentum": "矿业股动量",
     "F10_TIPSBEISpread": "实际利率-通胀利差",
     "F11_DXYMomentum": "美元动量 20D",
-    "F12_DXYDownGPRUp": "弱美元×高风险",
     "F13_GoldGDXDivergence": "金价-矿业股背离",
     "F14_GVZMomentum": "波动率动量",
 }
@@ -100,7 +98,16 @@ FACTOR_DISPLAY = {
 # F3_TIPS10Y: redundant with F10 (r=0.84), F10 has higher OOS IC (0.73 vs 0.58)
 # F8_ETFFlow: OOS IC=-0.026, Granger fail — noise factor
 # F9_GDXRatio: replaced by F9_GDXMomentum (momentum > level)
+# F9_GDXMomentum: ablation showed removing it flips model IC from -0.21→+0.04;
+#   r=-0.79 collinearity with F13 caused XGBoost overfitting despite solo IC=+0.285
+# F12_DXYDownGPRUp: IC=0.00, dead factor — P3 roundtable consensus removal
 # F15_ETFFlowAccel: OOS IC=0.046, near zero — removed with F8
+
+# ── Trade Execution ─────────────────────────────────────────────────────────
+MIN_HOLD_DAYS = 3              # Minimum days before Neutral can close position
+TRAILING_ACTIVATE = 1.0        # Activate trailing stop after 1× ATR profit
+TRAILING_DISTANCE = 2.0        # Trailing stop distance in ATR multiples
+TRADE_COST_BPS = 3             # Single-leg cost in bps (slippage + commission)
 
 # ── Risk Regime Thresholds (v1 — kept for backward compat) ───────────────────
 REGIME_HEALTHY = 1.0
@@ -119,9 +126,9 @@ REGIME_Z_LOW = -0.3       # Factor Z < this → risk-on signal
 # ── Layer 2: HMM parameters ───────────────────────────────────────────────────
 HMM_N_STATES = 3                     # Bull / Neutral / Bear
 HMM_LOOKBACK = 504                   # ~2 trading years for fitting window
-HMM_BASE_FACTORS = [                 # Features used for HMM (5 base factors)
+HMM_BASE_FACTORS = [                 # Features used for HMM (4 base factors)
     "F1_DXY", "F4_BEI", "F5_GPR",
-    "F6_GVZ", "F9_GDXMomentum",
+    "F6_GVZ",
 ]
 
 # ── Layer 3: Event detection parameters ──────────────────────────────────────

@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-04-02T11:28:05.791283",
+  "horizons": [
+    10,
+    20,
+    40
+  ],
+  "oos_ics": {
+    "10": 0.0842,
+    "20": 0.0429,
+    "40": -0.4197
+  },
+  "rolling_ics": {
+    "10": -0.0059,
+    "20": -0.0173,
+    "40": -0.4264
+  },
+  "weights": {
+    "10": 0.3333,
+    "20": 0.3333,
+    "40": 0.3333
+  },
+  "model_paths": {
+    "10": "/Users/vivienna/Desktop/VibeCoding/GoldMonitor/gold-dashboard/pipeline/model_10d.json",
+    "20": "/Users/vivienna/Desktop/VibeCoding/GoldMonitor/gold-dashboard/pipeline/model_20d.json",
+    "40": "/Users/vivienna/Desktop/VibeCoding/GoldMonitor/gold-dashboard/pipeline/model_40d.json"
+  }
+}
