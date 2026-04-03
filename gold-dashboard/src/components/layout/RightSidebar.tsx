@@ -109,15 +109,7 @@ export function RightSidebar() {
     : EMPTY_ACCOUNT
 
   return (
-    <div className="h-full flex flex-col gap-2 md:gap-3 p-2 md:p-3 overflow-y-auto bg-[#050B18] lg:border-l border-white/[0.06]">
-      {/* Signal card */}
-      <SignalCard signal={dailySignal} />
-
-      {/* SHAP waterfall — mobile only, on desktop it lives in LeftPanel tabs */}
-      <div className="rounded-2xl border border-white/[0.06] bg-[#0A1628] p-3 md:p-4 lg:hidden">
-        <ShapWaterfall bars={dailySignal.shapBars} prediction={dailySignal.prediction} />
-      </div>
-
+    <div className="h-full flex flex-col gap-2 md:gap-3 p-2 md:p-3 overflow-y-auto bg-[#050B18]">
       {/* Position management */}
       <PositionCard positions={positions} />
 
