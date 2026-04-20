@@ -85,6 +85,76 @@ def fetch_stooq(symbol: str, stooq_symbol: str) -> pd.DataFrame:
     return df
 
 
+def _fetch_xauusd_akshare() -> pd.DataFrame:
+    """
+    Fallback: fetch XAUUSD by converting Shanghai gold futures (AU0, RMB/gram)
+    to USD/oz using FRED USDCNY exchange rate. Requires akshare.
+    """
+    try:
+        import akshare as ak
+    except ImportError:
+        return pd.DataFrame()
+
+    # Shanghai gold futures (continuous contract)
+    au = ak.futures_zh_daily_sina(symbol="AU0")
+    au["date"] = pd.to_datetime(au["date"])
+    au = au.set_index("date").sort_index()
+    au = au[au.index >= pd.Timestamp(DATA_START)]
+
+    # USDCNY exchange rate from FRED
+    usdcny = fetch_fred_series("DEXCHUS")
+
+    merged = pd.DataFrame({"au_close": au["close"].astype(float),
+                            "au_open": au["open"].astype(float),
+                            "au_high": au["high"].astype(float),
+                            "au_low": au["low"].astype(float),
+                            "usdcny": usdcny})
+    merged = merged.ffill().dropna()
+
+    # Convert: RMB/gram → USD/troy oz (1 oz = 31.1035 g)
+    oz = 31.1035
+    result = pd.DataFrame({
+        "XAUUSD_close": merged["au_close"] * oz / merged["usdcny"],
+        "XAUUSD_open":  merged["au_open"]  * oz / merged["usdcny"],
+        "XAUUSD_high":  merged["au_high"]  * oz / merged["usdcny"],
+        "XAUUSD_low":   merged["au_low"]   * oz / merged["usdcny"],
+    })
+    result.index.name = "date"
+    return result
+
+
+def _fetch_us_etf_akshare(symbol: str) -> pd.DataFrame:
+    """
+    Fallback: fetch US ETF daily OHLCV (GDX/GLD/IAU/GDXJ) via AKShare.
+    Used when Stooq and Yahoo are both unavailable.
+    """
+    try:
+        import akshare as ak
+    except ImportError:
+        return pd.DataFrame()
+
+    df = ak.stock_us_daily(symbol=symbol, adjust="")
+    if df.empty or "date" not in df.columns:
+        return pd.DataFrame()
+
+    df["date"] = pd.to_datetime(df["date"])
+    df = df.set_index("date").sort_index()
+    df = df[df.index >= pd.Timestamp(DATA_START)]
+
+    # Rename to match expected format: {symbol}_{col}
+    rename = {}
+    for col in ["open", "high", "low", "close", "volume"]:
+        if col in df.columns:
+            rename[col] = f"{symbol}_{col}"
+    df = df.rename(columns=rename)
+
+    # Keep only the standardized columns
+    keep_cols = [c for c in df.columns if c.startswith(f"{symbol}_")]
+    df = df[keep_cols].copy()
+    df.index.name = "date"
+    return df
+
+
 def fetch_all_stooq() -> pd.DataFrame:
     """Fetch all Stooq series and merge. Falls back to Yahoo Finance if Stooq is rate-limited."""
     # Yahoo Finance symbol mapping for fallback
@@ -128,6 +198,21 @@ def fetch_all_stooq() -> pd.DataFrame:
                     continue
             except Exception as e2:
                 print(f"  Yahoo {symbol} fallback: FAILED — {e2}")
+
+        # Fallback to AKShare — XAUUSD (via AU0 conversion) or US ETFs
+        if df.empty:
+            try:
+                if symbol == "XAUUSD":
+                    ak_df = _fetch_xauusd_akshare()
+                else:
+                    # GLD, IAU, GDX, GDXJ are all available on AKShare
+                    ak_df = _fetch_us_etf_akshare(symbol)
+                if not ak_df.empty:
+                    frames.append(ak_df)
+                    print(f"  AKShare {symbol} (fallback): {len(ak_df)} bars")
+                    continue
+            except Exception as e3:
+                print(f"  AKShare {symbol} fallback: FAILED — {e3}")
 
         if df.empty:
             print(f"  {symbol}: no data from any source")
@@ -236,6 +321,26 @@ def fetch_yahoo_volatility() -> pd.DataFrame:
     return merged
 
 
+def compute_gvz_proxy(gold_close: pd.Series) -> pd.Series:
+    """
+    Construct a GVZ proxy from gold realized volatility when CBOE GVZ is unavailable.
+
+    GVZ = CBOE Gold Volatility Index = 30-day implied vol of GLD options.
+    Proxy = 22-day annualized realized volatility of gold returns, scaled by
+    the historical IV/RV ratio (~1.15) to approximate implied-vol levels.
+
+    This is standard practice: IV and RV are highly correlated (ρ ≈ 0.85 on GVZ)
+    so the proxy preserves the factor's time-series information content.
+    """
+    import numpy as np
+    log_ret = np.log(gold_close / gold_close.shift(1))
+    # 22-day rolling std, annualized (√252)
+    rv_22d = log_ret.rolling(22, min_periods=10).std() * np.sqrt(252) * 100
+    # Scale by typical IV/RV ratio (~1.15) so levels match real GVZ (~15-30)
+    gvz_proxy = rv_22d * 1.15
+    return gvz_proxy
+
+
 # ── Master Data Assembly ──────────────────────────────────────────────────────
 
 CACHE_PATH = Path(__file__).parent / "data_cache.pkl"
@@ -301,6 +406,10 @@ def _fetch_all_data_impl() -> pd.DataFrame:
         merged["GPR"] = merged["GPR"].ffill()
     if "DGS2" in merged.columns:
         merged["DGS2"] = merged["DGS2"].ffill()
+    if "T5YIFR" in merged.columns:
+        merged["T5YIFR"] = merged["T5YIFR"].ffill()
+    if "CPIAUCSL" in merged.columns:
+        merged["CPIAUCSL"] = merged["CPIAUCSL"].ffill()  # monthly → daily ffill
     # Drop rows where gold price is missing
     if "XAUUSD_close" in merged.columns:
         merged = merged.dropna(subset=["XAUUSD_close"])
@@ -308,6 +417,21 @@ def _fetch_all_data_impl() -> pd.DataFrame:
     # Require gold price data — if missing, data is incomplete
     if "XAUUSD_close" not in merged.columns or merged.empty:
         raise RuntimeError("No gold price data — cannot proceed without XAUUSD")
+
+    # Fill missing GVZ values with realized-volatility proxy.
+    # CBOE GVZ starts ~2018 on Yahoo; for pre-2018 history we use the proxy
+    # to avoid 30% NaN rate that kills rolling z-score and factor IC.
+    gvz_proxy = compute_gvz_proxy(merged["XAUUSD_close"])
+    if "GVZ_close" not in merged.columns or merged["GVZ_close"].isna().all():
+        merged["GVZ_close"] = gvz_proxy
+        print(f"  GVZ fully synthesized from realized vol "
+              f"(last={merged['GVZ_close'].dropna().iloc[-1]:.2f})")
+    else:
+        n_missing = int(merged["GVZ_close"].isna().sum())
+        if n_missing > 0:
+            merged["GVZ_close"] = merged["GVZ_close"].fillna(gvz_proxy)
+            print(f"  GVZ proxy filled {n_missing} missing rows "
+                  f"(last={merged['GVZ_close'].dropna().iloc[-1]:.2f})")
 
     print(f"\nMerged dataset: {len(merged)} rows, {len(merged.columns)} columns")
     print(f"Date range: {merged.index.min()} → {merged.index.max()}")

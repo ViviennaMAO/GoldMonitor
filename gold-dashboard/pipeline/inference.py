@@ -133,7 +133,11 @@ def build_regime_heatmap(features_df: pd.DataFrame, months: int = 6) -> list:
     recent = features_df.dropna(subset=factor_cols).tail(months * 22)  # ~22 trading days/month
 
     # Group by month
-    monthly = recent.resample("ME").last()
+    # pandas < 2.2 uses "M", pandas >= 2.2 uses "ME"
+    try:
+        monthly = recent.resample("ME").last()
+    except ValueError:
+        monthly = recent.resample("M").last()
     heatmap = []
 
     for date, row in monthly.iterrows():
@@ -276,9 +280,17 @@ def run_inference(features_df: pd.DataFrame) -> dict:
     risk_amount = account_equity * RISK_BUDGET
     position_size = risk_amount / stop_distance if stop_distance > 0 else 0
 
-    # Apply regime multiplier (v2: three-layer detection)
+    # Apply regime multiplier (v2.1: four-layer detection with inflation mechanism)
     regime_info = detect_regime_v2(valid)
     position_size *= regime_info["multiplier"]
+
+    # ── Dual Position Sizing (A: real-rate, B: tail hedge) ────────────────────
+    # From gold_inflation_paper: split gold into two functional positions
+    # A = 10-15% of portfolio, driven by TIPS 60D change (反实际利率仓位)
+    # B = 5-10% of portfolio, always on, boosted when unanchored (尾部保险仓位)
+    layer4 = regime_info.get("layer4", {})
+    position_a = position_size * layer4.get("signal_a_mult", 0.5) * 0.6  # A is 60% of total
+    position_b = position_size * layer4.get("signal_b_mult", 1.0) * 0.4  # B is 40% of total
 
     # ── Signal Output ─────────────────────────────────────────────────────────
     signal_data = {
@@ -297,6 +309,18 @@ def run_inference(features_df: pd.DataFrame) -> dict:
         "position_size": round(position_size, 4),
         "regime": regime_info["regime"],
         "regime_multiplier": regime_info["multiplier"],
+        # Dual position (from gold_inflation_paper SDF framework)
+        "position_a": round(position_a, 4),   # 反实际利率仓位
+        "position_b": round(position_b, 4),   # 尾部保险仓位
+        "signal_a": layer4.get("signal_a", "partial"),
+        "signal_b": layer4.get("signal_b", "hold"),
+        # Inflation mechanism
+        "inflation_mechanism": layer4.get("inflation_mechanism", "unknown"),
+        "inflation_mechanism_zh": layer4.get("inflation_mechanism_zh", ""),
+        "cpi_yoy": layer4.get("cpi_yoy"),
+        "t5yifr": layer4.get("t5yifr"),
+        "t5yifr_turbo": layer4.get("t5yifr_turbo", False),
+        "dual_force": layer4.get("dual_force", "none"),
         "factors": [],
     }
 

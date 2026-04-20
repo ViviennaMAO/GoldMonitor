@@ -33,6 +33,10 @@ from config import (
     RATE_SHOCK_THRESHOLD, CHANGEPOINT_PENALTY, CHANGEPOINT_LOOKBACK,
     QUADRANT_MULTIPLIERS, FED_CYCLE_ADJ,
     LAYER2_HMM_ADJ, LAYER2_LIQVOL_ADJ,
+    INFLATION_CPI_LOW, INFLATION_CPI_HIGH,
+    T5YIFR_ANCHOR, T5YIFR_UNANCHOR, T5YIFR_TURBO,
+    TIPS_60D_BULL, TIPS_60D_BEAR,
+    INFLATION_MECHANISM_MULT,
 )
 
 # ── Optional dependencies with graceful fallback ───────────────────────────────
@@ -532,6 +536,138 @@ def _detect_dollar_smile(latest) -> dict:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# Layer 4: Inflation Mechanism — 3-Regime State Machine (gold_inflation_paper)
+#
+# Based on Andrew Ang's SDF framework:
+# - Low inflation (CPI < 2%): gold = pure real-rate play, +6-8% annualized
+# - Moderate inflation trap (CPI 2-4%, T5YIFR anchored): gold's WORST zone, +1-3%
+# - High inflation unanchored (CPI > 4%, T5YIFR > 2.8%): gold turbo, +15-35%
+# ══════════════════════════════════════════════════════════════════════════════
+
+_INFLATION_ZH = {
+    "low_inflation":   "低通胀·利率驱动",
+    "moderate_trap":   "温和通胀陷阱",
+    "high_anchored":   "高通胀·锚定",
+    "high_unanchored": "高通胀·脱锚",
+    "unknown":         "通胀数据缺失",
+}
+
+
+def _detect_inflation_mechanism(df: pd.DataFrame, latest) -> dict:
+    """
+    Classify inflation regime using CPI YoY level and T5YIFR anchoring state.
+
+    Also computes dual-position signals:
+      - signal_A: real-rate position (TIPS 60D change driven)
+      - signal_B: tail-hedge position (always on, boosted when unanchored)
+    """
+    cpi_yoy = _safe_float(latest, "cpi_yoy", None)
+    t5yifr = _safe_float(latest, "raw_T5YIFR", None)
+    tips_60d = _safe_float(latest, "tips_60d_chg", None)
+
+    # ── Classify inflation mechanism ─────────────────────────────────────────
+    if cpi_yoy is None or cpi_yoy == 0.0:
+        # CPI data not available — fall back to BEI Z-score as proxy
+        bei_z = _safe_float(latest, "F4_BEI")
+        if bei_z < -0.5:
+            mechanism = "low_inflation"
+        elif bei_z > 1.0:
+            mechanism = "high_anchored"  # conservative default without CPI
+        else:
+            mechanism = "unknown"
+    elif cpi_yoy < INFLATION_CPI_LOW:
+        mechanism = "low_inflation"
+    elif cpi_yoy < INFLATION_CPI_HIGH:
+        # Moderate zone — check if anchored
+        if t5yifr is not None and t5yifr > T5YIFR_UNANCHOR:
+            mechanism = "high_unanchored"  # Even at moderate CPI, unanchoring is dangerous
+        else:
+            mechanism = "moderate_trap"
+    else:
+        # CPI > 4% — high inflation, check anchoring
+        if t5yifr is not None and t5yifr > T5YIFR_UNANCHOR:
+            mechanism = "high_unanchored"
+        else:
+            mechanism = "high_anchored"
+
+    multiplier = INFLATION_MECHANISM_MULT.get(mechanism, 1.0)
+
+    # ── Turbo boost: T5YIFR > 3.0% → extra multiplier ───────────────────────
+    turbo = False
+    if t5yifr is not None and t5yifr > T5YIFR_TURBO:
+        turbo = True
+        multiplier = min(multiplier * 1.15, 1.5)  # Cap at 1.5
+
+    # ── Dual-Force Confirmation (paper: "两股力量同时发力") ─────────────────
+    # Force 1 (discount rate): real rates falling → F10_TIPSBEISpread Z < -0.3
+    # Force 2 (hedging demand): fear rising → F6_GVZ Z > 0.5 OR F5_GPR Z > 0.5
+    # Both active = bold (×1.15), only one = cautious (×1.0), neither = neutral
+    f10_z = _safe_float(latest, "F10_TIPSBEISpread")
+    gvz_z_val = _safe_float(latest, "F6_GVZ")
+    gpr_z_val = _safe_float(latest, "F5_GPR")
+
+    force_discount = f10_z < -0.3          # Real rates falling
+    force_hedging = gvz_z_val > 0.5 or gpr_z_val > 0.5  # Fear elevated
+
+    if force_discount and force_hedging:
+        dual_force = "both"
+        multiplier *= 1.15   # Bold — both forces aligned
+    elif force_discount or force_hedging:
+        dual_force = "single"
+        # No change — cautious follow
+    else:
+        dual_force = "none"
+        multiplier *= 0.92   # Neither force active — gold is just a commodity
+
+    multiplier = round(min(multiplier, 1.5), 3)
+
+    # ── Dual position signals (A: real-rate, B: tail hedge) ──────────────────
+    # A-position: driven by TIPS 60-day change (paper: ±40bp threshold)
+    if tips_60d is not None:
+        if tips_60d <= TIPS_60D_BULL:
+            signal_a = "full"       # Real rates falling sharply → A full
+            signal_a_mult = 1.0
+        elif tips_60d >= TIPS_60D_BEAR:
+            signal_a = "exit"       # Real rates rising sharply → A exit
+            signal_a_mult = 0.0
+        else:
+            # Linear interpolation between thresholds
+            ratio = (tips_60d - TIPS_60D_BULL) / (TIPS_60D_BEAR - TIPS_60D_BULL)
+            signal_a_mult = round(1.0 - ratio, 2)
+            signal_a = "partial"
+    else:
+        signal_a = "partial"
+        signal_a_mult = 0.5
+
+    # B-position: always on, boosted in unanchored regime
+    signal_b = "hold"
+    signal_b_mult = 1.0
+    if mechanism == "high_unanchored":
+        signal_b = "boost"
+        signal_b_mult = 1.3
+    elif mechanism == "moderate_trap":
+        signal_b = "hold"   # Never exit B, but don't boost
+        signal_b_mult = 1.0
+
+    return {
+        "inflation_mechanism": mechanism,
+        "inflation_mechanism_zh": _INFLATION_ZH.get(mechanism, mechanism),
+        "inflation_multiplier": round(multiplier, 3),
+        "cpi_yoy": round(cpi_yoy, 2) if cpi_yoy is not None else None,
+        "t5yifr": round(t5yifr, 3) if t5yifr is not None else None,
+        "t5yifr_turbo": turbo,
+        "tips_60d_chg": round(tips_60d, 3) if tips_60d is not None else None,
+        "dual_force": dual_force,          # "both" / "single" / "none"
+        "force_discount_active": force_discount,
+        "force_hedging_active": force_hedging,
+        "signal_a": signal_a,
+        "signal_a_mult": signal_a_mult,
+        "signal_b": signal_b,
+        "signal_b_mult": signal_b_mult,
+    }
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # Composite: Assemble Final Regime
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -583,14 +719,20 @@ def _compute_confidence(layer1: dict, layer2: dict, layer3: dict) -> float:
 
 def detect_regime_v2(features_df: pd.DataFrame) -> dict:
     """
-    Main entry point. Runs three-layer regime detection and returns composite output.
+    Main entry point. Runs four-layer regime detection and returns composite output.
+
+    Layers:
+        L1: Macro quadrant (growth × inflation) + Fed cycle
+        L2: HMM market state + liquidity-volatility matrix
+        L3: Event overlay (rate shock, changepoint, dollar smile)
+        L4: Inflation mechanism (3-regime state machine from SDF paper)
 
     Args:
         features_df: Full historical features DataFrame from build_features().
 
     Returns:
         dict — backward-compatible with v1 keys (regime, multiplier,
-        risk_off_score, risk_on_score) plus new layer1/layer2/layer3 detail.
+        risk_off_score, risk_on_score) plus layer1-4 detail.
     """
     valid = features_df.dropna(subset=["gold_price"])
     if valid.empty:
@@ -601,12 +743,29 @@ def detect_regime_v2(features_df: pd.DataFrame) -> dict:
     layer1 = _detect_layer1(valid, latest)
     layer2 = _detect_layer2(valid, latest)
     layer3 = _detect_layer3(valid, latest)
+    layer4 = _detect_inflation_mechanism(valid, latest)
 
-    # Composite multiplier: L1 × L2 (multiplicative) + L3 (additive event delta)
+    # Composite multiplier: L1 × L2 (multiplicative) + L3 (additive) × L4 (inflation overlay)
     mult_12 = layer1["multiplier"] * layer2["adj_factor"]
-    final_mult = float(np.clip(mult_12 + layer3["overlay_delta"], 0.1, 1.5))
+    mult_123 = float(np.clip(mult_12 + layer3["overlay_delta"], 0.1, 1.5))
+
+    # L4 inflation mechanism modulates the final multiplier
+    # Moderate trap dampening is the most impactful — prevents false bullish signals
+    final_mult = float(np.clip(mult_123 * layer4["inflation_multiplier"], 0.1, 1.5))
 
     regime_zh, regime_en = _compose_name(layer1, layer2, layer3)
+
+    # Append inflation mechanism to regime label when it's decisive
+    if layer4["inflation_mechanism"] == "moderate_trap":
+        regime_zh += "·通胀陷阱"
+        regime_en += " InflationTrap"
+    elif layer4["inflation_mechanism"] == "high_unanchored":
+        regime_zh += "·脱锚"
+        regime_en += " Unanchored"
+        if layer4["t5yifr_turbo"]:
+            regime_zh += "🔥"
+            regime_en += " TURBO"
+
     confidence = _compute_confidence(layer1, layer2, layer3)
 
     return {
@@ -621,7 +780,8 @@ def detect_regime_v2(features_df: pd.DataFrame) -> dict:
         "layer1": layer1,
         "layer2": layer2,
         "layer3": layer3,
-        "version": "v2",
+        "layer4": layer4,
+        "version": "v2.1",
     }
 
 
@@ -645,5 +805,12 @@ def _fallback_regime() -> dict:
                    "changepoint_detected": False, "days_since_changepoint": None,
                    "dollar_type": "neutral", "dollar_type_zh": "中性美元",
                    "overlay_delta": 0.0, "cp_available": False},
-        "version": "v2",
+        "layer4": {"inflation_mechanism": "unknown",
+                   "inflation_mechanism_zh": "通胀数据缺失",
+                   "inflation_multiplier": 1.0,
+                   "cpi_yoy": None, "t5yifr": None, "t5yifr_turbo": False,
+                   "tips_60d_chg": None,
+                   "signal_a": "partial", "signal_a_mult": 0.5,
+                   "signal_b": "hold", "signal_b_mult": 1.0},
+        "version": "v2.1",
     }

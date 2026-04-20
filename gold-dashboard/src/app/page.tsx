@@ -1,6 +1,7 @@
 'use client'
 import { TopBar } from '@/components/layout/TopBar'
 import { SignalBanner } from '@/components/layout/SignalBanner'
+import { InflationDiagnostics } from '@/components/layout/InflationDiagnostics'
 import { LeftPanel } from '@/components/layout/LeftPanel'
 import { RightSidebar } from '@/components/layout/RightSidebar'
 import { StatusBar } from '@/components/layout/StatusBar'
@@ -16,6 +17,11 @@ export default function Home() {
       {/* Signal banner — prominent centered strip */}
       <div className="flex-shrink-0">
         <SignalBanner />
+      </div>
+
+      {/* Inflation mechanism diagnostics — v2.1 SDF framework */}
+      <div className="flex-shrink-0">
+        <InflationDiagnostics />
       </div>
 
       {/* Main body — natural flow on mobile, fixed side-by-side on desktop */}

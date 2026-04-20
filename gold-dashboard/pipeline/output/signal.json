@@ -1,54 +1,64 @@
 {
-  "date": "2026-04-02",
-  "timestamp": "2026-04-02T17:42:55.065503",
-  "signal": "Sell",
-  "predicted_return": -1.1934,
-  "confidence": 79.6,
-  "gold_price": 4648.5,
-  "gold_open": 4783.0,
-  "gold_high": 4825.9,
-  "gold_low": 4580.4,
-  "atr": 173.85,
-  "stop_loss": 4040.03,
-  "take_profit": 5561.21,
-  "position_size": 1.5432,
-  "regime": "中性·顺势",
-  "regime_multiplier": 0.626,
+  "date": "2026-04-20",
+  "timestamp": "2026-04-20T21:29:34.991594",
+  "signal": "Buy",
+  "predicted_return": 0.54,
+  "confidence": 36.0,
+  "gold_price": 4835.8,
+  "gold_open": 4811.8,
+  "gold_high": 4842.9,
+  "gold_low": 4752.0,
+  "atr": 105.07,
+  "stop_loss": 4468.05,
+  "take_profit": 5387.42,
+  "position_size": 2.1822,
+  "regime": "中性·顺势·通胀陷阱",
+  "regime_multiplier": 0.535,
+  "position_a": 0.6939,
+  "position_b": 0.8729,
+  "signal_a": "partial",
+  "signal_b": "hold",
+  "inflation_mechanism": "moderate_trap",
+  "inflation_mechanism_zh": "温和通胀陷阱",
+  "cpi_yoy": 3.12,
+  "t5yifr": 2.16,
+  "t5yifr_turbo": false,
+  "dual_force": "single",
   "factors": [
     {
       "name": "F1_DXY",
       "label": "美元指数 DXY",
-      "zscore": 0.2021,
-      "raw_value": 120.8851
+      "zscore": -1.1724,
+      "raw_value": 118.8552
     },
     {
       "name": "F4_BEI",
       "label": "通胀预期 BEI",
-      "zscore": -0.0519,
-      "raw_value": 2.31
+      "zscore": 0.7621,
+      "raw_value": 2.36
     },
     {
       "name": "F5_GPR",
       "label": "地缘政治风险 GPR",
-      "zscore": -0.3722,
+      "zscore": -0.2915,
       "raw_value": 371.0954
     },
     {
       "name": "F6_GVZ",
       "label": "黄金波动率 GVZ",
-      "zscore": 0.0,
-      "raw_value": null
+      "zscore": 2.6767,
+      "raw_value": 43.5432
     },
     {
       "name": "F10_TIPSBEISpread",
       "label": "实际利率-通胀利差",
-      "zscore": 0.5658,
+      "zscore": -0.1659,
       "raw_value": null
     },
     {
       "name": "F11_DXYMomentum",
       "label": "美元动量 20D",
-      "zscore": 1.2062,
+      "zscore": -0.6719,
       "raw_value": null
     },
     {
@@ -60,7 +70,7 @@
     {
       "name": "F14_GVZMomentum",
       "label": "波动率动量",
-      "zscore": 0.0,
+      "zscore": 0.6919,
       "raw_value": null
     }
   ]

@@ -93,6 +93,17 @@ export interface SignalData {
   position_size: number
   regime: string
   regime_multiplier: number
+  // Inflation mechanism diagnostics (v2.1 — from gold_inflation_paper)
+  inflation_mechanism?: 'low_inflation' | 'moderate_trap' | 'high_anchored' | 'high_unanchored' | 'unknown'
+  inflation_mechanism_zh?: string
+  cpi_yoy?: number | null
+  t5yifr?: number | null
+  t5yifr_turbo?: boolean
+  dual_force?: 'both' | 'single' | 'none'
+  position_a?: number
+  position_b?: number
+  signal_a?: 'full' | 'partial' | 'exit'
+  signal_b?: 'hold' | 'boost'
   factors: Array<{
     name: string
     label: string
@@ -156,6 +167,23 @@ export interface RegimeLayer3 {
   overlay_delta: number
 }
 
+export interface RegimeLayer4 {
+  inflation_mechanism: 'low_inflation' | 'moderate_trap' | 'high_anchored' | 'high_unanchored' | 'unknown'
+  inflation_mechanism_zh: string
+  inflation_multiplier: number
+  cpi_yoy: number | null
+  t5yifr: number | null
+  t5yifr_turbo: boolean
+  tips_60d_chg: number | null
+  dual_force: 'both' | 'single' | 'none'
+  force_discount_active: boolean
+  force_hedging_active: boolean
+  signal_a: 'full' | 'partial' | 'exit'
+  signal_a_mult: number
+  signal_b: 'hold' | 'boost'
+  signal_b_mult: number
+}
+
 export interface RegimeData {
   current: {
     regime: string
@@ -167,6 +195,7 @@ export interface RegimeData {
     layer1?: RegimeLayer1
     layer2?: RegimeLayer2
     layer3?: RegimeLayer3
+    layer4?: RegimeLayer4
     version?: string
   }
   heatmap: Array<{

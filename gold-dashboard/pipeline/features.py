@@ -165,6 +165,26 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     # Used exclusively by regime_v2.py for three-layer regime detection.
     # ══════════════════════════════════════════════════════════════════════════
 
+    # ── Inflation Mechanism Features (from gold_inflation_paper) ─────────────
+    # CPI YoY: compute year-over-year % change from monthly CPIAUCSL
+    # Used by inflation 3-regime state machine (low / trap / unanchored)
+    if "CPIAUCSL" in df.columns:
+        cpi = df["CPIAUCSL"].dropna()
+        # CPI is monthly, forward-filled to daily — compute YoY on raw then ffill
+        cpi_yoy = cpi.pct_change(252) * 100  # ~252 trading days ≈ 12 months
+        features["cpi_yoy"] = cpi_yoy.reindex(df.index).ffill()
+
+    # T5YIFR: 5-Year, 5-Year Forward Inflation Expectation Rate
+    # Key signal: T5YIFR > 2.8% → inflation expectations unanchoring
+    # T5YIFR > 3.0% → "turbo boost" for gold (paper's strongest signal)
+    if "T5YIFR" in df.columns:
+        features["raw_T5YIFR"] = df["T5YIFR"]
+        features["t5yifr_z"] = rolling_zscore(df["T5YIFR"])
+
+    # TIPS 60-day change (paper: ±40bp threshold for A-position toggle)
+    if "TIPS_10Y" in df.columns:
+        features["tips_60d_chg"] = df["TIPS_10Y"].diff(60)  # in percentage points
+
     # Yield Curve: 10Y nominal (TIPS + BEI) minus 2Y Treasury
     # Positive / steepening → growth expectations up
     # Negative / inverted → recession risk

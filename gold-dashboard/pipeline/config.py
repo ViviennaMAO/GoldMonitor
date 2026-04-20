@@ -28,6 +28,8 @@ FRED_SERIES = {
     "BEI": "T10YIE",
     "GPR": "GEPUCURRENT",       # Global Economic Policy Uncertainty (geopolitical risk proxy)
     "DGS2": "DGS2",             # 2-Year Treasury yield (regime v2: rate shock detection)
+    "T5YIFR": "T5YIFR",         # 5Y5Y Forward Inflation Expectation (anchoring/unanchoring)
+    "CPIAUCSL": "CPIAUCSL",     # CPI All Urban Consumers (monthly, YoY computed in features)
 }
 
 # ── Stooq Symbols ────────────────────────────────────────────────────────────
@@ -165,4 +167,30 @@ LAYER2_LIQVOL_ADJ = {
     "Crisis Spike":  0.80,  # High vol + good liq → reduce size
     "Grinding":      0.92,  # Low vol + poor liq → choppy, cautious
     "Systemic Risk": 0.65,  # High vol + poor liq → defensive
+}
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Inflation Mechanism State Machine (from gold_inflation_paper.docx)
+# Three mutually exclusive regimes based on CPI level + T5YIFR anchoring
+# ══════════════════════════════════════════════════════════════════════════════
+
+# CPI YoY thresholds for regime classification
+INFLATION_CPI_LOW = 2.0       # Below this → low-inflation mechanism
+INFLATION_CPI_HIGH = 4.0      # Above this → high-inflation zone
+
+# T5YIFR thresholds for anchoring assessment
+T5YIFR_ANCHOR = 2.7           # Below this → expectations anchored
+T5YIFR_UNANCHOR = 2.8         # Above this → expectations unanchoring
+T5YIFR_TURBO = 3.0            # Above this → "turbo boost" (paper's strongest signal)
+
+# TIPS 10Y 60-day change thresholds for A-position (反实际利率仓位)
+TIPS_60D_BULL = -0.40         # TIPS drops > 40bp in 60D → A-position full
+TIPS_60D_BEAR = +0.40         # TIPS rises > 40bp in 60D → A-position exit
+
+# Inflation mechanism multipliers (applied as overlay to composite regime)
+INFLATION_MECHANISM_MULT = {
+    "low_inflation":    1.05,  # Real-rate driven, gold benefits moderately
+    "moderate_trap":    0.75,  # Gold's worst environment — dampen aggressively
+    "high_anchored":    0.95,  # High CPI but anchored — real rates fight gold
+    "high_unanchored":  1.25,  # Turbo boost — gold's strongest environment
 }
