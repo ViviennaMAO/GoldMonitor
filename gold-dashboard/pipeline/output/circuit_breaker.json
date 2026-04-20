@@ -1,6 +1,6 @@
 {
-  "current_status": "active",
-  "peak_equity": 102433.36,
+  "current_status": "hibernating",
+  "peak_equity": 102385.62,
   "config": {
     "drawdown_reduce_half": 0.05,
     "drawdown_pause": 0.08,
@@ -11,49 +11,13 @@
   },
   "recent_events": [
     {
-      "date": "2026-03-17",
-      "multiplier": 0.0272,
+      "date": "2026-02-18",
+      "multiplier": 0.1452,
       "status": "reduced",
-      "reason": "IC scaling: 0.053 → mult=0.03",
-      "cumulative_dd": 0.0009,
+      "reason": "IC scaling: 0.065 → mult=0.15",
+      "cumulative_dd": 0.0,
       "monthly_dd": 0.0,
-      "rolling_ic": 0.0527
-    },
-    {
-      "date": "2026-03-18",
-      "multiplier": 0.2227,
-      "status": "reduced",
-      "reason": "IC scaling: 0.072 → mult=0.22",
-      "cumulative_dd": 0.0009,
-      "monthly_dd": 0.0,
-      "rolling_ic": 0.0723
-    },
-    {
-      "date": "2026-03-19",
-      "multiplier": 0.429,
-      "status": "reduced",
-      "reason": "IC scaling: 0.093 → mult=0.43",
-      "cumulative_dd": 0.0009,
-      "monthly_dd": 0.0,
-      "rolling_ic": 0.0929
-    },
-    {
-      "date": "2026-03-20",
-      "multiplier": 0.6134,
-      "status": "reduced",
-      "reason": "IC scaling: 0.111 → mult=0.61",
-      "cumulative_dd": 0.0009,
-      "monthly_dd": 0.0,
-      "rolling_ic": 0.1113
-    },
-    {
-      "date": "2026-03-23",
-      "multiplier": 0.8116,
-      "status": "reduced",
-      "reason": "IC scaling: 0.131 → mult=0.81",
-      "cumulative_dd": 0.0009,
-      "monthly_dd": 0.0,
-      "rolling_ic": 0.1312
+      "rolling_ic": 0.0645
     }
   ]
 }

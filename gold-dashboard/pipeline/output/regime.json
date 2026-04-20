@@ -1,11 +1,11 @@
 {
   "current": {
-    "regime": "中性·顺势·通胀陷阱",
-    "regime_en": "Neutral Trending InflationTrap",
-    "multiplier": 0.535,
+    "regime": "中性·通胀陷阱",
+    "regime_en": "Neutral InflationTrap",
+    "multiplier": 0.769,
     "risk_off_score": 0,
     "risk_on_score": 0,
-    "confidence": 0.67,
+    "confidence": 0.5,
     "layer1": {
       "quadrant": "Neutral",
       "quadrant_zh": "中性",
@@ -16,27 +16,28 @@
       "multiplier": 0.85
     },
     "layer2": {
-      "hmm_state": 2,
-      "hmm_label": "Bull",
-      "hmm_label_zh": "牛市",
-      "hmm_confidence": 1.0,
-      "hmm_available": true,
-      "vol_level": "high",
+      "hmm_state": -1,
+      "hmm_label": "Neutral",
+      "hmm_label_zh": "震荡",
+      "hmm_confidence": 0.6,
+      "hmm_available": false,
+      "vol_level": "low",
       "liq_level": "good",
-      "market_regime": "Crisis Spike",
-      "market_regime_zh": "危机冲击",
-      "adj_factor": 0.84
+      "market_regime": "Trending",
+      "market_regime_zh": "趋势行情",
+      "adj_factor": 1.05
     },
     "layer3": {
       "rate_shock_detected": false,
       "shock_source": null,
       "shock_source_zh": null,
-      "dgs2_zscore": 0.627,
+      "dgs2_zscore": 0.229,
       "shock_direction": null,
       "changepoint_detected": false,
       "days_since_changepoint": null,
       "n_breakpoints": 0,
-      "cp_available": true,
+      "cp_available": false,
+      "cp_error": "",
       "dollar_type": "weak",
       "dollar_type_zh": "弱势美元",
       "overlay_delta": 0.0
@@ -44,16 +45,16 @@
     "layer4": {
       "inflation_mechanism": "moderate_trap",
       "inflation_mechanism_zh": "温和通胀陷阱",
-      "inflation_multiplier": 0.75,
+      "inflation_multiplier": 0.862,
       "cpi_yoy": 3.12,
-      "t5yifr": 2.16,
+      "t5yifr": 2.13,
       "t5yifr_turbo": false,
-      "tips_60d_chg": -0.02,
-      "dual_force": "single",
-      "force_discount_active": false,
+      "tips_60d_chg": -0.05,
+      "dual_force": "both",
+      "force_discount_active": true,
       "force_hedging_active": true,
       "signal_a": "partial",
-      "signal_a_mult": 0.53,
+      "signal_a_mult": 0.56,
       "signal_b": "hold",
       "signal_b_mult": 1.0
     },
@@ -141,14 +142,14 @@
     {
       "month": "2026-04",
       "factors": {
-        "F1_DXY": -1.18,
-        "F4_BEI": 0.77,
-        "F5_GPR": -0.3,
-        "F6_GVZ": 0.69,
-        "F10_TIPSBEISpread": -0.17,
-        "F11_DXYMomentum": -0.6,
-        "F13_GoldGDXDivergence": -0.02,
-        "F14_GVZMomentum": -1.27
+        "F1_DXY": -1.76,
+        "F4_BEI": 0.57,
+        "F5_GPR": -0.29,
+        "F6_GVZ": 0.62,
+        "F10_TIPSBEISpread": -0.31,
+        "F11_DXYMomentum": -1.19,
+        "F13_GoldGDXDivergence": 0.03,
+        "F14_GVZMomentum": -1.24
       }
     }
   ]

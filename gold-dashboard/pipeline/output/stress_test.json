@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-03-30T10:19:56.278899",
-  "model_path": "/Users/vivienna/Desktop/VibeCoding/GoldMonitor/gold-dashboard/pipeline/model.json",
+  "generated_at": "2026-04-20T22:36:23.298859",
+  "model_path": "/home/runner/work/GoldMonitor/GoldMonitor/gold-dashboard/pipeline/model.json",
   "train_end": "2025-09-30",
   "periods": {
     "covid_crash": {
@@ -12,15 +12,15 @@
       "expected_logic_break": "DXY↑ + Gold↓ (normally inverse), all-asset liquidation",
       "samples": 39,
       "is_oos": false,
-      "pred_mean": 3.7371,
-      "pred_std": 5.2857,
-      "pred_min": -4.3616,
-      "pred_max": 14.0667,
+      "pred_mean": 3.9005,
+      "pred_std": 5.1506,
+      "pred_min": -3.8746,
+      "pred_max": 13.3819,
       "gold_return": 6.84,
       "gold_start": 1616.6,
       "gold_end": 1727.2,
       "gold_max_drawdown": -11.78,
-      "ic": 0.9534,
+      "ic": 0.9573,
       "direction_hit_rate": 94.9,
       "factor_analysis": [
         {
@@ -48,12 +48,6 @@
           "pct_extreme": 79.5
         },
         {
-          "factor": "F9_GDXMomentum",
-          "mean_zscore": -1.282,
-          "max_abs_zscore": 5.0,
-          "pct_extreme": 33.3
-        },
-        {
           "factor": "F10_TIPSBEISpread",
           "mean_zscore": 0.282,
           "max_abs_zscore": 5.0,
@@ -64,12 +58,6 @@
           "mean_zscore": 2.306,
           "max_abs_zscore": 5.0,
           "pct_extreme": 51.3
-        },
-        {
-          "factor": "F12_DXYDownGPRUp",
-          "mean_zscore": 0.0,
-          "max_abs_zscore": 0.0,
-          "pct_extreme": 0.0
         },
         {
           "factor": "F13_GoldGDXDivergence",
@@ -103,11 +91,6 @@
         {
           "type": "extreme_factor",
           "severity": "high",
-          "detail": "F9_GDXMomentum reached 5.0σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
           "detail": "F10_TIPSBEISpread reached 5.0σ — outside training distribution"
         },
         {
@@ -126,7 +109,7 @@
           "detail": "F14_GVZMomentum reached 5.0σ — outside training distribution"
         }
       ],
-      "logic_break_count": 8,
+      "logic_break_count": 7,
       "max_severity": "high"
     },
     "fed_hiking": {
@@ -138,16 +121,16 @@
       "expected_logic_break": "TIPS↑↑ but Gold sideways (rate-gold link broken)",
       "samples": 342,
       "is_oos": false,
-      "pred_mean": 0.259,
-      "pred_std": 2.897,
-      "pred_min": -5.2212,
-      "pred_max": 8.9096,
+      "pred_mean": 0.0546,
+      "pred_std": 2.7462,
+      "pred_min": -5.0809,
+      "pred_max": 7.6292,
       "gold_return": 3.19,
       "gold_start": 1908.0,
       "gold_end": 1968.9,
       "gold_max_drawdown": -18.14,
-      "ic": 0.9228,
-      "direction_hit_rate": 89.2,
+      "ic": 0.9105,
+      "direction_hit_rate": 86.5,
       "factor_analysis": [
         {
           "factor": "F1_DXY",
@@ -174,12 +157,6 @@
           "pct_extreme": 7.9
         },
         {
-          "factor": "F9_GDXMomentum",
-          "mean_zscore": 0.008,
-          "max_abs_zscore": 3.238,
-          "pct_extreme": 5.8
-        },
-        {
           "factor": "F10_TIPSBEISpread",
           "mean_zscore": 1.452,
           "max_abs_zscore": 3.934,
@@ -190,12 +167,6 @@
           "mean_zscore": -0.089,
           "max_abs_zscore": 3.727,
           "pct_extreme": 11.4
-        },
-        {
-          "factor": "F12_DXYDownGPRUp",
-          "mean_zscore": 0.259,
-          "max_abs_zscore": 5.0,
-          "pct_extreme": 6.7
         },
         {
           "factor": "F13_GoldGDXDivergence",
@@ -229,11 +200,6 @@
         {
           "type": "extreme_factor",
           "severity": "high",
-          "detail": "F9_GDXMomentum reached 3.2σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
           "detail": "F10_TIPSBEISpread reached 3.9σ — outside training distribution"
         },
         {
@@ -244,15 +210,10 @@
         {
           "type": "extreme_factor",
           "severity": "high",
-          "detail": "F12_DXYDownGPRUp reached 5.0σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
           "detail": "F14_GVZMomentum reached 5.0σ — outside training distribution"
         }
       ],
-      "logic_break_count": 8,
+      "logic_break_count": 6,
       "max_severity": "high"
     },
     "russia_ukraine": {
@@ -264,16 +225,16 @@
       "expected_logic_break": "GPR spike → Gold spike → rapid mean reversion",
       "samples": 88,
       "is_oos": false,
-      "pred_mean": -1.8296,
-      "pred_std": 1.8699,
-      "pred_min": -5.2212,
-      "pred_max": 4.9853,
+      "pred_mean": -2.0653,
+      "pred_std": 1.7884,
+      "pred_min": -5.0809,
+      "pred_max": 2.19,
       "gold_return": -6.29,
       "gold_start": 1925.1,
       "gold_end": 1804.1,
       "gold_max_drawdown": -11.57,
       "ic": 0.8611,
-      "direction_hit_rate": 89.8,
+      "direction_hit_rate": 88.6,
       "factor_analysis": [
         {
           "factor": "F1_DXY",
@@ -300,12 +261,6 @@
           "pct_extreme": 22.7
         },
         {
-          "factor": "F9_GDXMomentum",
-          "mean_zscore": 0.087,
-          "max_abs_zscore": 3.238,
-          "pct_extreme": 23.9
-        },
-        {
           "factor": "F10_TIPSBEISpread",
           "mean_zscore": 1.383,
           "max_abs_zscore": 3.934,
@@ -316,12 +271,6 @@
           "mean_zscore": 0.554,
           "max_abs_zscore": 3.727,
           "pct_extreme": 19.3
-        },
-        {
-          "factor": "F12_DXYDownGPRUp",
-          "mean_zscore": 0.0,
-          "max_abs_zscore": 0.0,
-          "pct_extreme": 0.0
         },
         {
           "factor": "F13_GoldGDXDivergence",
@@ -360,11 +309,6 @@
         {
           "type": "extreme_factor",
           "severity": "high",
-          "detail": "F9_GDXMomentum reached 3.2σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
           "detail": "F10_TIPSBEISpread reached 3.9σ — outside training distribution"
         },
         {
@@ -378,7 +322,7 @@
           "detail": "F14_GVZMomentum reached 5.0σ — outside training distribution"
         }
       ],
-      "logic_break_count": 8,
+      "logic_break_count": 7,
       "max_severity": "high"
     },
     "svb_crisis": {
@@ -390,16 +334,16 @@
       "expected_logic_break": "GVZ↑ + Gold↑ but ETF flows lagged",
       "samples": 48,
       "is_oos": false,
-      "pred_mean": 0.4991,
-      "pred_std": 2.7956,
-      "pred_min": -3.4848,
-      "pred_max": 8.8083,
+      "pred_mean": 0.5381,
+      "pred_std": 2.7882,
+      "pred_min": -3.9193,
+      "pred_max": 7.6292,
       "gold_return": 11.33,
       "gold_start": 1812.7,
       "gold_end": 2018.0,
       "gold_max_drawdown": -3.03,
-      "ic": 0.9079,
-      "direction_hit_rate": 83.3,
+      "ic": 0.8279,
+      "direction_hit_rate": 70.8,
       "factor_analysis": [
         {
           "factor": "F1_DXY",
@@ -426,12 +370,6 @@
           "pct_extreme": 2.1
         },
         {
-          "factor": "F9_GDXMomentum",
-          "mean_zscore": 0.762,
-          "max_abs_zscore": 2.612,
-          "pct_extreme": 12.5
-        },
-        {
           "factor": "F10_TIPSBEISpread",
           "mean_zscore": 0.659,
           "max_abs_zscore": 1.152,
@@ -442,12 +380,6 @@
           "mean_zscore": -0.383,
           "max_abs_zscore": 1.626,
           "pct_extreme": 0.0
-        },
-        {
-          "factor": "F12_DXYDownGPRUp",
-          "mean_zscore": 2.164,
-          "max_abs_zscore": 5.0,
-          "pct_extreme": 47.9
         },
         {
           "factor": "F13_GoldGDXDivergence",
@@ -466,15 +398,10 @@
         {
           "type": "extreme_factor",
           "severity": "high",
-          "detail": "F12_DXYDownGPRUp reached 5.0σ — outside training distribution"
-        },
-        {
-          "type": "extreme_factor",
-          "severity": "high",
           "detail": "F14_GVZMomentum reached 5.0σ — outside training distribution"
         }
       ],
-      "logic_break_count": 2,
+      "logic_break_count": 1,
       "max_severity": "high"
     },
     "gold_breakout_2024": {
@@ -486,16 +413,16 @@
       "expected_logic_break": "DXY↑ + TIPS↑ + Gold↑↑ (breaks both DXY and rate logic)",
       "samples": 83,
       "is_oos": false,
-      "pred_mean": 2.2698,
-      "pred_std": 3.0474,
-      "pred_min": -1.9325,
-      "pred_max": 8.8319,
+      "pred_mean": 2.3656,
+      "pred_std": 3.1123,
+      "pred_min": -2.6018,
+      "pred_max": 9.0366,
       "gold_return": 11.54,
       "gold_start": 2086.9,
       "gold_end": 2327.7,
       "gold_max_drawdown": -5.53,
-      "ic": 0.9167,
-      "direction_hit_rate": 85.5,
+      "ic": 0.8806,
+      "direction_hit_rate": 84.3,
       "factor_analysis": [
         {
           "factor": "F1_DXY",
@@ -522,12 +449,6 @@
           "pct_extreme": 7.2
         },
         {
-          "factor": "F9_GDXMomentum",
-          "mean_zscore": 0.638,
-          "max_abs_zscore": 2.123,
-          "pct_extreme": 3.6
-        },
-        {
           "factor": "F10_TIPSBEISpread",
           "mean_zscore": 0.602,
           "max_abs_zscore": 1.09,
@@ -537,12 +458,6 @@
           "factor": "F11_DXYMomentum",
           "mean_zscore": 0.295,
           "max_abs_zscore": 1.709,
-          "pct_extreme": 0.0
-        },
-        {
-          "factor": "F12_DXYDownGPRUp",
-          "mean_zscore": -0.352,
-          "max_abs_zscore": 0.435,
           "pct_extreme": 0.0
         },
         {
@@ -582,10 +497,10 @@
   "summary": {
     "total_periods_tested": 5,
     "periods_with_data": 5,
-    "total_logic_breaks": 29,
+    "total_logic_breaks": 24,
     "high_severity_periods": 5,
-    "avg_crisis_ic": 0.9124,
-    "avg_direction_hit_rate": 88.5,
+    "avg_crisis_ic": 0.8875,
+    "avg_direction_hit_rate": 85.0,
     "overall_assessment": "CRITICAL — Model has significant logic breaks across multiple crisis types. Consider adding regime-aware features."
   }
 }

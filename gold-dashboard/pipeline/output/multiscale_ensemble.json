@@ -1,19 +1,19 @@
 {
-  "timestamp": "2026-04-02T17:33:48.669033",
+  "timestamp": "2026-04-20T22:36:22.614822",
   "horizons": [
     10,
     20,
     40
   ],
   "oos_ics": {
-    "10": 0.0822,
-    "20": 0.0432,
-    "40": -0.4201
+    "10": 0.1432,
+    "20": -0.051,
+    "40": -0.1963
   },
   "rolling_ics": {
-    "10": -0.0136,
-    "20": -0.0159,
-    "40": -0.4272
+    "10": -0.0168,
+    "20": -0.151,
+    "40": -0.176
   },
   "weights": {
     "10": 0.3333,
@@ -21,8 +21,8 @@
     "40": 0.3333
   },
   "model_paths": {
-    "10": "/Users/vivienna/Desktop/VibeCoding/GoldMonitor/gold-dashboard/pipeline/model_10d.json",
-    "20": "/Users/vivienna/Desktop/VibeCoding/GoldMonitor/gold-dashboard/pipeline/model_20d.json",
-    "40": "/Users/vivienna/Desktop/VibeCoding/GoldMonitor/gold-dashboard/pipeline/model_40d.json"
+    "10": "/home/runner/work/GoldMonitor/GoldMonitor/gold-dashboard/pipeline/model_10d.json",
+    "20": "/home/runner/work/GoldMonitor/GoldMonitor/gold-dashboard/pipeline/model_20d.json",
+    "40": "/home/runner/work/GoldMonitor/GoldMonitor/gold-dashboard/pipeline/model_40d.json"
   }
 }
