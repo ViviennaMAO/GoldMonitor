@@ -1,59 +1,59 @@
 {
-  "base_value": 1.0221,
-  "prediction": 0.5283,
+  "base_value": 1.0146,
+  "prediction": 0.1844,
   "bars": [
     {
-      "factor": "F5_GPR",
-      "label": "地缘政治风险 GPR",
-      "value": -0.5077,
-      "raw_feature": -0.2915
+      "factor": "F13_GoldGDXDivergence",
+      "label": "金价-矿业股背离",
+      "value": -0.6811,
+      "raw_feature": 0.1671
     },
     {
       "factor": "F1_DXY",
       "label": "美元指数 DXY",
-      "value": 0.4879,
-      "raw_feature": -1.7615
-    },
-    {
-      "factor": "F13_GoldGDXDivergence",
-      "label": "金价-矿业股背离",
-      "value": -0.4388,
-      "raw_feature": 0.0339
-    },
-    {
-      "factor": "F6_GVZ",
-      "label": "黄金波动率 GVZ",
-      "value": -0.2194,
-      "raw_feature": 0.62
-    },
-    {
-      "factor": "F11_DXYMomentum",
-      "label": "美元动量 20D",
-      "value": 0.1108,
-      "raw_feature": -1.1888
-    },
-    {
-      "factor": "F14_GVZMomentum",
-      "label": "波动率动量",
-      "value": 0.0874,
-      "raw_feature": -1.2393
-    },
-    {
-      "factor": "F10_TIPSBEISpread",
-      "label": "实际利率-通胀利差",
-      "value": -0.0859,
-      "raw_feature": -0.3105
+      "value": 0.4097,
+      "raw_feature": -1.7464
     },
     {
       "factor": "F4_BEI",
       "label": "通胀预期 BEI",
-      "value": 0.0719,
-      "raw_feature": 0.5743
+      "value": -0.3659,
+      "raw_feature": 1.1343
+    },
+    {
+      "factor": "F6_GVZ",
+      "label": "黄金波动率 GVZ",
+      "value": -0.3451,
+      "raw_feature": 0.7375
+    },
+    {
+      "factor": "F5_GPR",
+      "label": "地缘政治风险 GPR",
+      "value": -0.3218,
+      "raw_feature": -0.2835
+    },
+    {
+      "factor": "F11_DXYMomentum",
+      "label": "美元动量 20D",
+      "value": 0.2796,
+      "raw_feature": -0.9749
+    },
+    {
+      "factor": "F14_GVZMomentum",
+      "label": "波动率动量",
+      "value": 0.1431,
+      "raw_feature": -1.1602
+    },
+    {
+      "factor": "F10_TIPSBEISpread",
+      "label": "实际利率-通胀利差",
+      "value": 0.0512,
+      "raw_feature": -0.4511
     }
   ],
   "stability": {
     "stable": true,
     "dominant_factor": "F5_GPR",
-    "max_share": 0.365
+    "max_share": 0.306
   }
 }
