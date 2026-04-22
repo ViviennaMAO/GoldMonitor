@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-21T22:32:40.775565",
+  "timestamp": "2026-04-22T22:40:46.167276",
   "method": "Combinatorial Purged Cross-Validation",
   "parameters": {
     "n_blocks": 6,
@@ -9,68 +9,68 @@
     "total_train_samples": 2613
   },
   "results": {
-    "median_sharpe": 1.2427,
-    "mean_sharpe": 1.1676,
-    "worst_path_sharpe": -1.3224,
-    "best_path_sharpe": 3.7445,
-    "positive_rate_pct": 73.3,
-    "t_statistic": 2.8577,
-    "p_value": 0.0127,
-    "median_ic": -0.0003,
-    "mean_ic": 0.0231
+    "median_sharpe": 0.9168,
+    "mean_sharpe": 1.166,
+    "worst_path_sharpe": -1.1642,
+    "best_path_sharpe": 3.8992,
+    "positive_rate_pct": 66.7,
+    "t_statistic": 2.7968,
+    "p_value": 0.0143,
+    "median_ic": 0.0109,
+    "mean_ic": 0.0255
   },
   "conclusion": {
     "alpha_confirmed": true,
     "confidence_level": "moderate",
     "recommendation": "PROCEED with optimization",
-    "baseline_sharpe": -1.3224
+    "baseline_sharpe": -1.1642
   },
   "paths": [
     {
       "path_id": 1,
       "train_samples": 1723,
       "test_samples": 870,
-      "ic": 0.0935,
-      "ic_pval": 0.0058,
-      "sharpe": 0.5069
+      "ic": 0.0913,
+      "ic_pval": 0.007,
+      "sharpe": 0.3635
     },
     {
       "path_id": 2,
       "train_samples": 1683,
       "test_samples": 870,
-      "ic": 0.111,
-      "ic_pval": 0.001,
-      "sharpe": 3.7445
+      "ic": 0.1164,
+      "ic_pval": 0.0006,
+      "sharpe": 3.8992
     },
     {
       "path_id": 3,
       "train_samples": 1683,
       "test_samples": 870,
-      "ic": -0.031,
-      "ic_pval": 0.3617,
-      "sharpe": -0.0749
+      "ic": -0.0251,
+      "ic_pval": 0.4605,
+      "sharpe": -0.1146
     },
     {
       "path_id": 4,
       "train_samples": 1683,
       "test_samples": 870,
-      "ic": 0.1337,
+      "ic": 0.1297,
       "ic_pval": 0.0001,
-      "sharpe": 1.4467
+      "sharpe": 1.4357
     },
     {
       "path_id": 5,
       "train_samples": 1700,
       "test_samples": 873,
-      "ic": -0.0564,
-      "ic_pval": 0.096,
-      "sharpe": 2.9264
+      "ic": -0.0504,
+      "ic_pval": 0.137,
+      "sharpe": 2.9139
     },
     {
       "path_id": 6,
       "train_samples": 1703,
       "test_samples": 870,
-      "ic": 0.1189,
+      "ic": 0.1187,
       "ic_pval": 0.0004,
       "sharpe": 2.9656
     },
@@ -78,73 +78,73 @@
       "path_id": 7,
       "train_samples": 1663,
       "test_samples": 870,
-      "ic": -0.1081,
-      "ic_pval": 0.0014,
-      "sharpe": -1.3224
+      "ic": -0.1056,
+      "ic_pval": 0.0018,
+      "sharpe": -1.1642
     },
     {
       "path_id": 8,
       "train_samples": 1663,
       "test_samples": 870,
-      "ic": -0.0018,
-      "ic_pval": 0.9586,
-      "sharpe": 0.3073
+      "ic": -0.0052,
+      "ic_pval": 0.8783,
+      "sharpe": 0.2103
     },
     {
       "path_id": 9,
       "train_samples": 1680,
       "test_samples": 873,
-      "ic": 0.0799,
-      "ic_pval": 0.0183,
-      "sharpe": 0.1319
+      "ic": 0.0692,
+      "ic_pval": 0.041,
+      "sharpe": -0.2784
     },
     {
       "path_id": 10,
       "train_samples": 1703,
       "test_samples": 870,
-      "ic": -0.0003,
-      "ic_pval": 0.9924,
-      "sharpe": 1.9413
+      "ic": 0.0109,
+      "ic_pval": 0.7479,
+      "sharpe": 2.1186
     },
     {
       "path_id": 11,
       "train_samples": 1663,
       "test_samples": 870,
-      "ic": 0.0684,
-      "ic_pval": 0.0438,
-      "sharpe": 3.408
+      "ic": 0.074,
+      "ic_pval": 0.029,
+      "sharpe": 3.44
     },
     {
       "path_id": 12,
       "train_samples": 1680,
       "test_samples": 873,
-      "ic": -0.089,
-      "ic_pval": 0.0085,
-      "sharpe": 1.2427
+      "ic": -0.083,
+      "ic_pval": 0.0141,
+      "sharpe": 1.6893
     },
     {
       "path_id": 13,
       "train_samples": 1703,
       "test_samples": 870,
-      "ic": -0.0816,
-      "ic_pval": 0.0161,
-      "sharpe": -0.802
+      "ic": -0.077,
+      "ic_pval": 0.0231,
+      "sharpe": -0.8375
     },
     {
       "path_id": 14,
       "train_samples": 1680,
       "test_samples": 873,
-      "ic": 0.1173,
-      "ic_pval": 0.0005,
-      "sharpe": -0.3876
+      "ic": 0.1279,
+      "ic_pval": 0.0002,
+      "sharpe": -0.0679
     },
     {
       "path_id": 15,
       "train_samples": 1720,
       "test_samples": 873,
-      "ic": -0.0085,
-      "ic_pval": 0.8018,
-      "sharpe": 1.4794
+      "ic": -0.0089,
+      "ic_pval": 0.793,
+      "sharpe": 0.9168
     }
   ]
 }

@@ -18,42 +18,42 @@
     {
       "x": "F1_DXY",
       "y": "F4_BEI",
-      "value": -0.372
+      "value": -0.375
     },
     {
       "x": "F1_DXY",
       "y": "F5_GPR",
-      "value": -0.095
+      "value": -0.098
     },
     {
       "x": "F1_DXY",
       "y": "F6_GVZ",
-      "value": 0.34
+      "value": 0.343
     },
     {
       "x": "F1_DXY",
       "y": "F10_TIPSBEISpread",
-      "value": 0.073
+      "value": 0.069
     },
     {
       "x": "F1_DXY",
       "y": "F11_DXYMomentum",
-      "value": 0.569
+      "value": 0.577
     },
     {
       "x": "F1_DXY",
       "y": "F13_GoldGDXDivergence",
-      "value": 0.462
+      "value": 0.456
     },
     {
       "x": "F1_DXY",
       "y": "F14_GVZMomentum",
-      "value": 0.07
+      "value": 0.078
     },
     {
       "x": "F4_BEI",
       "y": "F1_DXY",
-      "value": -0.372
+      "value": -0.375
     },
     {
       "x": "F4_BEI",
@@ -63,42 +63,42 @@
     {
       "x": "F4_BEI",
       "y": "F5_GPR",
-      "value": 0.074
+      "value": 0.08
     },
     {
       "x": "F4_BEI",
       "y": "F6_GVZ",
-      "value": -0.407
+      "value": -0.408
     },
     {
       "x": "F4_BEI",
       "y": "F10_TIPSBEISpread",
-      "value": -0.218
+      "value": -0.213
     },
     {
       "x": "F4_BEI",
       "y": "F11_DXYMomentum",
-      "value": 0.023
+      "value": 0.012
     },
     {
       "x": "F4_BEI",
       "y": "F13_GoldGDXDivergence",
-      "value": -0.365
+      "value": -0.361
     },
     {
       "x": "F4_BEI",
       "y": "F14_GVZMomentum",
-      "value": -0.112
+      "value": -0.115
     },
     {
       "x": "F5_GPR",
       "y": "F1_DXY",
-      "value": -0.095
+      "value": -0.098
     },
     {
       "x": "F5_GPR",
       "y": "F4_BEI",
-      "value": 0.074
+      "value": 0.08
     },
     {
       "x": "F5_GPR",
@@ -108,42 +108,42 @@
     {
       "x": "F5_GPR",
       "y": "F6_GVZ",
-      "value": -0.156
+      "value": -0.17
     },
     {
       "x": "F5_GPR",
       "y": "F10_TIPSBEISpread",
-      "value": 0.406
+      "value": 0.397
     },
     {
       "x": "F5_GPR",
       "y": "F11_DXYMomentum",
-      "value": -0.274
+      "value": -0.264
     },
     {
       "x": "F5_GPR",
       "y": "F13_GoldGDXDivergence",
-      "value": -0.166
+      "value": -0.163
     },
     {
       "x": "F5_GPR",
       "y": "F14_GVZMomentum",
-      "value": -0.221
+      "value": -0.232
     },
     {
       "x": "F6_GVZ",
       "y": "F1_DXY",
-      "value": 0.34
+      "value": 0.343
     },
     {
       "x": "F6_GVZ",
       "y": "F4_BEI",
-      "value": -0.407
+      "value": -0.408
     },
     {
       "x": "F6_GVZ",
       "y": "F5_GPR",
-      "value": -0.156
+      "value": -0.17
     },
     {
       "x": "F6_GVZ",
@@ -153,42 +153,42 @@
     {
       "x": "F6_GVZ",
       "y": "F10_TIPSBEISpread",
-      "value": 0.267
+      "value": 0.258
     },
     {
       "x": "F6_GVZ",
       "y": "F11_DXYMomentum",
-      "value": 0.018
+      "value": 0.032
     },
     {
       "x": "F6_GVZ",
       "y": "F13_GoldGDXDivergence",
-      "value": 0.712
+      "value": 0.72
     },
     {
       "x": "F6_GVZ",
       "y": "F14_GVZMomentum",
-      "value": 0.332
+      "value": 0.325
     },
     {
       "x": "F10_TIPSBEISpread",
       "y": "F1_DXY",
-      "value": 0.073
+      "value": 0.069
     },
     {
       "x": "F10_TIPSBEISpread",
       "y": "F4_BEI",
-      "value": -0.218
+      "value": -0.213
     },
     {
       "x": "F10_TIPSBEISpread",
       "y": "F5_GPR",
-      "value": 0.406
+      "value": 0.397
     },
     {
       "x": "F10_TIPSBEISpread",
       "y": "F6_GVZ",
-      "value": 0.267
+      "value": 0.258
     },
     {
       "x": "F10_TIPSBEISpread",
@@ -198,42 +198,42 @@
     {
       "x": "F10_TIPSBEISpread",
       "y": "F11_DXYMomentum",
-      "value": -0.393
+      "value": -0.386
     },
     {
       "x": "F10_TIPSBEISpread",
       "y": "F13_GoldGDXDivergence",
-      "value": 0.183
+      "value": 0.187
     },
     {
       "x": "F10_TIPSBEISpread",
       "y": "F14_GVZMomentum",
-      "value": -0.157
+      "value": -0.169
     },
     {
       "x": "F11_DXYMomentum",
       "y": "F1_DXY",
-      "value": 0.569
+      "value": 0.577
     },
     {
       "x": "F11_DXYMomentum",
       "y": "F4_BEI",
-      "value": 0.023
+      "value": 0.012
     },
     {
       "x": "F11_DXYMomentum",
       "y": "F5_GPR",
-      "value": -0.274
+      "value": -0.264
     },
     {
       "x": "F11_DXYMomentum",
       "y": "F6_GVZ",
-      "value": 0.018
+      "value": 0.032
     },
     {
       "x": "F11_DXYMomentum",
       "y": "F10_TIPSBEISpread",
-      "value": -0.393
+      "value": -0.386
     },
     {
       "x": "F11_DXYMomentum",
@@ -243,42 +243,42 @@
     {
       "x": "F11_DXYMomentum",
       "y": "F13_GoldGDXDivergence",
-      "value": 0.201
+      "value": 0.193
     },
     {
       "x": "F11_DXYMomentum",
       "y": "F14_GVZMomentum",
-      "value": 0.185
+      "value": 0.204
     },
     {
       "x": "F13_GoldGDXDivergence",
       "y": "F1_DXY",
-      "value": 0.462
+      "value": 0.456
     },
     {
       "x": "F13_GoldGDXDivergence",
       "y": "F4_BEI",
-      "value": -0.365
+      "value": -0.361
     },
     {
       "x": "F13_GoldGDXDivergence",
       "y": "F5_GPR",
-      "value": -0.166
+      "value": -0.163
     },
     {
       "x": "F13_GoldGDXDivergence",
       "y": "F6_GVZ",
-      "value": 0.712
+      "value": 0.72
     },
     {
       "x": "F13_GoldGDXDivergence",
       "y": "F10_TIPSBEISpread",
-      "value": 0.183
+      "value": 0.187
     },
     {
       "x": "F13_GoldGDXDivergence",
       "y": "F11_DXYMomentum",
-      "value": 0.201
+      "value": 0.193
     },
     {
       "x": "F13_GoldGDXDivergence",
@@ -288,42 +288,42 @@
     {
       "x": "F13_GoldGDXDivergence",
       "y": "F14_GVZMomentum",
-      "value": 0.015
+      "value": 0.016
     },
     {
       "x": "F14_GVZMomentum",
       "y": "F1_DXY",
-      "value": 0.07
+      "value": 0.078
     },
     {
       "x": "F14_GVZMomentum",
       "y": "F4_BEI",
-      "value": -0.112
+      "value": -0.115
     },
     {
       "x": "F14_GVZMomentum",
       "y": "F5_GPR",
-      "value": -0.221
+      "value": -0.232
     },
     {
       "x": "F14_GVZMomentum",
       "y": "F6_GVZ",
-      "value": 0.332
+      "value": 0.325
     },
     {
       "x": "F14_GVZMomentum",
       "y": "F10_TIPSBEISpread",
-      "value": -0.157
+      "value": -0.169
     },
     {
       "x": "F14_GVZMomentum",
       "y": "F11_DXYMomentum",
-      "value": 0.185
+      "value": 0.204
     },
     {
       "x": "F14_GVZMomentum",
       "y": "F13_GoldGDXDivergence",
-      "value": 0.015
+      "value": 0.016
     },
     {
       "x": "F14_GVZMomentum",

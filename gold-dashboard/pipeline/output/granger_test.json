@@ -1,92 +1,92 @@
 {
-  "generated_at": "2026-04-21T22:32:42.149120",
-  "total_samples": 2732,
+  "generated_at": "2026-04-22T22:40:47.476761",
+  "total_samples": 2733,
   "factors": {
     "F1_DXY": {
       "display_name": "美元指数 DXY",
-      "contemporaneous_ic": 0.0722,
-      "oos_ic": 0.1954,
+      "contemporaneous_ic": 0.0719,
+      "oos_ic": 0.2025,
       "granger_causes_gold": true,
       "optimal_lag_days": 15,
-      "optimal_lag_ic": 0.1114,
+      "optimal_lag_ic": 0.1108,
       "optimal_lag_pval": 0.0,
       "n_significant_lags": 20,
       "verdict": "STRONG — Granger causal + significant OOS IC"
     },
     "F4_BEI": {
       "display_name": "通胀预期 BEI",
-      "contemporaneous_ic": -0.2013,
-      "oos_ic": -0.4428,
+      "contemporaneous_ic": -0.2011,
+      "oos_ic": -0.4321,
       "granger_causes_gold": true,
       "optimal_lag_days": 1,
-      "optimal_lag_ic": -0.1998,
+      "optimal_lag_ic": -0.1996,
       "optimal_lag_pval": 0.0,
       "n_significant_lags": 20,
       "verdict": "STRONG — Granger causal + significant OOS IC"
     },
     "F5_GPR": {
       "display_name": "地缘政治风险 GPR",
-      "contemporaneous_ic": 0.1062,
-      "oos_ic": 0.233,
+      "contemporaneous_ic": 0.1059,
+      "oos_ic": 0.2304,
       "granger_causes_gold": true,
       "optimal_lag_days": 6,
-      "optimal_lag_ic": 0.1099,
+      "optimal_lag_ic": 0.1095,
       "optimal_lag_pval": 0.0,
       "n_significant_lags": 20,
       "verdict": "STRONG — Granger causal + significant OOS IC"
     },
     "F6_GVZ": {
       "display_name": "黄金波动率 GVZ",
-      "contemporaneous_ic": 0.0543,
-      "oos_ic": -0.4689,
+      "contemporaneous_ic": 0.0552,
+      "oos_ic": -0.4539,
       "granger_causes_gold": true,
       "optimal_lag_days": 1,
-      "optimal_lag_ic": 0.0549,
-      "optimal_lag_pval": 0.00414,
+      "optimal_lag_ic": 0.0557,
+      "optimal_lag_pval": 0.003581,
       "n_significant_lags": 13,
       "verdict": "STRONG — Granger causal + significant OOS IC"
     },
     "F10_TIPSBEISpread": {
       "display_name": "实际利率-通胀利差",
-      "contemporaneous_ic": 0.0587,
-      "oos_ic": 0.7107,
+      "contemporaneous_ic": 0.0591,
+      "oos_ic": 0.7125,
       "granger_causes_gold": true,
       "optimal_lag_days": 15,
-      "optimal_lag_ic": 0.0678,
-      "optimal_lag_pval": 0.000407,
+      "optimal_lag_ic": 0.0674,
+      "optimal_lag_pval": 0.000438,
       "n_significant_lags": 20,
       "verdict": "STRONG — Granger causal + significant OOS IC"
     },
     "F11_DXYMomentum": {
       "display_name": "美元动量 20D",
-      "contemporaneous_ic": -0.0158,
-      "oos_ic": -0.3614,
+      "contemporaneous_ic": -0.0149,
+      "oos_ic": -0.3464,
       "granger_causes_gold": true,
       "optimal_lag_days": 13,
-      "optimal_lag_ic": 0.0434,
-      "optimal_lag_pval": 0.023639,
+      "optimal_lag_ic": 0.0442,
+      "optimal_lag_pval": 0.021262,
       "n_significant_lags": 4,
       "verdict": "STRONG — Granger causal + significant OOS IC"
     },
     "F13_GoldGDXDivergence": {
       "display_name": "金价-矿业股背离",
-      "contemporaneous_ic": -0.0977,
-      "oos_ic": -0.3564,
+      "contemporaneous_ic": -0.0978,
+      "oos_ic": -0.355,
       "granger_causes_gold": true,
       "optimal_lag_days": 1,
-      "optimal_lag_ic": -0.0845,
-      "optimal_lag_pval": 1e-05,
+      "optimal_lag_ic": -0.0847,
+      "optimal_lag_pval": 9e-06,
       "n_significant_lags": 20,
       "verdict": "STRONG — Granger causal + significant OOS IC"
     },
     "F14_GVZMomentum": {
       "display_name": "波动率动量",
-      "contemporaneous_ic": -0.0228,
-      "oos_ic": -0.0332,
+      "contemporaneous_ic": -0.0221,
+      "oos_ic": -0.0251,
       "granger_causes_gold": false,
       "optimal_lag_days": 9,
-      "optimal_lag_ic": 0.0282,
-      "optimal_lag_pval": 0.140793,
+      "optimal_lag_ic": 0.0279,
+      "optimal_lag_pval": 0.14548,
       "n_significant_lags": 0,
       "verdict": "REDUNDANT — Consider removing from model"
     }
@@ -102,7 +102,7 @@
         "F10_TIPSBEISpread": -0.0459,
         "F11_DXYMomentum": -0.0297,
         "F13_GoldGDXDivergence": -0.1612,
-        "F14_GVZMomentum": 0.025
+        "F14_GVZMomentum": 0.0249
       }
     },
     "trend_down": {
@@ -111,24 +111,24 @@
         "F1_DXY": -0.1124,
         "F4_BEI": -0.1788,
         "F5_GPR": -0.0292,
-        "F6_GVZ": 0.1514,
+        "F6_GVZ": 0.152,
         "F10_TIPSBEISpread": 0.0454,
         "F11_DXYMomentum": -0.0793,
         "F13_GoldGDXDivergence": -0.1518,
-        "F14_GVZMomentum": -0.0172
+        "F14_GVZMomentum": -0.0179
       }
     },
     "range": {
-      "samples": 1285,
+      "samples": 1286,
       "factor_ics": {
-        "F1_DXY": 0.1834,
-        "F4_BEI": -0.2368,
-        "F5_GPR": 0.1628,
-        "F6_GVZ": 0.0251,
-        "F10_TIPSBEISpread": 0.1404,
-        "F11_DXYMomentum": 0.0217,
-        "F13_GoldGDXDivergence": -0.0243,
-        "F14_GVZMomentum": -0.0627
+        "F1_DXY": 0.1826,
+        "F4_BEI": -0.2365,
+        "F5_GPR": 0.1621,
+        "F6_GVZ": 0.027,
+        "F10_TIPSBEISpread": 0.1409,
+        "F11_DXYMomentum": 0.0236,
+        "F13_GoldGDXDivergence": -0.0252,
+        "F14_GVZMomentum": -0.0609
       }
     }
   },

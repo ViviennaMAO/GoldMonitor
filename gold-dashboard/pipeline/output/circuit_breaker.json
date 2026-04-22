@@ -1,6 +1,6 @@
 {
   "current_status": "hibernating",
-  "peak_equity": 101663.24,
+  "peak_equity": 102335.33,
   "config": {
     "drawdown_reduce_half": 0.05,
     "drawdown_pause": 0.08,
@@ -11,256 +11,310 @@
   },
   "recent_events": [
     {
-      "date": "2026-01-14",
-      "multiplier": 0.9615,
-      "status": "reduced",
-      "reason": "IC scaling: 0.146 → mult=0.96",
-      "cumulative_dd": 0.0025,
-      "monthly_dd": 0.0002,
-      "rolling_ic": 0.1462
-    },
-    {
-      "date": "2026-01-16",
-      "multiplier": 0.9398,
-      "status": "reduced",
-      "reason": "IC scaling: 0.144 → mult=0.94",
-      "cumulative_dd": 0.0025,
-      "monthly_dd": 0.0002,
-      "rolling_ic": 0.144
-    },
-    {
       "date": "2026-01-20",
-      "multiplier": 0.5403,
+      "multiplier": 0.8632,
       "status": "reduced",
-      "reason": "IC scaling: 0.104 → mult=0.54",
+      "reason": "IC scaling: 0.136 → mult=0.86",
       "cumulative_dd": 0.0025,
       "monthly_dd": 0.0002,
-      "rolling_ic": 0.104
+      "rolling_ic": 0.1363
     },
     {
       "date": "2026-01-21",
-      "multiplier": 0.0574,
+      "multiplier": 0.3914,
       "status": "reduced",
-      "reason": "IC scaling: 0.056 → mult=0.06",
+      "reason": "IC scaling: 0.089 → mult=0.39",
       "cumulative_dd": 0.0025,
       "monthly_dd": 0.0002,
-      "rolling_ic": 0.0557
+      "rolling_ic": 0.0891
+    },
+    {
+      "date": "2026-01-22",
+      "multiplier": 0.2819,
+      "status": "reduced",
+      "reason": "IC scaling: 0.078 → mult=0.28",
+      "cumulative_dd": 0.0,
+      "monthly_dd": 0.0,
+      "rolling_ic": 0.0782
+    },
+    {
+      "date": "2026-01-27",
+      "multiplier": 0.223,
+      "status": "reduced",
+      "reason": "IC scaling: 0.072 → mult=0.22",
+      "cumulative_dd": 0.0,
+      "monthly_dd": 0.0,
+      "rolling_ic": 0.0723
     },
     {
       "date": "2026-01-28",
-      "multiplier": 0.0924,
+      "multiplier": 0.2752,
       "status": "reduced",
-      "reason": "IC scaling: 0.059 → mult=0.09",
-      "cumulative_dd": 0.0021,
+      "reason": "IC scaling: 0.078 → mult=0.28",
+      "cumulative_dd": 0.0,
       "monthly_dd": 0.0,
-      "rolling_ic": 0.0592
+      "rolling_ic": 0.0775
     },
     {
       "date": "2026-01-29",
-      "multiplier": 0.0251,
+      "multiplier": 0.1157,
+      "status": "reduced",
+      "reason": "IC scaling: 0.062 → mult=0.12",
+      "cumulative_dd": 0.0,
+      "monthly_dd": 0.0,
+      "rolling_ic": 0.0616
+    },
+    {
+      "date": "2026-02-06",
+      "multiplier": 0.0257,
       "status": "reduced",
       "reason": "IC scaling: 0.053 → mult=0.03",
-      "cumulative_dd": 0.0021,
+      "cumulative_dd": 0.0034,
       "monthly_dd": 0.0,
-      "rolling_ic": 0.0525
+      "rolling_ic": 0.0526
     },
     {
       "date": "2026-02-09",
-      "multiplier": 0.2119,
+      "multiplier": 0.273,
       "status": "reduced",
-      "reason": "IC scaling: 0.071 → mult=0.21",
-      "cumulative_dd": 0.0032,
+      "reason": "IC scaling: 0.077 → mult=0.27",
+      "cumulative_dd": 0.0034,
       "monthly_dd": 0.0,
-      "rolling_ic": 0.0712
+      "rolling_ic": 0.0773
     },
     {
       "date": "2026-02-10",
-      "multiplier": 0.3947,
+      "multiplier": 0.4219,
       "status": "reduced",
-      "reason": "IC scaling: 0.089 → mult=0.39",
-      "cumulative_dd": 0.0032,
+      "reason": "IC scaling: 0.092 → mult=0.42",
+      "cumulative_dd": 0.0034,
       "monthly_dd": 0.0,
-      "rolling_ic": 0.0895
+      "rolling_ic": 0.0922
     },
     {
       "date": "2026-02-11",
-      "multiplier": 0.4253,
+      "multiplier": 0.4147,
       "status": "reduced",
-      "reason": "IC scaling: 0.093 → mult=0.43",
-      "cumulative_dd": 0.0032,
+      "reason": "IC scaling: 0.091 → mult=0.41",
+      "cumulative_dd": 0.0034,
       "monthly_dd": 0.0,
-      "rolling_ic": 0.0925
+      "rolling_ic": 0.0915
     },
     {
       "date": "2026-02-12",
-      "multiplier": 0.4247,
+      "multiplier": 0.3647,
       "status": "reduced",
-      "reason": "IC scaling: 0.092 → mult=0.42",
-      "cumulative_dd": 0.0032,
+      "reason": "IC scaling: 0.086 → mult=0.36",
+      "cumulative_dd": 0.0034,
       "monthly_dd": 0.0,
-      "rolling_ic": 0.0925
+      "rolling_ic": 0.0865
     },
     {
       "date": "2026-02-13",
-      "multiplier": 0.667,
+      "multiplier": 0.4831,
       "status": "reduced",
-      "reason": "IC scaling: 0.117 → mult=0.67",
-      "cumulative_dd": 0.0032,
+      "reason": "IC scaling: 0.098 → mult=0.48",
+      "cumulative_dd": 0.0034,
       "monthly_dd": 0.0,
-      "rolling_ic": 0.1167
+      "rolling_ic": 0.0983
     },
     {
       "date": "2026-02-17",
-      "multiplier": 0.8254,
+      "multiplier": 0.4436,
       "status": "reduced",
-      "reason": "IC scaling: 0.133 → mult=0.83",
-      "cumulative_dd": 0.0032,
+      "reason": "IC scaling: 0.094 → mult=0.44",
+      "cumulative_dd": 0.0033,
       "monthly_dd": 0.0,
-      "rolling_ic": 0.1325
+      "rolling_ic": 0.0944
+    },
+    {
+      "date": "2026-02-18",
+      "multiplier": 0.7303,
+      "status": "reduced",
+      "reason": "IC scaling: 0.123 → mult=0.73",
+      "cumulative_dd": 0.0033,
+      "monthly_dd": 0.0,
+      "rolling_ic": 0.123
+    },
+    {
+      "date": "2026-02-19",
+      "multiplier": 0.6876,
+      "status": "reduced",
+      "reason": "IC scaling: 0.119 → mult=0.69",
+      "cumulative_dd": 0.0033,
+      "monthly_dd": 0.0,
+      "rolling_ic": 0.1188
     },
     {
       "date": "2026-02-20",
-      "multiplier": 0.8982,
+      "multiplier": 0.6609,
       "status": "reduced",
-      "reason": "IC scaling: 0.140 → mult=0.90",
-      "cumulative_dd": 0.0032,
+      "reason": "IC scaling: 0.116 → mult=0.66",
+      "cumulative_dd": 0.0033,
       "monthly_dd": 0.0,
-      "rolling_ic": 0.1398
+      "rolling_ic": 0.1161
     },
     {
       "date": "2026-02-23",
-      "multiplier": 0.9537,
+      "multiplier": 0.7265,
+      "status": "reduced",
+      "reason": "IC scaling: 0.123 → mult=0.73",
+      "cumulative_dd": 0.0038,
+      "monthly_dd": 0.0005,
+      "rolling_ic": 0.1226
+    },
+    {
+      "date": "2026-02-24",
+      "multiplier": 0.9504,
       "status": "reduced",
       "reason": "IC scaling: 0.145 → mult=0.95",
-      "cumulative_dd": 0.0041,
-      "monthly_dd": 0.001,
-      "rolling_ic": 0.1454
+      "cumulative_dd": 0.0039,
+      "monthly_dd": 0.0005,
+      "rolling_ic": 0.145
     },
     {
       "date": "2026-03-02",
-      "multiplier": 0.9615,
+      "multiplier": 0.7403,
       "status": "reduced",
-      "reason": "IC scaling: 0.146 → mult=0.96",
-      "cumulative_dd": 0.0039,
+      "reason": "IC scaling: 0.124 → mult=0.74",
+      "cumulative_dd": 0.0037,
       "monthly_dd": 0.0,
-      "rolling_ic": 0.1462
+      "rolling_ic": 0.124
     },
     {
       "date": "2026-03-03",
-      "multiplier": 0.9148,
+      "multiplier": 0.7209,
       "status": "reduced",
-      "reason": "IC scaling: 0.141 → mult=0.91",
-      "cumulative_dd": 0.0039,
+      "reason": "IC scaling: 0.122 → mult=0.72",
+      "cumulative_dd": 0.002,
       "monthly_dd": 0.0,
-      "rolling_ic": 0.1415
+      "rolling_ic": 0.1221
+    },
+    {
+      "date": "2026-03-05",
+      "multiplier": 0.976,
+      "status": "reduced",
+      "reason": "IC scaling: 0.148 → mult=0.98",
+      "cumulative_dd": 0.002,
+      "monthly_dd": 0.0,
+      "rolling_ic": 0.1476
+    },
+    {
+      "date": "2026-03-10",
+      "multiplier": 0.9654,
+      "status": "reduced",
+      "reason": "IC scaling: 0.147 → mult=0.97",
+      "cumulative_dd": 0.0024,
+      "monthly_dd": 0.0004,
+      "rolling_ic": 0.1465
     },
     {
       "date": "2026-03-11",
-      "multiplier": 0.7076,
+      "multiplier": 0.7465,
       "status": "reduced",
-      "reason": "IC scaling: 0.121 → mult=0.71",
-      "cumulative_dd": 0.0055,
-      "monthly_dd": 0.0016,
-      "rolling_ic": 0.1208
+      "reason": "IC scaling: 0.125 → mult=0.75",
+      "cumulative_dd": 0.0024,
+      "monthly_dd": 0.0004,
+      "rolling_ic": 0.1246
     },
     {
       "date": "2026-03-12",
-      "multiplier": 0.6403,
+      "multiplier": 0.6826,
       "status": "reduced",
-      "reason": "IC scaling: 0.114 → mult=0.64",
-      "cumulative_dd": 0.0055,
-      "monthly_dd": 0.0016,
-      "rolling_ic": 0.114
+      "reason": "IC scaling: 0.118 → mult=0.68",
+      "cumulative_dd": 0.0024,
+      "monthly_dd": 0.0004,
+      "rolling_ic": 0.1183
     },
     {
       "date": "2026-03-13",
-      "multiplier": 0.7142,
+      "multiplier": 0.7681,
       "status": "reduced",
-      "reason": "IC scaling: 0.121 → mult=0.71",
-      "cumulative_dd": 0.0051,
-      "monthly_dd": 0.0012,
-      "rolling_ic": 0.1214
+      "reason": "IC scaling: 0.127 → mult=0.77",
+      "cumulative_dd": 0.0021,
+      "monthly_dd": 0.0001,
+      "rolling_ic": 0.1268
     },
     {
       "date": "2026-03-16",
-      "multiplier": 0.8004,
+      "multiplier": 0.8871,
       "status": "reduced",
-      "reason": "IC scaling: 0.130 → mult=0.80",
-      "cumulative_dd": 0.0051,
-      "monthly_dd": 0.0012,
-      "rolling_ic": 0.13
+      "reason": "IC scaling: 0.139 → mult=0.89",
+      "cumulative_dd": 0.0021,
+      "monthly_dd": 0.0001,
+      "rolling_ic": 0.1387
     },
     {
       "date": "2026-03-17",
-      "multiplier": 0.7765,
+      "multiplier": 0.8765,
       "status": "reduced",
-      "reason": "IC scaling: 0.128 → mult=0.78",
-      "cumulative_dd": 0.0051,
-      "monthly_dd": 0.0012,
-      "rolling_ic": 0.1276
+      "reason": "IC scaling: 0.138 → mult=0.88",
+      "cumulative_dd": 0.0008,
+      "monthly_dd": 0.0,
+      "rolling_ic": 0.1376
     },
     {
       "date": "2026-03-18",
-      "multiplier": 0.7687,
+      "multiplier": 0.8126,
       "status": "reduced",
-      "reason": "IC scaling: 0.127 → mult=0.77",
-      "cumulative_dd": 0.0051,
-      "monthly_dd": 0.0012,
-      "rolling_ic": 0.1269
+      "reason": "IC scaling: 0.131 → mult=0.81",
+      "cumulative_dd": 0.0008,
+      "monthly_dd": 0.0,
+      "rolling_ic": 0.1313
     },
     {
-      "date": "2026-03-20",
-      "multiplier": 0.9876,
+      "date": "2026-03-19",
+      "multiplier": 0.996,
       "status": "reduced",
-      "reason": "IC scaling: 0.149 → mult=0.99",
-      "cumulative_dd": 0.0051,
-      "monthly_dd": 0.0012,
-      "rolling_ic": 0.1488
+      "reason": "IC scaling: 0.150 → mult=1.00",
+      "cumulative_dd": 0.0008,
+      "monthly_dd": 0.0,
+      "rolling_ic": 0.1496
     },
     {
       "date": "2026-03-23",
-      "multiplier": 0.8487,
+      "multiplier": 0.7459,
       "status": "reduced",
-      "reason": "IC scaling: 0.135 → mult=0.85",
-      "cumulative_dd": 0.0051,
-      "monthly_dd": 0.0012,
-      "rolling_ic": 0.1349
+      "reason": "IC scaling: 0.125 → mult=0.75",
+      "cumulative_dd": 0.0008,
+      "monthly_dd": 0.0,
+      "rolling_ic": 0.1246
     },
     {
       "date": "2026-03-24",
-      "multiplier": 0.9465,
+      "multiplier": 0.8948,
       "status": "reduced",
-      "reason": "IC scaling: 0.145 → mult=0.95",
-      "cumulative_dd": 0.0051,
-      "monthly_dd": 0.0012,
-      "rolling_ic": 0.1447
+      "reason": "IC scaling: 0.139 → mult=0.89",
+      "cumulative_dd": 0.0008,
+      "monthly_dd": 0.0,
+      "rolling_ic": 0.1395
+    },
+    {
+      "date": "2026-03-30",
+      "multiplier": 0.9799,
+      "status": "reduced",
+      "reason": "IC scaling: 0.148 → mult=0.98",
+      "cumulative_dd": 0.0006,
+      "monthly_dd": 0.0,
+      "rolling_ic": 0.148
+    },
+    {
+      "date": "2026-04-07",
+      "multiplier": 0.7487,
+      "status": "reduced",
+      "reason": "IC scaling: 0.125 → mult=0.75",
+      "cumulative_dd": 0.0003,
+      "monthly_dd": 0.0,
+      "rolling_ic": 0.1249
     },
     {
       "date": "2026-04-08",
-      "multiplier": 0.8972,
+      "multiplier": 0.3444,
       "status": "reduced",
-      "reason": "IC scaling: 0.140 → mult=0.90",
-      "cumulative_dd": 0.0049,
+      "reason": "IC scaling: 0.084 → mult=0.34",
+      "cumulative_dd": 0.0003,
       "monthly_dd": 0.0,
-      "rolling_ic": 0.1397
-    },
-    {
-      "date": "2026-04-09",
-      "multiplier": 0.4654,
-      "status": "reduced",
-      "reason": "IC scaling: 0.097 → mult=0.47",
-      "cumulative_dd": 0.0049,
-      "monthly_dd": 0.0,
-      "rolling_ic": 0.0965
-    },
-    {
-      "date": "2026-04-10",
-      "multiplier": 0.1026,
-      "status": "reduced",
-      "reason": "IC scaling: 0.060 → mult=0.10",
-      "cumulative_dd": 0.0049,
-      "monthly_dd": 0.0,
-      "rolling_ic": 0.0603
+      "rolling_ic": 0.0844
     }
   ]
 }

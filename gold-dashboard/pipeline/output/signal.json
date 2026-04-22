@@ -1,76 +1,76 @@
 {
-  "date": "2026-04-21",
-  "timestamp": "2026-04-21T22:32:41.777171",
-  "signal": "Neutral",
-  "predicted_return": 0.1844,
-  "confidence": 12.3,
-  "gold_price": 4736.1,
-  "gold_open": 4738.7,
-  "gold_high": 4748.1,
-  "gold_low": 4734.3,
-  "atr": 96.41,
-  "stop_loss": 4398.65,
-  "take_profit": 5242.28,
-  "position_size": 4.6273,
-  "regime": "过热·通胀陷阱",
-  "regime_multiplier": 1.041,
-  "position_a": 1.416,
-  "position_b": 1.8509,
+  "date": "2026-04-22",
+  "timestamp": "2026-04-22T22:40:47.146902",
+  "signal": "Buy",
+  "predicted_return": 0.5703,
+  "confidence": 38.0,
+  "gold_price": 4751.4,
+  "gold_open": 4759.2,
+  "gold_high": 4763.6,
+  "gold_low": 4750.0,
+  "atr": 95.1,
+  "stop_loss": 4418.55,
+  "take_profit": 5250.68,
+  "position_size": 3.0149,
+  "regime": "中性·通胀陷阱",
+  "regime_multiplier": 0.669,
+  "position_a": 0.8502,
+  "position_b": 1.2059,
   "signal_a": "partial",
   "signal_b": "hold",
   "inflation_mechanism": "moderate_trap",
   "inflation_mechanism_zh": "温和通胀陷阱",
   "cpi_yoy": 3.12,
-  "t5yifr": 2.16,
+  "t5yifr": 2.15,
   "t5yifr_turbo": false,
-  "dual_force": "both",
+  "dual_force": "single",
   "factors": [
     {
       "name": "F1_DXY",
       "label": "美元指数 DXY",
-      "zscore": -1.7464,
+      "zscore": -1.7321,
       "raw_value": 118.0795
     },
     {
       "name": "F4_BEI",
       "label": "通胀预期 BEI",
-      "zscore": 1.1343,
+      "zscore": 1.1252,
       "raw_value": 2.38
     },
     {
       "name": "F5_GPR",
       "label": "地缘政治风险 GPR",
-      "zscore": -0.2835,
+      "zscore": -0.2754,
       "raw_value": 371.0954
     },
     {
       "name": "F6_GVZ",
       "label": "黄金波动率 GVZ",
-      "zscore": 0.7375,
-      "raw_value": 29.31
+      "zscore": 0.4291,
+      "raw_value": 27.09
     },
     {
       "name": "F10_TIPSBEISpread",
       "label": "实际利率-通胀利差",
-      "zscore": -0.4511,
+      "zscore": -0.3705,
       "raw_value": null
     },
     {
       "name": "F11_DXYMomentum",
       "label": "美元动量 20D",
-      "zscore": -0.9749,
+      "zscore": -1.1172,
       "raw_value": null
     },
     {
       "name": "F13_GoldGDXDivergence",
       "label": "金价-矿业股背离",
-      "zscore": 0.1671,
+      "zscore": 0.1141,
       "raw_value": null
     },
     {
       "name": "F14_GVZMomentum",
       "label": "波动率动量",
-      "zscore": -1.1602,
+      "zscore": -1.112,
       "raw_value": null
     }
   ]
