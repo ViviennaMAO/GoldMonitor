@@ -21,6 +21,11 @@ venv/
 
 # Pipeline model (large binary, not tracked)
 gold-dashboard/pipeline/model.json
+gold-dashboard/pipeline/model_10d.json
+gold-dashboard/pipeline/model_20d.json
+gold-dashboard/pipeline/model_40d.json
+gold-dashboard/pipeline/data_cache.pkl
+gold-dashboard/tsconfig.tsbuildinfo
 
 # OS
 .DS_Store
