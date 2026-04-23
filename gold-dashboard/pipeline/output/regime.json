@@ -1,19 +1,19 @@
 {
   "current": {
-    "regime": "中性·通胀陷阱",
-    "regime_en": "Neutral InflationTrap",
-    "multiplier": 0.669,
+    "regime": "过热·通胀陷阱",
+    "regime_en": "Overheating InflationTrap",
+    "multiplier": 1.041,
     "risk_off_score": 0,
     "risk_on_score": 0,
-    "confidence": 0.5,
+    "confidence": 0.6,
     "layer1": {
-      "quadrant": "Neutral",
-      "quadrant_zh": "中性",
-      "growth_direction": "neutral",
+      "quadrant": "Overheating",
+      "quadrant_zh": "过热",
+      "growth_direction": "up",
       "inflation_direction": "up",
-      "fed_cycle": "Neutral",
-      "fed_cycle_zh": "中性",
-      "multiplier": 0.85
+      "fed_cycle": "Easing",
+      "fed_cycle_zh": "宽松",
+      "multiplier": 1.15
     },
     "layer2": {
       "hmm_state": -1,
@@ -31,7 +31,7 @@
       "rate_shock_detected": false,
       "shock_source": null,
       "shock_source_zh": null,
-      "dgs2_zscore": 0.63,
+      "dgs2_zscore": 0.687,
       "shock_direction": null,
       "changepoint_detected": false,
       "days_since_changepoint": null,
@@ -45,14 +45,14 @@
     "layer4": {
       "inflation_mechanism": "moderate_trap",
       "inflation_mechanism_zh": "温和通胀陷阱",
-      "inflation_multiplier": 0.75,
+      "inflation_multiplier": 0.862,
       "cpi_yoy": 3.12,
-      "t5yifr": 2.15,
+      "t5yifr": 2.26,
       "t5yifr_turbo": false,
       "tips_60d_chg": 0.02,
-      "dual_force": "single",
+      "dual_force": "both",
       "force_discount_active": true,
-      "force_hedging_active": false,
+      "force_hedging_active": true,
       "signal_a": "partial",
       "signal_a_mult": 0.47,
       "signal_b": "hold",
@@ -142,14 +142,14 @@
     {
       "month": "2026-04",
       "factors": {
-        "F1_DXY": -1.73,
-        "F4_BEI": 1.13,
-        "F5_GPR": -0.28,
-        "F6_GVZ": 0.43,
-        "F10_TIPSBEISpread": -0.37,
+        "F1_DXY": -1.72,
+        "F4_BEI": 1.86,
+        "F5_GPR": -0.27,
+        "F6_GVZ": 0.54,
+        "F10_TIPSBEISpread": -0.66,
         "F11_DXYMomentum": -1.12,
-        "F13_GoldGDXDivergence": 0.11,
-        "F14_GVZMomentum": -1.11
+        "F13_GoldGDXDivergence": 0.17,
+        "F14_GVZMomentum": -0.68
       }
     }
   ]

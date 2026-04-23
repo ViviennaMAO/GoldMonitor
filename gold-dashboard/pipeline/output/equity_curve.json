@@ -57,926 +57,933 @@
   },
   {
     "date": "2025-10-13",
-    "equity": 101310.83,
+    "equity": 101312.97,
     "gld": 106234.0,
     "drawdown": 0.0,
     "gold_price": 4108.6
   },
   {
     "date": "2025-10-14",
-    "equity": 101308.93,
+    "equity": 101361.19,
     "gld": 107012.29,
     "drawdown": 0.0,
     "gold_price": 4138.7
   },
   {
     "date": "2025-10-15",
-    "equity": 101250.46,
+    "equity": 101302.85,
     "gld": 108000.0,
     "drawdown": 0.0,
     "gold_price": 4176.9
   },
   {
     "date": "2025-10-16",
-    "equity": 101088.65,
+    "equity": 101141.4,
     "gld": 110670.98,
     "drawdown": 0.22,
     "gold_price": 4280.2
   },
   {
     "date": "2025-10-17",
-    "equity": 100967.28,
+    "equity": 101019.97,
     "gld": 108336.13,
     "drawdown": 0.22,
     "gold_price": 4189.9
   },
   {
     "date": "2025-10-20",
-    "equity": 101162.44,
+    "equity": 101215.23,
     "gld": 112124.11,
-    "drawdown": 0.15,
+    "drawdown": 0.14,
     "gold_price": 4336.4
   },
   {
     "date": "2025-10-21",
-    "equity": 101162.44,
+    "equity": 101214.02,
     "gld": 105693.6,
     "drawdown": 0.15,
     "gold_price": 4087.7
   },
   {
     "date": "2025-10-22",
-    "equity": 101162.44,
+    "equity": 101256.64,
     "gld": 104574.01,
     "drawdown": 0.15,
     "gold_price": 4044.4
   },
   {
     "date": "2025-10-23",
-    "equity": 101162.44,
+    "equity": 101176.81,
     "gld": 106670.98,
     "drawdown": 0.15,
     "gold_price": 4125.5
   },
   {
     "date": "2025-10-24",
-    "equity": 101161.29,
+    "equity": 101183.8,
     "gld": 106487.39,
     "drawdown": 0.15,
     "gold_price": 4118.4
   },
   {
     "date": "2025-10-27",
-    "equity": 101267.94,
+    "equity": 101297.3,
     "gld": 103475.11,
-    "drawdown": 0.04,
+    "drawdown": 0.06,
     "gold_price": 4001.9
   },
   {
     "date": "2025-10-28",
-    "equity": 101267.94,
+    "equity": 101297.3,
     "gld": 102552.03,
-    "drawdown": 0.04,
+    "drawdown": 0.06,
     "gold_price": 3966.2
   },
   {
     "date": "2025-10-29",
-    "equity": 101267.94,
+    "equity": 101296.21,
     "gld": 103004.52,
-    "drawdown": 0.04,
+    "drawdown": 0.06,
     "gold_price": 3983.7
   },
   {
     "date": "2025-10-30",
-    "equity": 101266.88,
+    "equity": 101312.28,
     "gld": 103459.6,
-    "drawdown": 0.04,
+    "drawdown": 0.06,
     "gold_price": 4001.3
   },
   {
     "date": "2025-10-31",
-    "equity": 101249.94,
+    "equity": 101294.84,
     "gld": 102965.74,
-    "drawdown": 0.04,
+    "drawdown": 0.06,
     "gold_price": 3982.2
   },
   {
     "date": "2025-11-03",
-    "equity": 101264.93,
+    "equity": 101310.27,
     "gld": 103433.74,
     "drawdown": 0.05,
     "gold_price": 4000.3
   },
   {
     "date": "2025-11-04",
-    "equity": 101263.82,
+    "equity": 101309.16,
     "gld": 102073.69,
     "drawdown": 0.05,
     "gold_price": 3947.7
   },
   {
     "date": "2025-11-05",
-    "equity": 101294.39,
+    "equity": 101339.74,
     "gld": 102916.61,
     "drawdown": 0.05,
     "gold_price": 3980.3
   },
   {
     "date": "2025-11-06",
-    "equity": 101294.01,
+    "equity": 101339.37,
     "gld": 102906.27,
     "drawdown": 0.05,
     "gold_price": 3979.9
   },
   {
     "date": "2025-11-07",
-    "equity": 101312.3,
+    "equity": 101357.66,
     "gld": 103410.47,
     "drawdown": 0.05,
     "gold_price": 3999.4
   },
   {
     "date": "2025-11-10",
-    "equity": 101416.55,
+    "equity": 101463.11,
     "gld": 106316.74,
-    "drawdown": 0.0,
+    "drawdown": 0.05,
     "gold_price": 4111.8
   },
   {
     "date": "2025-11-11",
-    "equity": 101414.63,
+    "equity": 101458.42,
     "gld": 106187.45,
-    "drawdown": 0.0,
+    "drawdown": 0.05,
     "gold_price": 4106.8
   },
   {
     "date": "2025-11-12",
-    "equity": 101566.65,
+    "equity": 101548.81,
     "gld": 108711.05,
     "drawdown": 0.0,
     "gold_price": 4204.4
   },
   {
     "date": "2025-11-13",
-    "equity": 101539.39,
+    "equity": 101548.81,
     "gld": 108258.56,
     "drawdown": 0.0,
     "gold_price": 4186.9
   },
   {
     "date": "2025-11-14",
-    "equity": 101382.81,
+    "equity": 101548.81,
     "gld": 105691.02,
-    "drawdown": 0.03,
+    "drawdown": 0.0,
     "gold_price": 4087.6
   },
   {
     "date": "2025-11-17",
-    "equity": 101382.81,
+    "equity": 101546.96,
     "gld": 105191.99,
-    "drawdown": 0.03,
+    "drawdown": 0.0,
     "gold_price": 4068.3
   },
   {
     "date": "2025-11-18",
-    "equity": 101382.81,
+    "equity": 101557.55,
     "gld": 105010.99,
-    "drawdown": 0.03,
+    "drawdown": 0.0,
     "gold_price": 4061.3
   },
   {
     "date": "2025-11-19",
-    "equity": 101382.81,
+    "equity": 101532.74,
     "gld": 105435.03,
-    "drawdown": 0.03,
+    "drawdown": 0.0,
     "gold_price": 4077.7
   },
   {
     "date": "2025-11-20",
-    "equity": 101380.89,
+    "equity": 101559.75,
     "gld": 104886.88,
-    "drawdown": 0.04,
+    "drawdown": 0.0,
     "gold_price": 4056.5
   },
   {
     "date": "2025-11-21",
-    "equity": 101412.87,
+    "equity": 101613.14,
     "gld": 105409.18,
-    "drawdown": 0.04,
+    "drawdown": 0.0,
     "gold_price": 4076.7
   },
   {
     "date": "2025-11-24",
-    "equity": 101436.93,
+    "equity": 101653.32,
     "gld": 105802.2,
-    "drawdown": 0.04,
+    "drawdown": 0.0,
     "gold_price": 4091.9
   },
   {
     "date": "2025-11-25",
-    "equity": 101511.82,
+    "equity": 101778.33,
     "gld": 107025.22,
-    "drawdown": 0.04,
+    "drawdown": 0.0,
     "gold_price": 4139.2
   },
   {
     "date": "2025-11-26",
-    "equity": 101552.98,
+    "equity": 101847.05,
     "gld": 107697.48,
-    "drawdown": 0.04,
+    "drawdown": 0.0,
     "gold_price": 4165.2
   },
   {
     "date": "2025-11-28",
-    "equity": 101637.05,
+    "equity": 101987.39,
     "gld": 109070.45,
-    "drawdown": 0.04,
+    "drawdown": 0.0,
     "gold_price": 4218.3
   },
   {
     "date": "2025-12-01",
-    "equity": 101668.29,
+    "equity": 102042.9,
     "gld": 109613.44,
     "drawdown": 0.0,
     "gold_price": 4239.3
   },
   {
     "date": "2025-12-02",
-    "equity": 101666.29,
+    "equity": 101903.61,
     "gld": 108250.81,
     "drawdown": 0.0,
     "gold_price": 4186.6
   },
   {
     "date": "2025-12-03",
-    "equity": 101686.48,
+    "equity": 101933.85,
     "gld": 108579.18,
     "drawdown": 0.0,
     "gold_price": 4199.3
   },
   {
     "date": "2025-12-04",
-    "equity": 101706.36,
+    "equity": 101933.85,
     "gld": 108902.39,
     "drawdown": 0.0,
     "gold_price": 4211.8
   },
   {
     "date": "2025-12-05",
-    "equity": 101706.1,
+    "equity": 101933.85,
     "gld": 108930.83,
     "drawdown": 0.0,
     "gold_price": 4212.9
   },
   {
     "date": "2025-12-08",
-    "equity": 101706.1,
+    "equity": 101933.85,
     "gld": 108266.33,
     "drawdown": 0.0,
     "gold_price": 4187.2
   },
   {
     "date": "2025-12-09",
-    "equity": 101706.1,
+    "equity": 101933.85,
     "gld": 108770.53,
     "drawdown": 0.0,
     "gold_price": 4206.7
   },
   {
     "date": "2025-12-10",
-    "equity": 101701.76,
+    "equity": 101926.59,
     "gld": 108504.2,
-    "drawdown": 0.0,
+    "drawdown": 0.01,
     "gold_price": 4196.4
   },
   {
     "date": "2025-12-11",
-    "equity": 102008.99,
+    "equity": 102439.79,
     "gld": 110808.02,
-    "drawdown": 0.0,
+    "drawdown": 0.01,
     "gold_price": 4285.5
   },
   {
     "date": "2025-12-12",
-    "equity": 102059.33,
+    "equity": 102523.89,
     "gld": 111185.52,
-    "drawdown": 0.0,
+    "drawdown": 0.01,
     "gold_price": 4300.1
   },
   {
     "date": "2025-12-15",
-    "equity": 102077.63,
+    "equity": 102554.46,
     "gld": 111356.18,
     "drawdown": 0.0,
     "gold_price": 4306.7
   },
   {
     "date": "2025-12-16",
-    "equity": 102073.77,
+    "equity": 102550.57,
     "gld": 111299.29,
     "drawdown": 0.0,
     "gold_price": 4304.5
   },
   {
     "date": "2025-12-17",
-    "equity": 102202.5,
+    "equity": 102679.91,
     "gld": 112411.12,
     "drawdown": 0.0,
     "gold_price": 4347.5
   },
   {
     "date": "2025-12-18",
-    "equity": 102172.13,
+    "equity": 102655.85,
     "gld": 112204.27,
     "drawdown": 0.0,
     "gold_price": 4339.5
   },
   {
     "date": "2025-12-19",
-    "equity": 102129.65,
+    "equity": 102717.78,
     "gld": 112770.52,
     "drawdown": 0.0,
     "gold_price": 4361.4
   },
   {
     "date": "2025-12-22",
-    "equity": 101963.03,
+    "equity": 102715.14,
     "gld": 114921.79,
-    "drawdown": 0.2,
+    "drawdown": 0.0,
     "gold_price": 4444.6
   },
   {
     "date": "2025-12-23",
-    "equity": 102033.08,
+    "equity": 102785.56,
     "gld": 115909.5,
-    "drawdown": 0.14,
+    "drawdown": 0.0,
     "gold_price": 4482.8
   },
   {
     "date": "2025-12-24",
-    "equity": 102037.34,
+    "equity": 102789.85,
     "gld": 115852.62,
-    "drawdown": 0.14,
+    "drawdown": 0.0,
     "gold_price": 4480.6
   },
   {
     "date": "2025-12-26",
-    "equity": 101940.77,
+    "equity": 102692.56,
     "gld": 117106.66,
-    "drawdown": 0.23,
+    "drawdown": 0.09,
     "gold_price": 4529.1
   },
   {
     "date": "2025-12-29",
-    "equity": 101938.73,
+    "equity": 102690.51,
     "gld": 111831.94,
-    "drawdown": 0.23,
+    "drawdown": 0.09,
     "gold_price": 4325.1
   },
   {
     "date": "2025-12-30",
-    "equity": 102009.42,
+    "equity": 102761.73,
     "gld": 112995.48,
-    "drawdown": 0.23,
+    "drawdown": 0.09,
     "gold_price": 4370.1
   },
   {
     "date": "2025-12-31",
-    "equity": 101939.51,
+    "equity": 102691.3,
     "gld": 111844.86,
-    "drawdown": 0.23,
+    "drawdown": 0.09,
     "gold_price": 4325.6
   },
   {
     "date": "2026-01-02",
-    "equity": 101919.88,
+    "equity": 102671.53,
     "gld": 111555.27,
-    "drawdown": 0.25,
+    "drawdown": 0.11,
     "gold_price": 4314.4
   },
   {
     "date": "2026-01-05",
-    "equity": 101919.88,
+    "equity": 102671.53,
     "gld": 114722.69,
-    "drawdown": 0.25,
+    "drawdown": 0.11,
     "gold_price": 4436.9
   },
   {
     "date": "2026-01-06",
-    "equity": 101919.88,
+    "equity": 102671.53,
     "gld": 115893.99,
-    "drawdown": 0.25,
+    "drawdown": 0.11,
     "gold_price": 4482.2
   },
   {
     "date": "2026-01-07",
-    "equity": 101918.42,
+    "equity": 102669.75,
     "gld": 115043.3,
-    "drawdown": 0.25,
+    "drawdown": 0.11,
     "gold_price": 4449.3
   },
   {
     "date": "2026-01-08",
-    "equity": 101918.86,
+    "equity": 102670.28,
     "gld": 115053.66,
-    "drawdown": 0.25,
+    "drawdown": 0.11,
     "gold_price": 4449.7
   },
   {
     "date": "2026-01-09",
-    "equity": 101963.28,
+    "equity": 102724.41,
     "gld": 116103.42,
-    "drawdown": 0.25,
+    "drawdown": 0.11,
     "gold_price": 4490.3
   },
   {
     "date": "2026-01-12",
-    "equity": 102088.01,
+    "equity": 102876.4,
     "gld": 119051.06,
-    "drawdown": 0.25,
+    "drawdown": 0.11,
     "gold_price": 4604.3
   },
   {
     "date": "2026-01-13",
-    "equity": 102071.49,
+    "equity": 102856.27,
     "gld": 118660.64,
-    "drawdown": 0.25,
+    "drawdown": 0.11,
     "gold_price": 4589.2
   },
   {
     "date": "2026-01-14",
-    "equity": 102112.08,
+    "equity": 102905.73,
     "gld": 119619.9,
-    "drawdown": 0.25,
+    "drawdown": 0.11,
     "gold_price": 4626.3
   },
   {
     "date": "2026-01-15",
-    "equity": 102101.14,
+    "equity": 102892.4,
     "gld": 119361.34,
-    "drawdown": 0.25,
+    "drawdown": 0.11,
     "gold_price": 4616.3
   },
   {
     "date": "2026-01-16",
-    "equity": 102070.61,
+    "equity": 102855.2,
     "gld": 118639.95,
-    "drawdown": 0.25,
+    "drawdown": 0.11,
     "gold_price": 4588.4
   },
   {
     "date": "2026-01-20",
-    "equity": 102257.92,
+    "equity": 103083.45,
     "gld": 123066.58,
-    "drawdown": 0.25,
+    "drawdown": 0.11,
     "gold_price": 4759.6
   },
   {
     "date": "2026-01-21",
-    "equity": 102335.33,
+    "equity": 103177.78,
     "gld": 124933.41,
     "drawdown": 0.0,
     "gold_price": 4831.8
   },
   {
     "date": "2026-01-22",
-    "equity": 102335.33,
+    "equity": 103177.78,
     "gld": 126924.36,
     "drawdown": 0.0,
     "gold_price": 4908.8
   },
   {
     "date": "2026-01-23",
-    "equity": 102335.33,
+    "equity": 103177.78,
     "gld": 128667.1,
     "drawdown": 0.0,
     "gold_price": 4976.2
   },
   {
     "date": "2026-01-26",
-    "equity": 102335.33,
+    "equity": 103177.78,
     "gld": 131343.25,
     "drawdown": 0.0,
     "gold_price": 5079.7
   },
   {
     "date": "2026-01-27",
-    "equity": 102335.33,
+    "equity": 103177.78,
     "gld": 131348.41,
     "drawdown": 0.0,
     "gold_price": 5079.9
   },
   {
     "date": "2026-01-28",
-    "equity": 102334.4,
+    "equity": 103176.46,
     "gld": 137080.8,
     "drawdown": 0.0,
     "gold_price": 5301.6
   },
   {
     "date": "2026-01-29",
-    "equity": 102344.24,
+    "equity": 103190.44,
     "gld": 137515.19,
     "drawdown": 0.0,
     "gold_price": 5318.4
   },
   {
     "date": "2026-01-30",
-    "equity": 101989.08,
+    "equity": 102685.99,
     "gld": 121884.94,
-    "drawdown": 0.34,
+    "drawdown": 0.48,
     "gold_price": 4713.9
   },
   {
     "date": "2026-02-02",
-    "equity": 101989.08,
+    "equity": 102670.66,
     "gld": 119521.65,
-    "drawdown": 0.34,
+    "drawdown": 0.49,
     "gold_price": 4622.5
   },
   {
     "date": "2026-02-03",
-    "equity": 101989.08,
+    "equity": 102670.66,
     "gld": 126792.51,
-    "drawdown": 0.34,
+    "drawdown": 0.49,
     "gold_price": 4903.7
   },
   {
     "date": "2026-02-04",
-    "equity": 101989.08,
+    "equity": 102670.66,
     "gld": 127224.3,
-    "drawdown": 0.34,
+    "drawdown": 0.49,
     "gold_price": 4920.4
   },
   {
     "date": "2026-02-05",
-    "equity": 101989.08,
+    "equity": 102670.66,
     "gld": 125698.77,
-    "drawdown": 0.34,
+    "drawdown": 0.49,
     "gold_price": 4861.4
   },
   {
     "date": "2026-02-06",
-    "equity": 101989.08,
+    "equity": 102670.66,
     "gld": 128020.69,
-    "drawdown": 0.34,
+    "drawdown": 0.49,
     "gold_price": 4951.2
   },
   {
     "date": "2026-02-09",
-    "equity": 101989.08,
+    "equity": 102670.66,
     "gld": 130598.58,
-    "drawdown": 0.34,
+    "drawdown": 0.49,
     "gold_price": 5050.9
   },
   {
     "date": "2026-02-10",
-    "equity": 101988.63,
+    "equity": 102669.96,
     "gld": 129380.73,
-    "drawdown": 0.34,
+    "drawdown": 0.49,
     "gold_price": 5003.8
   },
   {
     "date": "2026-02-11",
-    "equity": 102008.93,
+    "equity": 102701.64,
     "gld": 131133.81,
-    "drawdown": 0.34,
+    "drawdown": 0.49,
     "gold_price": 5071.6
   },
   {
     "date": "2026-02-12",
-    "equity": 101964.65,
+    "equity": 102632.52,
     "gld": 127309.64,
-    "drawdown": 0.34,
+    "drawdown": 0.49,
     "gold_price": 4923.7
   },
   {
     "date": "2026-02-13",
-    "equity": 101993.63,
+    "equity": 102677.76,
     "gld": 129851.33,
-    "drawdown": 0.33,
+    "drawdown": 0.48,
     "gold_price": 5022.0
   },
   {
     "date": "2026-02-17",
-    "equity": 101993.2,
+    "equity": 102677.12,
     "gld": 126254.68,
-    "drawdown": 0.33,
+    "drawdown": 0.49,
     "gold_price": 4882.9
   },
   {
     "date": "2026-02-18",
-    "equity": 101963.07,
+    "equity": 102631.89,
     "gld": 128933.42,
-    "drawdown": 0.33,
+    "drawdown": 0.49,
     "gold_price": 4986.5
   },
   {
     "date": "2026-02-19",
-    "equity": 101966.15,
+    "equity": 102636.52,
     "gld": 128659.34,
-    "drawdown": 0.33,
+    "drawdown": 0.49,
     "gold_price": 4975.9
   },
   {
     "date": "2026-02-20",
-    "equity": 101941.46,
+    "equity": 102599.45,
     "gld": 130815.77,
-    "drawdown": 0.38,
+    "drawdown": 0.56,
     "gold_price": 5059.3
   },
   {
     "date": "2026-02-23",
-    "equity": 101940.21,
+    "equity": 102597.73,
     "gld": 134575.31,
-    "drawdown": 0.39,
+    "drawdown": 0.56,
     "gold_price": 5204.7
   },
   {
     "date": "2026-02-24",
-    "equity": 101979.15,
+    "equity": 102651.67,
     "gld": 133310.92,
-    "drawdown": 0.39,
+    "drawdown": 0.56,
     "gold_price": 5155.8
   },
   {
     "date": "2026-02-25",
-    "equity": 101938.86,
+    "equity": 102595.85,
     "gld": 134619.26,
-    "drawdown": 0.39,
+    "drawdown": 0.56,
     "gold_price": 5206.4
   },
   {
     "date": "2026-02-26",
-    "equity": 101959.15,
+    "equity": 102623.29,
     "gld": 133846.15,
-    "drawdown": 0.37,
+    "drawdown": 0.54,
     "gold_price": 5176.5
   },
   {
     "date": "2026-02-27",
-    "equity": 102038.51,
+    "equity": 102756.42,
     "gld": 135242.4,
-    "drawdown": 0.37,
+    "drawdown": 0.54,
     "gold_price": 5230.5
   },
   {
     "date": "2026-03-02",
-    "equity": 102130.09,
+    "equity": 102913.95,
     "gld": 136894.63,
-    "drawdown": 0.2,
+    "drawdown": 0.54,
     "gold_price": 5294.4
   },
   {
     "date": "2026-03-03",
-    "equity": 102128.55,
+    "equity": 102447.3,
     "gld": 132059.47,
-    "drawdown": 0.2,
+    "drawdown": 0.71,
     "gold_price": 5107.4
   },
   {
     "date": "2026-03-04",
-    "equity": 102115.68,
+    "equity": 102431.7,
     "gld": 132390.44,
-    "drawdown": 0.2,
+    "drawdown": 0.71,
     "gold_price": 5120.2
   },
   {
     "date": "2026-03-05",
-    "equity": 102170.88,
+    "equity": 102498.59,
     "gld": 130970.91,
-    "drawdown": 0.2,
+    "drawdown": 0.71,
     "gold_price": 5065.3
   },
   {
     "date": "2026-03-06",
-    "equity": 102088.08,
+    "equity": 102398.27,
     "gld": 133060.12,
-    "drawdown": 0.24,
+    "drawdown": 0.76,
     "gold_price": 5146.1
   },
   {
     "date": "2026-03-09",
-    "equity": 102085.62,
+    "equity": 102398.27,
     "gld": 131648.35,
-    "drawdown": 0.24,
+    "drawdown": 0.76,
     "gold_price": 5091.5
   },
   {
     "date": "2026-03-10",
-    "equity": 102308.3,
+    "equity": 102395.77,
     "gld": 135221.72,
-    "drawdown": 0.24,
+    "drawdown": 0.76,
     "gold_price": 5229.7
   },
   {
     "date": "2026-03-11",
-    "equity": 102207.92,
+    "equity": 102296.43,
     "gld": 133610.86,
-    "drawdown": 0.24,
+    "drawdown": 0.76,
     "gold_price": 5167.4
   },
   {
     "date": "2026-03-12",
-    "equity": 102120.61,
+    "equity": 102209.29,
     "gld": 132276.66,
-    "drawdown": 0.21,
+    "drawdown": 0.94,
     "gold_price": 5115.8
   },
   {
     "date": "2026-03-13",
-    "equity": 102190.28,
+    "equity": 102308.86,
     "gld": 130639.95,
-    "drawdown": 0.21,
+    "drawdown": 0.94,
     "gold_price": 5052.5
   },
   {
     "date": "2026-03-16",
-    "equity": 102253.01,
+    "equity": 102400.87,
     "gld": 129127.34,
-    "drawdown": 0.08,
+    "drawdown": 0.94,
     "gold_price": 4994.0
   },
   {
     "date": "2026-03-17",
-    "equity": 102253.01,
+    "equity": 102387.5,
     "gld": 129308.34,
-    "drawdown": 0.08,
+    "drawdown": 0.77,
     "gold_price": 5001.0
   },
   {
     "date": "2026-03-18",
-    "equity": 102253.01,
+    "equity": 102387.5,
     "gld": 126435.68,
-    "drawdown": 0.08,
+    "drawdown": 0.77,
     "gold_price": 4889.9
   },
   {
     "date": "2026-03-19",
-    "equity": 102253.01,
+    "equity": 102385.58,
     "gld": 118957.99,
-    "drawdown": 0.08,
+    "drawdown": 0.77,
     "gold_price": 4600.7
   },
   {
     "date": "2026-03-20",
-    "equity": 102251.04,
+    "equity": 102427.8,
     "gld": 118174.53,
-    "drawdown": 0.08,
+    "drawdown": 0.77,
     "gold_price": 4570.4
   },
   {
     "date": "2026-03-23",
-    "equity": 102490.33,
+    "equity": 102659.53,
     "gld": 113874.6,
-    "drawdown": 0.08,
+    "drawdown": 0.77,
     "gold_price": 4404.1
   },
   {
     "date": "2026-03-24",
-    "equity": 102497.24,
+    "equity": 102666.21,
     "gld": 113750.48,
-    "drawdown": 0.08,
+    "drawdown": 0.77,
     "gold_price": 4399.3
   },
   {
     "date": "2026-03-25",
-    "equity": 102278.72,
+    "equity": 102454.6,
     "gld": 117641.88,
-    "drawdown": 0.06,
+    "drawdown": 0.7,
     "gold_price": 4549.8
   },
   {
     "date": "2026-03-26",
-    "equity": 102278.72,
+    "equity": 102454.6,
     "gld": 113135.1,
-    "drawdown": 0.06,
+    "drawdown": 0.7,
     "gold_price": 4375.5
   },
   {
     "date": "2026-03-27",
-    "equity": 102277.75,
+    "equity": 102454.6,
     "gld": 116147.38,
-    "drawdown": 0.06,
+    "drawdown": 0.7,
     "gold_price": 4492.0
   },
   {
     "date": "2026-03-30",
-    "equity": 102301.03,
+    "equity": 102453.65,
     "gld": 117026.5,
-    "drawdown": 0.03,
+    "drawdown": 0.7,
     "gold_price": 4526.0
   },
   {
     "date": "2026-03-31",
-    "equity": 102300.1,
+    "equity": 102367.92,
     "gld": 120170.66,
-    "drawdown": 0.03,
+    "drawdown": 0.7,
     "gold_price": 4647.6
   },
   {
     "date": "2026-04-01",
-    "equity": 102390.65,
+    "equity": 102272.33,
     "gld": 123676.8,
-    "drawdown": 0.03,
+    "drawdown": 0.7,
     "gold_price": 4783.2
   },
   {
     "date": "2026-04-02",
-    "equity": 102302.71,
+    "equity": 102364.19,
     "gld": 120271.49,
-    "drawdown": 0.03,
+    "drawdown": 0.79,
     "gold_price": 4651.5
   },
   {
     "date": "2026-04-06",
-    "equity": 102305.31,
+    "equity": 102364.19,
     "gld": 120408.53,
-    "drawdown": 0.03,
+    "drawdown": 0.79,
     "gold_price": 4656.8
   },
   {
     "date": "2026-04-07",
-    "equity": 102305.31,
+    "equity": 102364.19,
     "gld": 120416.29,
-    "drawdown": 0.03,
+    "drawdown": 0.79,
     "gold_price": 4657.1
   },
   {
     "date": "2026-04-08",
-    "equity": 102304.83,
+    "equity": 102363.58,
     "gld": 122805.43,
-    "drawdown": 0.03,
+    "drawdown": 0.79,
     "gold_price": 4749.5
   },
   {
     "date": "2026-04-09",
-    "equity": 102319.28,
+    "equity": 102381.8,
     "gld": 123909.51,
-    "drawdown": 0.03,
+    "drawdown": 0.79,
     "gold_price": 4792.2
   },
   {
     "date": "2026-04-10",
-    "equity": 102309.03,
+    "equity": 102368.87,
     "gld": 123126.05,
-    "drawdown": 0.03,
+    "drawdown": 0.79,
     "gold_price": 4761.9
   },
   {
     "date": "2026-04-13",
-    "equity": 102301.95,
+    "equity": 102360.55,
     "gld": 122621.85,
-    "drawdown": 0.03,
+    "drawdown": 0.79,
     "gold_price": 4742.4
   },
   {
     "date": "2026-04-14",
-    "equity": 102301.95,
+    "equity": 102395.18,
     "gld": 124757.6,
-    "drawdown": 0.03,
+    "drawdown": 0.76,
     "gold_price": 4825.0
   },
   {
     "date": "2026-04-15",
-    "equity": 102301.95,
+    "equity": 102395.18,
     "gld": 124111.18,
-    "drawdown": 0.03,
+    "drawdown": 0.76,
     "gold_price": 4800.0
   },
   {
     "date": "2026-04-16",
-    "equity": 102301.95,
+    "equity": 102395.18,
     "gld": 123733.68,
-    "drawdown": 0.03,
+    "drawdown": 0.76,
     "gold_price": 4785.4
   },
   {
     "date": "2026-04-17",
-    "equity": 102301.95,
+    "equity": 102395.18,
     "gld": 125600.52,
-    "drawdown": 0.03,
+    "drawdown": 0.76,
     "gold_price": 4857.6
   },
   {
     "date": "2026-04-20",
-    "equity": 102301.95,
+    "equity": 102395.18,
     "gld": 124281.84,
-    "drawdown": 0.03,
+    "drawdown": 0.76,
     "gold_price": 4806.6
   },
   {
     "date": "2026-04-21",
-    "equity": 102301.95,
+    "equity": 102395.18,
     "gld": 121484.16,
-    "drawdown": 0.03,
+    "drawdown": 0.76,
     "gold_price": 4698.4
   },
   {
     "date": "2026-04-22",
-    "equity": 102301.95,
-    "gld": 122854.55,
-    "drawdown": 0.03,
-    "gold_price": 4751.4
+    "equity": 102395.18,
+    "gld": 122365.87,
+    "drawdown": 0.76,
+    "gold_price": 4732.5
+  },
+  {
+    "date": "2026-04-23",
+    "equity": 102395.18,
+    "gld": 121776.35,
+    "drawdown": 0.76,
+    "gold_price": 4709.7
   }
 ]
