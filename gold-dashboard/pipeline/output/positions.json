@@ -4,76 +4,94 @@
       "symbol": "XAUUSD",
       "direction": "Short",
       "size": 0.0,
-      "entry_price": 4709.7,
-      "current_price": 4709.7,
-      "stop_loss": 4990.05,
+      "entry_price": 4705.1,
+      "current_price": 4725.4,
+      "stop_loss": 4986.08,
       "unrealized_pnl": -0.0,
       "return_pct": -0.0
     }
   ],
   "recent_trades": [
     {
-      "date": "2025-12-26",
-      "type": "close_neutral",
-      "direction": "Short",
-      "entry": 4482.8,
-      "exit": 4529.1,
-      "pnl": -93.0,
-      "return_pct": -0.093
+      "date": "2025-12-24",
+      "type": "close_long",
+      "direction": "Long",
+      "entry": 4444.6,
+      "exit": 4480.6,
+      "pnl": 68.77,
+      "return_pct": 0.0688
     },
     {
-      "date": "2026-01-02",
-      "type": "close_neutral",
+      "date": "2025-12-29",
+      "type": "close_short",
+      "direction": "Short",
+      "entry": 4480.6,
+      "exit": 4325.1,
+      "pnl": 301.96,
+      "return_pct": 0.302
+    },
+    {
+      "date": "2025-12-31",
+      "type": "close_long",
       "direction": "Long",
       "entry": 4325.1,
-      "exit": 4314.4,
-      "pnl": -18.98,
-      "return_pct": -0.019
+      "exit": 4325.6,
+      "pnl": 0.0,
+      "return_pct": 0.0
+    },
+    {
+      "date": "2026-01-06",
+      "type": "close_short",
+      "direction": "Short",
+      "entry": 4325.6,
+      "exit": 4482.2,
+      "pnl": -0.0,
+      "return_pct": -0.0
     },
     {
       "date": "2026-01-21",
       "type": "close_neutral",
       "direction": "Long",
-      "entry": 4449.3,
+      "entry": 4482.2,
       "exit": 4831.8,
-      "pnl": 508.03,
-      "return_pct": 0.508
+      "pnl": 0.0,
+      "return_pct": 0.0
     },
     {
-      "date": "2026-01-28",
-      "type": "close_short",
+      "date": "2026-01-26",
+      "type": "close_long",
+      "direction": "Long",
+      "entry": 4908.8,
+      "exit": 5079.7,
+      "pnl": 0.0,
+      "return_pct": 0.0
+    },
+    {
+      "date": "2026-01-29",
+      "type": "close_neutral",
       "direction": "Short",
       "entry": 5079.7,
-      "exit": 5301.6,
+      "exit": 5318.4,
       "pnl": -0.0,
       "return_pct": -0.0
-    },
-    {
-      "date": "2026-01-30",
-      "type": "stop_loss",
-      "direction": "Long",
-      "entry": 5301.6,
-      "exit": 4713.9,
-      "pnl": -490.23,
-      "return_pct": -0.4902
     },
     {
       "date": "2026-02-02",
-      "type": "close_neutral",
+      "type": "close_long",
       "direction": "Long",
       "entry": 4713.9,
       "exit": 4622.5,
-      "pnl": -15.33,
-      "return_pct": -0.0153
+      "pnl": -20.02,
+      "return_pct": -0.02
     },
     {
-      "date": "2026-02-09",
+      "date": "2026-02-06",
       "type": "close_neutral",
       "direction": "Short",
-      "entry": 4920.4,
-      "exit": 5050.9,
-      "pnl": -0.0,
-      "return_pct": -0.0
+      "entry": 4622.5,
+      "exit": 4951.2,
+      "pnl": -55.97,
+      "return_pct": -0.056
     },
     {
       "date": "2026-02-13",
@@ -81,17 +99,17 @@
       "direction": "Long",
       "entry": 5003.8,
       "exit": 5022.0,
-      "pnl": 7.8,
-      "return_pct": 0.0078
+      "pnl": 8.16,
+      "return_pct": 0.0082
     },
     {
-      "date": "2026-02-20",
-      "type": "close_neutral",
-      "direction": "Short",
-      "entry": 4882.9,
-      "exit": 5059.3,
-      "pnl": -77.67,
-      "return_pct": -0.0777
+      "date": "2026-02-23",
+      "type": "close_long",
+      "direction": "Long",
+      "entry": 4986.5,
+      "exit": 5204.7,
+      "pnl": 146.16,
+      "return_pct": 0.1462
     },
     {
       "date": "2026-02-26",
@@ -99,87 +117,69 @@
       "direction": "Short",
       "entry": 5204.7,
       "exit": 5176.5,
-      "pnl": 29.39,
-      "return_pct": 0.0294
+      "pnl": 11.5,
+      "return_pct": 0.0115
     },
     {
       "date": "2026-03-03",
-      "type": "close_long",
+      "type": "close_neutral",
       "direction": "Long",
       "entry": 5176.5,
       "exit": 5107.4,
-      "pnl": -174.13,
-      "return_pct": -0.1741
+      "pnl": -112.83,
+      "return_pct": -0.1128
     },
     {
-      "date": "2026-03-06",
-      "type": "close_neutral",
-      "direction": "Short",
-      "entry": 5107.4,
-      "exit": 5146.1,
-      "pnl": -49.03,
-      "return_pct": -0.049
-    },
-    {
-      "date": "2026-03-12",
-      "type": "close_long",
-      "direction": "Long",
-      "entry": 5229.7,
-      "exit": 5115.8,
-      "pnl": -184.06,
-      "return_pct": -0.1841
-    },
-    {
-      "date": "2026-03-17",
-      "type": "close_neutral",
-      "direction": "Short",
-      "entry": 5115.8,
-      "exit": 5001.0,
-      "pnl": 178.21,
-      "return_pct": 0.1782
-    },
-    {
-      "date": "2026-03-25",
-      "type": "close_neutral",
-      "direction": "Short",
-      "entry": 4600.7,
-      "exit": 4549.8,
-      "pnl": 69.02,
-      "return_pct": 0.069
-    },
-    {
-      "date": "2026-04-02",
-      "type": "close_neutral",
-      "direction": "Short",
-      "entry": 4526.0,
-      "exit": 4651.5,
-      "pnl": -89.46,
-      "return_pct": -0.0895
-    },
-    {
-      "date": "2026-04-14",
+      "date": "2026-03-11",
       "type": "close_neutral",
       "direction": "Long",
-      "entry": 4749.5,
-      "exit": 4825.0,
-      "pnl": 31.6,
-      "return_pct": 0.0316
+      "entry": 5120.2,
+      "exit": 5167.4,
+      "pnl": 0.0,
+      "return_pct": 0.0
     },
     {
-      "date": "2026-04-17",
-      "type": "close_short",
+      "date": "2026-03-23",
+      "type": "close_neutral",
       "direction": "Short",
-      "entry": 4800.0,
-      "exit": 4857.6,
+      "entry": 4994.0,
+      "exit": 4404.1,
+      "pnl": 0.0,
+      "return_pct": 0.0
+    },
+    {
+      "date": "2026-03-30",
+      "type": "close_neutral",
+      "direction": "Long",
+      "entry": 4549.8,
+      "exit": 4526.0,
       "pnl": -0.0,
       "return_pct": -0.0
     },
     {
-      "date": "2026-04-21",
+      "date": "2026-04-06",
       "type": "close_neutral",
       "direction": "Long",
-      "entry": 4857.6,
-      "exit": 4698.4,
+      "entry": 4647.6,
+      "exit": 4656.8,
+      "pnl": 0.0,
+      "return_pct": 0.0
+    },
+    {
+      "date": "2026-04-10",
+      "type": "close_neutral",
+      "direction": "Long",
+      "entry": 4657.1,
+      "exit": 4761.9,
+      "pnl": 0.0,
+      "return_pct": 0.0
+    },
+    {
+      "date": "2026-04-17",
+      "type": "close_neutral",
+      "direction": "Short",
+      "entry": 4742.4,
+      "exit": 4857.6,
       "pnl": -0.0,
       "return_pct": -0.0
     },
@@ -187,8 +187,8 @@
       "date": "2026-04-23",
       "type": "close_long",
       "direction": "Long",
-      "entry": 4732.5,
-      "exit": 4709.7,
+      "entry": 4806.6,
+      "exit": 4705.1,
       "pnl": -0.0,
       "return_pct": -0.0
     }
