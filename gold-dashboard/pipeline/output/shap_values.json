@@ -1,59 +1,59 @@
 {
-  "base_value": 1.0097,
-  "prediction": -2.7606,
+  "base_value": 1.0154,
+  "prediction": -2.8826,
   "bars": [
     {
       "factor": "F4_BEI",
       "label": "通胀预期 BEI",
-      "value": -2.3181,
-      "raw_feature": 1.8412
+      "value": -2.6237,
+      "raw_feature": 2.186
     },
     {
       "factor": "F13_GoldGDXDivergence",
       "label": "金价-矿业股背离",
-      "value": -1.0799,
-      "raw_feature": 0.0791
+      "value": -1.0463,
+      "raw_feature": 0.1348
     },
     {
       "factor": "F5_GPR",
       "label": "地缘政治风险 GPR",
-      "value": -0.6906,
-      "raw_feature": -0.2585
-    },
-    {
-      "factor": "F1_DXY",
-      "label": "美元指数 DXY",
-      "value": 0.64,
-      "raw_feature": -1.7129
-    },
-    {
-      "factor": "F6_GVZ",
-      "label": "黄金波动率 GVZ",
-      "value": -0.4171,
-      "raw_feature": 0.2583
+      "value": -0.4011,
+      "raw_feature": -0.2498
     },
     {
       "factor": "F14_GVZMomentum",
       "label": "波动率动量",
-      "value": 0.2109,
-      "raw_feature": -0.8271
+      "value": 0.202,
+      "raw_feature": -0.8451
     },
     {
-      "factor": "F11_DXYMomentum",
-      "label": "美元动量 20D",
-      "value": -0.1553,
-      "raw_feature": -1.3074
+      "factor": "F6_GVZ",
+      "label": "黄金波动率 GVZ",
+      "value": -0.1862,
+      "raw_feature": 0.1862
+    },
+    {
+      "factor": "F1_DXY",
+      "label": "美元指数 DXY",
+      "value": 0.1685,
+      "raw_feature": -1.2112
     },
     {
       "factor": "F10_TIPSBEISpread",
       "label": "实际利率-通胀利差",
-      "value": 0.0398,
-      "raw_feature": -0.6581
+      "value": -0.0542,
+      "raw_feature": -1.0252
+    },
+    {
+      "factor": "F11_DXYMomentum",
+      "label": "美元动量 20D",
+      "value": 0.0429,
+      "raw_feature": -1.2179
     }
   ],
   "stability": {
     "stable": true,
     "dominant_factor": "F4_BEI",
-    "max_share": 0.262
+    "max_share": 0.353
   }
 }
