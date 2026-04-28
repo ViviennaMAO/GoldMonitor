@@ -1,59 +1,59 @@
 {
-  "base_value": 1.0154,
-  "prediction": -2.8826,
+  "base_value": 1.0189,
+  "prediction": -4.2695,
   "bars": [
     {
       "factor": "F4_BEI",
       "label": "通胀预期 BEI",
-      "value": -2.6237,
-      "raw_feature": 2.186
+      "value": -2.6869,
+      "raw_feature": 2.1595
     },
     {
       "factor": "F13_GoldGDXDivergence",
       "label": "金价-矿业股背离",
-      "value": -1.0463,
-      "raw_feature": 0.1348
-    },
-    {
-      "factor": "F5_GPR",
-      "label": "地缘政治风险 GPR",
-      "value": -0.4011,
-      "raw_feature": -0.2498
-    },
-    {
-      "factor": "F14_GVZMomentum",
-      "label": "波动率动量",
-      "value": 0.202,
-      "raw_feature": -0.8451
-    },
-    {
-      "factor": "F6_GVZ",
-      "label": "黄金波动率 GVZ",
-      "value": -0.1862,
-      "raw_feature": 0.1862
-    },
-    {
-      "factor": "F1_DXY",
-      "label": "美元指数 DXY",
-      "value": 0.1685,
-      "raw_feature": -1.2112
-    },
-    {
-      "factor": "F10_TIPSBEISpread",
-      "label": "实际利率-通胀利差",
-      "value": -0.0542,
-      "raw_feature": -1.0252
+      "value": -1.3522,
+      "raw_feature": 0.1944
     },
     {
       "factor": "F11_DXYMomentum",
       "label": "美元动量 20D",
-      "value": 0.0429,
-      "raw_feature": -1.2179
+      "value": -0.5401,
+      "raw_feature": -1.5031
+    },
+    {
+      "factor": "F5_GPR",
+      "label": "地缘政治风险 GPR",
+      "value": -0.5353,
+      "raw_feature": -0.2409
+    },
+    {
+      "factor": "F6_GVZ",
+      "label": "黄金波动率 GVZ",
+      "value": -0.2931,
+      "raw_feature": 0.2987
+    },
+    {
+      "factor": "F10_TIPSBEISpread",
+      "label": "实际利率-通胀利差",
+      "value": 0.1011,
+      "raw_feature": -0.8685
+    },
+    {
+      "factor": "F14_GVZMomentum",
+      "label": "波动率动量",
+      "value": 0.0621,
+      "raw_feature": -0.8551
+    },
+    {
+      "factor": "F1_DXY",
+      "label": "美元指数 DXY",
+      "value": -0.0441,
+      "raw_feature": -1.2047
     }
   ],
   "stability": {
     "stable": true,
     "dominant_factor": "F4_BEI",
-    "max_share": 0.353
+    "max_share": 0.365
   }
 }

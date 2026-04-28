@@ -1,8 +1,8 @@
 {
   "lifetime": {
     "phase": "accumulate",
-    "n_trades": 28,
-    "remaining": 22,
+    "n_trades": 30,
+    "remaining": 20,
     "risk_budget": 0.01,
     "kelly_full": null,
     "kelly_lower": null,
@@ -13,8 +13,8 @@
   },
   "rolling_30": {
     "phase": "accumulate",
-    "n_trades": 28,
-    "remaining": 22,
+    "n_trades": 30,
+    "remaining": 20,
     "risk_budget": 0.01,
     "kelly_full": null,
     "kelly_lower": null,
