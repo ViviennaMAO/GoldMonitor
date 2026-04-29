@@ -5,21 +5,30 @@
       "direction": "Short",
       "size": 0.0,
       "entry_price": 4698.4,
-      "current_price": 4608.6,
-      "stop_loss": 4745.19,
+      "current_price": 4560.6,
+      "stop_loss": 4693.57,
       "unrealized_pnl": 0.0,
       "return_pct": 0.0
     }
   ],
   "recent_trades": [
     {
+      "date": "2026-01-02",
+      "type": "close_neutral",
+      "direction": "Long",
+      "entry": 4325.1,
+      "exit": 4314.4,
+      "pnl": -18.93,
+      "return_pct": -0.0189
+    },
+    {
       "date": "2026-01-12",
       "type": "close_neutral",
       "direction": "Long",
-      "entry": 4449.3,
+      "entry": 4449.7,
       "exit": 4604.3,
-      "pnl": 237.5,
-      "return_pct": 0.2375
+      "pnl": 237.19,
+      "return_pct": 0.2372
     },
     {
       "date": "2026-01-21",
@@ -27,44 +36,35 @@
       "direction": "Long",
       "entry": 4589.2,
       "exit": 4831.8,
-      "pnl": 345.76,
-      "return_pct": 0.3458
-    },
-    {
-      "date": "2026-01-22",
-      "type": "close_short",
-      "direction": "Short",
-      "entry": 4831.8,
-      "exit": 4908.8,
-      "pnl": -202.62,
-      "return_pct": -0.2026
+      "pnl": 344.9,
+      "return_pct": 0.3449
     },
     {
       "date": "2026-01-26",
-      "type": "close_long",
-      "direction": "Long",
-      "entry": 4908.8,
+      "type": "stop_loss",
+      "direction": "Short",
+      "entry": 4831.8,
       "exit": 5079.7,
-      "pnl": 424.67,
-      "return_pct": 0.4247
+      "pnl": -642.43,
+      "return_pct": -0.6424
     },
     {
-      "date": "2026-01-29",
+      "date": "2026-01-28",
       "type": "close_short",
       "direction": "Short",
       "entry": 5079.7,
-      "exit": 5318.4,
-      "pnl": -588.47,
-      "return_pct": -0.5885
+      "exit": 5301.6,
+      "pnl": -534.78,
+      "return_pct": -0.5348
     },
     {
       "date": "2026-01-30",
       "type": "stop_loss",
       "direction": "Long",
-      "entry": 5318.4,
+      "entry": 5301.6,
       "exit": 4713.9,
-      "pnl": -940.83,
-      "return_pct": -0.9408
+      "pnl": -1254.39,
+      "return_pct": -1.2544
     },
     {
       "date": "2026-02-02",
@@ -72,26 +72,26 @@
       "direction": "Long",
       "entry": 4713.9,
       "exit": 4622.5,
-      "pnl": -98.72,
-      "return_pct": -0.0987
+      "pnl": -97.38,
+      "return_pct": -0.0974
     },
     {
-      "date": "2026-02-06",
-      "type": "close_neutral",
+      "date": "2026-02-09",
+      "type": "close_short",
       "direction": "Short",
       "entry": 4622.5,
-      "exit": 4951.2,
-      "pnl": -307.64,
-      "return_pct": -0.3076
+      "exit": 5050.9,
+      "pnl": -395.14,
+      "return_pct": -0.3951
     },
     {
-      "date": "2026-02-13",
+      "date": "2026-02-12",
       "type": "close_neutral",
       "direction": "Long",
-      "entry": 5003.8,
-      "exit": 5022.0,
-      "pnl": 11.79,
-      "return_pct": 0.0118
+      "entry": 5050.9,
+      "exit": 4923.7,
+      "pnl": -88.24,
+      "return_pct": -0.0882
     },
     {
       "date": "2026-02-25",
@@ -99,53 +99,62 @@
       "direction": "Short",
       "entry": 5059.3,
       "exit": 5206.4,
-      "pnl": -97.39,
-      "return_pct": -0.0974
+      "pnl": -140.6,
+      "return_pct": -0.1406
     },
     {
-      "date": "2026-03-02",
+      "date": "2026-03-03",
       "type": "close_neutral",
       "direction": "Long",
       "entry": 5176.5,
-      "exit": 5294.4,
-      "pnl": 170.02,
-      "return_pct": 0.17
+      "exit": 5107.4,
+      "pnl": -101.61,
+      "return_pct": -0.1016
     },
     {
       "date": "2026-03-06",
-      "type": "close_neutral",
+      "type": "close_short",
       "direction": "Short",
-      "entry": 5107.4,
+      "entry": 5065.3,
       "exit": 5146.1,
-      "pnl": -55.82,
-      "return_pct": -0.0558
+      "pnl": -198.83,
+      "return_pct": -0.1988
     },
     {
-      "date": "2026-03-12",
-      "type": "close_long",
+      "date": "2026-03-09",
+      "type": "close_neutral",
       "direction": "Long",
-      "entry": 5091.5,
-      "exit": 5115.8,
-      "pnl": 36.47,
-      "return_pct": 0.0365
+      "entry": 5146.1,
+      "exit": 5091.5,
+      "pnl": -83.3,
+      "return_pct": -0.0833
     },
     {
       "date": "2026-03-17",
       "type": "close_neutral",
       "direction": "Short",
-      "entry": 5115.8,
+      "entry": 5167.4,
       "exit": 5001.0,
-      "pnl": 181.62,
-      "return_pct": 0.1816
+      "pnl": 251.38,
+      "return_pct": 0.2514
     },
     {
       "date": "2026-03-24",
       "type": "close_neutral",
       "direction": "Short",
-      "entry": 4600.7,
+      "entry": 4889.9,
       "exit": 4399.3,
-      "pnl": 276.96,
-      "return_pct": 0.277
+      "pnl": 764.19,
+      "return_pct": 0.7642
+    },
+    {
+      "date": "2026-03-30",
+      "type": "close_neutral",
+      "direction": "Long",
+      "entry": 4492.0,
+      "exit": 4526.0,
+      "pnl": 22.85,
+      "return_pct": 0.0229
     },
     {
       "date": "2026-04-06",
@@ -153,41 +162,32 @@
       "direction": "Long",
       "entry": 4647.6,
       "exit": 4656.8,
-      "pnl": 5.19,
-      "return_pct": 0.0052
+      "pnl": 5.11,
+      "return_pct": 0.0051
     },
     {
-      "date": "2026-04-10",
+      "date": "2026-04-09",
       "type": "close_long",
       "direction": "Long",
       "entry": 4657.1,
-      "exit": 4761.9,
-      "pnl": 101.84,
-      "return_pct": 0.1018
-    },
-    {
-      "date": "2026-04-14",
-      "type": "close_neutral",
-      "direction": "Short",
-      "entry": 4761.9,
-      "exit": 4825.0,
-      "pnl": -24.56,
-      "return_pct": -0.0246
+      "exit": 4792.2,
+      "pnl": 125.98,
+      "return_pct": 0.126
     },
     {
       "date": "2026-04-17",
-      "type": "close_short",
+      "type": "close_neutral",
       "direction": "Short",
-      "entry": 4800.0,
+      "entry": 4792.2,
       "exit": 4857.6,
-      "pnl": -0.0,
-      "return_pct": -0.0
+      "pnl": -13.07,
+      "return_pct": -0.0131
     },
     {
       "date": "2026-04-21",
       "type": "close_long",
       "direction": "Long",
-      "entry": 4857.6,
+      "entry": 4806.6,
       "exit": 4698.4,
       "pnl": -0.0,
       "return_pct": -0.0

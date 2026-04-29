@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-28T22:48:38.724890",
+  "timestamp": "2026-04-29T22:50:54.484468",
   "n_factors": 8,
   "factors": [
     "F1_DXY",
@@ -12,22 +12,22 @@
     "F14_GVZMomentum"
   ],
   "train_end": "2025-09-30",
-  "oos_samples": 124,
+  "oos_samples": 125,
   "status": "healthy",
   "warnings": [],
-  "oos_ic": 0.2298,
-  "recent_60d_ic": 0.1834,
-  "ic_first_half": 0.2005,
-  "ic_second_half": 0.1715,
+  "oos_ic": 0.2569,
+  "recent_60d_ic": 0.1638,
+  "ic_first_half": 0.2382,
+  "ic_second_half": 0.1628,
   "factor_ics": {
-    "F1_DXY": 0.2005,
-    "F4_BEI": -0.4112,
-    "F5_GPR": 0.239,
-    "F6_GVZ": -0.4298,
-    "F10_TIPSBEISpread": 0.6825,
-    "F11_DXYMomentum": -0.3204,
+    "F1_DXY": 0.1821,
+    "F4_BEI": -0.4118,
+    "F5_GPR": 0.2479,
+    "F6_GVZ": -0.4328,
+    "F10_TIPSBEISpread": 0.6574,
+    "F11_DXYMomentum": -0.3296,
     "F13_GoldGDXDivergence": -0.351,
-    "F14_GVZMomentum": -0.0262
+    "F14_GVZMomentum": -0.0363
   },
   "high_corr_pairs": 0
 }

@@ -18,42 +18,42 @@
     {
       "x": "F1_DXY",
       "y": "F4_BEI",
-      "value": -0.369
+      "value": -0.368
     },
     {
       "x": "F1_DXY",
       "y": "F5_GPR",
-      "value": -0.127
+      "value": -0.134
     },
     {
       "x": "F1_DXY",
       "y": "F6_GVZ",
-      "value": 0.335
+      "value": 0.334
     },
     {
       "x": "F1_DXY",
       "y": "F10_TIPSBEISpread",
-      "value": 0.055
+      "value": 0.052
     },
     {
       "x": "F1_DXY",
       "y": "F11_DXYMomentum",
-      "value": 0.611
+      "value": 0.619
     },
     {
       "x": "F1_DXY",
       "y": "F13_GoldGDXDivergence",
-      "value": 0.451
+      "value": 0.447
     },
     {
       "x": "F1_DXY",
       "y": "F14_GVZMomentum",
-      "value": 0.079
+      "value": 0.087
     },
     {
       "x": "F4_BEI",
       "y": "F1_DXY",
-      "value": -0.369
+      "value": -0.368
     },
     {
       "x": "F4_BEI",
@@ -63,42 +63,42 @@
     {
       "x": "F4_BEI",
       "y": "F5_GPR",
-      "value": 0.094
+      "value": 0.099
     },
     {
       "x": "F4_BEI",
       "y": "F6_GVZ",
-      "value": -0.421
+      "value": -0.422
     },
     {
       "x": "F4_BEI",
       "y": "F10_TIPSBEISpread",
-      "value": -0.229
+      "value": -0.233
     },
     {
       "x": "F4_BEI",
       "y": "F11_DXYMomentum",
-      "value": -0.026
+      "value": -0.039
     },
     {
       "x": "F4_BEI",
       "y": "F13_GoldGDXDivergence",
-      "value": -0.319
+      "value": -0.306
     },
     {
       "x": "F4_BEI",
       "y": "F14_GVZMomentum",
-      "value": -0.135
+      "value": -0.141
     },
     {
       "x": "F5_GPR",
       "y": "F1_DXY",
-      "value": -0.127
+      "value": -0.134
     },
     {
       "x": "F5_GPR",
       "y": "F4_BEI",
-      "value": 0.094
+      "value": 0.099
     },
     {
       "x": "F5_GPR",
@@ -108,42 +108,42 @@
     {
       "x": "F5_GPR",
       "y": "F6_GVZ",
-      "value": -0.224
+      "value": -0.236
     },
     {
       "x": "F5_GPR",
       "y": "F10_TIPSBEISpread",
-      "value": 0.361
+      "value": 0.352
     },
     {
       "x": "F5_GPR",
       "y": "F11_DXYMomentum",
-      "value": -0.224
+      "value": -0.215
     },
     {
       "x": "F5_GPR",
       "y": "F13_GoldGDXDivergence",
-      "value": -0.168
+      "value": -0.169
     },
     {
       "x": "F5_GPR",
       "y": "F14_GVZMomentum",
-      "value": -0.247
+      "value": -0.239
     },
     {
       "x": "F6_GVZ",
       "y": "F1_DXY",
-      "value": 0.335
+      "value": 0.334
     },
     {
       "x": "F6_GVZ",
       "y": "F4_BEI",
-      "value": -0.421
+      "value": -0.422
     },
     {
       "x": "F6_GVZ",
       "y": "F5_GPR",
-      "value": -0.224
+      "value": -0.236
     },
     {
       "x": "F6_GVZ",
@@ -153,42 +153,42 @@
     {
       "x": "F6_GVZ",
       "y": "F10_TIPSBEISpread",
-      "value": 0.247
+      "value": 0.246
     },
     {
       "x": "F6_GVZ",
       "y": "F11_DXYMomentum",
-      "value": 0.086
+      "value": 0.098
     },
     {
       "x": "F6_GVZ",
       "y": "F13_GoldGDXDivergence",
-      "value": 0.716
+      "value": 0.713
     },
     {
       "x": "F6_GVZ",
       "y": "F14_GVZMomentum",
-      "value": 0.32
+      "value": 0.329
     },
     {
       "x": "F10_TIPSBEISpread",
       "y": "F1_DXY",
-      "value": 0.055
+      "value": 0.052
     },
     {
       "x": "F10_TIPSBEISpread",
       "y": "F4_BEI",
-      "value": -0.229
+      "value": -0.233
     },
     {
       "x": "F10_TIPSBEISpread",
       "y": "F5_GPR",
-      "value": 0.361
+      "value": 0.352
     },
     {
       "x": "F10_TIPSBEISpread",
       "y": "F6_GVZ",
-      "value": 0.247
+      "value": 0.246
     },
     {
       "x": "F10_TIPSBEISpread",
@@ -198,87 +198,87 @@
     {
       "x": "F10_TIPSBEISpread",
       "y": "F11_DXYMomentum",
-      "value": -0.346
+      "value": -0.336
     },
     {
       "x": "F10_TIPSBEISpread",
-      "y": "F13_GoldGDXDivergence",
-      "value": 0.181
-    },
-    {
-      "x": "F10_TIPSBEISpread",
-      "y": "F14_GVZMomentum",
-      "value": -0.175
-    },
-    {
-      "x": "F11_DXYMomentum",
-      "y": "F1_DXY",
-      "value": 0.611
-    },
-    {
-      "x": "F11_DXYMomentum",
-      "y": "F4_BEI",
-      "value": -0.026
-    },
-    {
-      "x": "F11_DXYMomentum",
-      "y": "F5_GPR",
-      "value": -0.224
-    },
-    {
-      "x": "F11_DXYMomentum",
-      "y": "F6_GVZ",
-      "value": 0.086
-    },
-    {
-      "x": "F11_DXYMomentum",
-      "y": "F10_TIPSBEISpread",
-      "value": -0.346
-    },
-    {
-      "x": "F11_DXYMomentum",
-      "y": "F11_DXYMomentum",
-      "value": 1.0
-    },
-    {
-      "x": "F11_DXYMomentum",
       "y": "F13_GoldGDXDivergence",
       "value": 0.178
     },
     {
+      "x": "F10_TIPSBEISpread",
+      "y": "F14_GVZMomentum",
+      "value": -0.171
+    },
+    {
+      "x": "F11_DXYMomentum",
+      "y": "F1_DXY",
+      "value": 0.619
+    },
+    {
+      "x": "F11_DXYMomentum",
+      "y": "F4_BEI",
+      "value": -0.039
+    },
+    {
+      "x": "F11_DXYMomentum",
+      "y": "F5_GPR",
+      "value": -0.215
+    },
+    {
+      "x": "F11_DXYMomentum",
+      "y": "F6_GVZ",
+      "value": 0.098
+    },
+    {
+      "x": "F11_DXYMomentum",
+      "y": "F10_TIPSBEISpread",
+      "value": -0.336
+    },
+    {
+      "x": "F11_DXYMomentum",
+      "y": "F11_DXYMomentum",
+      "value": 1.0
+    },
+    {
+      "x": "F11_DXYMomentum",
+      "y": "F13_GoldGDXDivergence",
+      "value": 0.172
+    },
+    {
       "x": "F11_DXYMomentum",
       "y": "F14_GVZMomentum",
-      "value": 0.234
+      "value": 0.228
     },
     {
       "x": "F13_GoldGDXDivergence",
       "y": "F1_DXY",
-      "value": 0.451
+      "value": 0.447
     },
     {
       "x": "F13_GoldGDXDivergence",
       "y": "F4_BEI",
-      "value": -0.319
+      "value": -0.306
     },
     {
       "x": "F13_GoldGDXDivergence",
       "y": "F5_GPR",
-      "value": -0.168
+      "value": -0.169
     },
     {
       "x": "F13_GoldGDXDivergence",
       "y": "F6_GVZ",
-      "value": 0.716
+      "value": 0.713
     },
     {
       "x": "F13_GoldGDXDivergence",
       "y": "F10_TIPSBEISpread",
-      "value": 0.181
+      "value": 0.178
     },
     {
       "x": "F13_GoldGDXDivergence",
       "y": "F11_DXYMomentum",
-      "value": 0.178
+      "value": 0.172
     },
     {
       "x": "F13_GoldGDXDivergence",
@@ -288,42 +288,42 @@
     {
       "x": "F13_GoldGDXDivergence",
       "y": "F14_GVZMomentum",
-      "value": -0.001
+      "value": -0.002
     },
     {
       "x": "F14_GVZMomentum",
       "y": "F1_DXY",
-      "value": 0.079
+      "value": 0.087
     },
     {
       "x": "F14_GVZMomentum",
       "y": "F4_BEI",
-      "value": -0.135
+      "value": -0.141
     },
     {
       "x": "F14_GVZMomentum",
       "y": "F5_GPR",
-      "value": -0.247
+      "value": -0.239
     },
     {
       "x": "F14_GVZMomentum",
       "y": "F6_GVZ",
-      "value": 0.32
+      "value": 0.329
     },
     {
       "x": "F14_GVZMomentum",
       "y": "F10_TIPSBEISpread",
-      "value": -0.175
+      "value": -0.171
     },
     {
       "x": "F14_GVZMomentum",
       "y": "F11_DXYMomentum",
-      "value": 0.234
+      "value": 0.228
     },
     {
       "x": "F14_GVZMomentum",
       "y": "F13_GoldGDXDivergence",
-      "value": -0.001
+      "value": -0.002
     },
     {
       "x": "F14_GVZMomentum",
